@@ -25,6 +25,38 @@ export class AppMenu {
                 items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
             },
             {
+                label: 'Quản lý khóa học',
+                items: [
+                    { label: 'Course list', icon: 'pi pi-fw pi-book', routerLink: ['/courses/list'] },
+                    { label: 'Approve course', icon: 'pi pi-fw pi-check', routerLink: ['/courses/approve-course'] },
+                    { label: 'Category', icon: 'pi pi-fw pi-tags', routerLink: ['/categories'] },
+                    { label: 'Lesson', icon: 'pi pi-fw pi-video', routerLink: ['/lessons'] }
+                ]
+            },
+            {
+                label: 'Quản lý người dùng',
+                items: [
+                    { label: 'Danh sách người dùng', icon: 'pi pi-fw pi-users', routerLink: ['/users'] },
+                    { label: 'Giảng viên', icon: 'pi pi-fw pi-user-tie', routerLink: ['/instructors'] },
+                    { label: 'Học viên', icon: 'pi pi-fw pi-user', routerLink: ['/students'] }
+                ]
+            },
+            {
+                label: 'Quản lý đơn hàng & thanh toán',
+                items: [
+                    { label: 'Đơn hàng', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/orders'] },
+                    { label: 'Giao dịch thanh toán', icon: 'pi pi-fw pi-credit-card', routerLink: ['/payments'] }
+                ]
+            },
+            {
+                label: 'Hệ thống',
+                items: [
+                    { label: 'Cài đặt', icon: 'pi pi-fw pi-cog', routerLink: ['/settings'] },
+                    { label: 'Báo cáo & Thống kê', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reports'] }
+                ]
+            },
+            
+            {
                 label: 'UI Components',
                 items: [
                     { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },

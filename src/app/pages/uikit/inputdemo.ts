@@ -62,7 +62,7 @@ import { Country } from '../service/customer.service';
         ListboxModule,
         InputGroupAddonModule,
         TextareaModule
-    ],
+    ],  
     template: ` <p-fluid class="flex flex-col md:flex-row gap-8">
             <div class="md:w-1/2">
                 <div class="card flex flex-col gap-4">
