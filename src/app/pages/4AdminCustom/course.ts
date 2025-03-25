@@ -23,7 +23,6 @@ import { Dialog, DialogModule } from 'primeng/dialog';
 import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CourseData } from '../service/data.service';
 import { InputTextModule } from 'primeng/inputtext';
-import { ApproveCourseComponent } from './approve-course';
 import { BreadcrumpComponent } from './breadcrump';
 interface City {
   name: string;
@@ -32,8 +31,8 @@ interface City {
 @Component({
   selector: 'app-course-list',
   standalone: true,
-  imports: [BreadcrumpComponent,Select, RouterModule, Dialog, ConfirmDialog,DialogModule,ConfirmDialogModule,InputTextModule,
-    InputIconModule, IconField, IconFieldModule, InputIcon, Toolbar, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule, SpeedDial],
+  imports: [BreadcrumpComponent,Select, RouterModule, Dialog,DialogModule,ConfirmDialogModule,InputTextModule,
+    InputIconModule, IconFieldModule, Toolbar, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule, SpeedDial],
   template: `
   <app-breadcrump [apr]="'List course'" [manager]="'Manage course'"></app-breadcrump>
 
@@ -47,6 +46,7 @@ interface City {
   <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select level" class="w-full md:w-56" />
   <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select author" class="w-full md:w-56" />
   <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Sort by duration" class="w-full md:w-56" />
+  <p-select [options]="cities" [(ngModel)]="selectedCity" optionLabel="name" placeholder="Select by status" class="w-full md:w-56" />
 
 </div>
   <style>
@@ -100,7 +100,7 @@ interface City {
         <th >Reviews</th>
         <th style="min-width: 10rem">Ngôn ngữ</th>
         <th >Trình độ</th>
-        <th style="min-width: 10rem">
+        <th style="min-width: 14rem">
           Thao tác
         </th>
       </tr>
@@ -131,7 +131,8 @@ interface City {
         <p-tag [value]="course.level" [severity]="getSeverity(course.level)" />
         </td>
         <td>
-        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true"  />
+        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" (click)="view(course.id)" />
+        <p-button icon="pi pi-pencil" class="mr-2" [rounded]="true" [outlined]="true"  (click)="edit(course.id)"/>
         <p-button icon="pi pi-trash" severity="danger" [rounded]="true" [outlined]="true"  />
         </td>
       </tr>
@@ -175,6 +176,12 @@ export class CourseList implements OnInit {
   constructor(private courseService: CourseService,private data:CourseData,
     private router: Router
   ) { }
+  edit(id:string){
+    this.router.navigate(['/courses/update-course', id]);
+  }
+  view(id:string){
+    this.router.navigate(['/courses/view-course', id]);
+  }
 
   ngOnInit() {
     // this.searchCourses();
