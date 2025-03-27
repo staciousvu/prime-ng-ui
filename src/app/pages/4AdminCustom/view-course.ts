@@ -31,24 +31,30 @@ import { CurriculumComponent } from './curriculum';
 @Component({
     selector: 'app-view-course',
     standalone:true,
-    imports:[CurriculumComponent,FileUploadModule,FluidModule,TabsModule,BreadcrumpComponent,Select, RouterModule, Dialog,DialogModule,ConfirmDialogModule,InputTextModule,
-        InputIconModule, IconFieldModule, Toolbar, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule, SpeedDial],
+    imports:[CurriculumComponent,FileUploadModule,FluidModule,TabsModule,Select, RouterModule,DialogModule,ConfirmDialogModule,InputTextModule,
+        InputIconModule, IconFieldModule, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule],
     template: `
-    <div class="card p-4 pb-2">
+    <div class="card" style="padding: 6px; margin: 8px; background-color: transparent;">
     <div class="flex items-center justify-between">
         <div class="flex items-center">
             <p-button label="Back" icon="pi pi-arrow-left" class="me-5" [routerLink]="['/courses/list']"/>
             <span class="font-semibold text-xl">View course</span>    
         </div>
-        <span class="text-lg font-bold text-gray-600">Lập trình HTML , CSS nâng cao</span> 
+        <div class="flex flex-col items-center">
+            <span class="text-2xl font-bold text-gray-800">Lập trình HTML, CSS nâng cao</span>
+        </div>
+        <div>
+            <!-- <p-button label="Save" icon="pi pi-save" class="text-white px-4 py-2 rounded-lg"/> -->
+        </div>
     </div>
 </div>
 <div class="card">
     <p-tabs value="0">
         <p-tablist>
-            <p-tab value="0">Course information</p-tab>
-            <p-tab value="1">Curriculum</p-tab>
-            <p-tab value="2">Intended learner</p-tab>
+        <p-tab value="0" class="text-lg">Course information</p-tab>
+<p-tab value="1" class="text-lg">Curriculum</p-tab>
+<p-tab value="2" class="text-lg">Intended learner</p-tab>
+
         </p-tablist>
         <p-tabpanels>
             <p-tabpanel value="0">

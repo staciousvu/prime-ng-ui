@@ -27,10 +27,23 @@ export class AppMenu {
             {
                 label: 'Quản lý khóa học',
                 items: [
-                    { label: 'Course list', icon: 'pi pi-fw pi-book', routerLink: ['/courses/list'] },
+                    { label: 'List courses', icon: 'pi pi-fw pi-book', routerLink: ['/courses/list'] },
                     { label: 'Approve course', icon: 'pi pi-fw pi-check', routerLink: ['/courses/approve-course'] },
-                    { label: 'Category', icon: 'pi pi-fw pi-tags', routerLink: ['/categories'] },
-                    { label: 'Lesson', icon: 'pi pi-fw pi-video', routerLink: ['/lessons'] }
+                    { label: 'Label', icon: 'pi pi-fw pi-tag', routerLink: ['/courses/label'] },
+                    { label: 'Category', icon: 'pi pi-fw pi-tags',routerLink: ['/courses/category']  },
+                ]
+            },
+            {
+                label: 'Quản lý voucher',
+                items: [
+                    { label: 'List vouchers', icon: 'pi pi-fw pi-ticket', routerLink: ['/vouchers/list'] },
+                    { label: 'Add voucher', icon: 'pi pi-fw pi-plus', routerLink: ['/vouchers/add-course'] },
+                ]
+            },
+            {
+                label: 'Quản lý đánh giá',
+                items: [
+                    { label: 'List reviews', icon: 'pi pi-fw pi-ticket', routerLink: ['/reviews/list'] },
                 ]
             },
             {

@@ -6,6 +6,7 @@ import { StyleClassModule } from 'primeng/styleclass';
 import { AppConfigurator } from './app.configurator';
 import { LayoutService } from '../service/layout.service';
 import { BadgeModule } from 'primeng/badge';
+import { AuthService } from '../../pages/service/auth.service';
 @Component({
     selector: 'app-topbar',
     standalone: true,
@@ -53,10 +54,24 @@ import { BadgeModule } from 'primeng/badge';
                     <i class="pi pi-bell"></i>
                         <span>Notifications</span>
                     </button>
-                    <button type="button" class="layout-topbar-action">
+                    <button type="button" class="layout-topbar-action" (click)="toggleDropdown()">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>
                     </button>
+      <!-- Dropdown Menu -->
+      <div *ngIf="isOpen"
+        class="absolute right-0 top-full mt-2 w-40 bg-white border rounded-lg shadow-lg z-10">
+        <ul class="py-2 text-gray-700">
+          <li>
+            <a routerLink="/profile" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+          </li>
+          <li>
+            <button (click)="logout()"  class="w-full text-left px-4 py-2 hover:bg-gray-100">
+              Logout
+            </button>
+          </li>
+        </ul>
+      </div>
                 </div>
             </div>
         </div>
@@ -100,9 +115,19 @@ import { BadgeModule } from 'primeng/badge';
     }`
 })
 export class AppTopbar {
+    logout() {
+        console.log("Logout clicked in AppTopbar!");
+        
+        this.auth.logout();
+    }
+    isOpen = false;
+
+  toggleDropdown() {
+    this.isOpen = !this.isOpen;
+  }
     items!: MenuItem[];
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(public layoutService: LayoutService,private auth:AuthService) { }
 
     toggleDarkMode() {
         this.layoutService.layoutConfig.update((state) => ({ ...state, darkTheme: !state.darkTheme }));

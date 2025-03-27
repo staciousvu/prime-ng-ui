@@ -565,6 +565,62 @@ export class CourseData{
             status: "ACCEPTED"
         }
     ]
+    vouchers = [
+        {
+            id: 1,
+            code: "DISCOUNT10",
+            description: "Giảm giá 10% cho đơn hàng",
+            discountType: "PERCENTAGE",
+            discountValue: 10.00,
+            startDate: "2024-10-01T00:00:00",
+            endDate: "2024-10-31T23:59:59",
+            isActive: "INACTIVE"
+        },
+        {
+            id: 2,
+            code: "FREESHIP50",
+            description: "Miễn phí vận chuyển cho đơn hàng từ 50K",
+            discountType: "FIXED_AMOUNT",
+            discountValue: 50.00,
+            startDate: "2024-11-01T00:00:00",
+            endDate: "2024-11-30T23:59:59",
+            isActive: "ACTIVE"
+        },
+        {
+            id: 3,
+            code: "WELCOME20",
+            description: "Giảm ngay 20K cho khách hàng mới",
+            discountType: "FIXED_AMOUNT",
+            discountValue: 20.00,
+            startDate: "2024-09-15T00:00:00",
+            endDate: "2024-12-15T23:59:59",
+            isActive: "ACTIVE"
+        },
+        {
+            id: 4,
+            code: "BLACKFRIDAY30",
+            description: "Giảm 30% cho tất cả đơn hàng dịp Black Friday",
+            discountType: "PERCENTAGE",
+            discountValue: 30.00,
+            startDate: "2024-11-25T00:00:00",
+            endDate: "2024-11-29T23:59:59",
+            isActive: "INACTIVE"
+        },
+        {
+            id: 5,
+            code: "YEAR-END50",
+            description: "Giảm 50K cho đơn hàng từ 500K",
+            discountType: "FIXED_AMOUNT",
+            discountValue: 50.00,
+            startDate: "2024-12-01T00:00:00",
+            endDate: "2025-12-31T23:59:59",
+            isActive: "ACTIVE"
+        }
+    ]
+    getAllVouchers(){
+        return this.vouchers;
+    }
+    
     
     
       getAllCourses() {

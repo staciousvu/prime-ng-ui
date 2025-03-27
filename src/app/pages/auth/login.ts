@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { CheckboxModule } from 'primeng/checkbox';
 import { InputTextModule } from 'primeng/inputtext';
 import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'app-login',
@@ -36,7 +37,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                     />
                                 </g>
                             </svg>
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to PrimeLand!</div>
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Welcome to EDUFLOW!</div>
                             <span class="text-muted-color font-medium">Sign in to continue</span>
                         </div>
 
@@ -54,7 +55,7 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
                                 </div>
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
-                            <p-button label="Sign In" styleClass="w-full" routerLink="/"></p-button>
+                            <p-button label="Sign In" styleClass="w-full" (onClick)="onSubmit()"></p-button>
                         </div>
                     </div>
                 </div>
@@ -63,9 +64,16 @@ import { AppFloatingConfigurator } from '../../layout/component/app.floatingconf
     `
 })
 export class Login {
-    email: string = '';
+    email: string = 'vunguyenba310703@gmail.com';
 
-    password: string = '';
+    password: string = '12345678';
 
     checked: boolean = false;
+    constructor(private authService: AuthService, private router: Router) {}
+    onSubmit() {
+        this.authService.login({ username: this.email, password: this.password }).subscribe({
+          next: () => this.router.navigate(['admin']),
+          error: (err) => console.error('Login failed', err)
+        });
+      }
 }
