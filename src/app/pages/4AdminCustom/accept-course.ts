@@ -109,7 +109,7 @@ interface City {
                         <p-tag [value]="'ACCEPT'" [severity]="'success'" />
                     </td>
                     <td>
-                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" />
+                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" (click)="view(course.id)"/>
                     </td>
                 </tr>
             </ng-template>
@@ -135,6 +135,7 @@ interface City {
                 <p-button label="Yes" icon="pi pi-check" (click)="closeReject()" severity="danger" outlined autofocus />
             </ng-template>
         </p-dialog>
+        
     `,
     styles: ``,
     providers: [CourseService, CourseData]
@@ -189,4 +190,7 @@ export class CourseAcceptComponent implements OnInit {
               return 'info';
       }
   }
+    view(id: string) {
+        this.router.navigate(['/courses/view-course', id]);
+      }
 }

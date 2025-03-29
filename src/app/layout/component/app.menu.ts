@@ -47,6 +47,12 @@ export class AppMenu {
                 ]
             },
             {
+                label: 'Quản lý thông báo',
+                items: [
+                    { label: 'List notification', icon: 'pi pi-fw pi-bell', routerLink: ['/courses/notifications/list'] },
+                ]
+            },
+            {
                 label: 'Quản lý người dùng',
                 items: [
                     { label: 'Danh sách người dùng', icon: 'pi pi-fw pi-users', routerLink: ['/users'] },

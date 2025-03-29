@@ -8,6 +8,7 @@ import { ViewCourseComponent } from "./view-course";
 import { CategoryComponent } from "./category";
 import { TestComponent } from "./test";
 import { CourseLabelComponent } from "./label-course";
+import { NotificationComponent } from "./notification/notification";
 
 
 
@@ -21,5 +22,6 @@ export default [
     {path:'test',data: { breadcrumb: 'Button' }, component: TestComponent},
     { path: 'update-course/:id', data: { breadcrumb: 'Button' }, component: UpdateCourse },
     { path: 'view-course/:id', data: { breadcrumb: 'Button' }, component: ViewCourseComponent },
+    { path: 'notifications/list', data: { breadcrumb: 'Button' }, component: NotificationComponent },
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;

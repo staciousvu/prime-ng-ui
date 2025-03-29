@@ -110,7 +110,7 @@ interface City {
                         <p-tag [value]="'DRAFT'" [severity]="'info'" />
                     </td>
                     <td>
-                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" />
+                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" (click)="view(course.id)"/>
                     </td>
                 </tr>
             </ng-template>
@@ -190,4 +190,7 @@ export class CourseDraftComponent implements OnInit {
               return 'info';
       }
   }
+    view(id: string) {
+        this.router.navigate(['/courses/view-course', id]);
+      }
 }

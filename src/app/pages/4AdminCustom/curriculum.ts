@@ -35,7 +35,9 @@ interface Section {
                         <button pButton icon="pi pi-times" class="btn-cancel" (click)="cancelEditSection(i)"></button>
                     </div>
                 </div>
+                <!--  -->
                 <app-section [section]="section"></app-section>
+                <!--  -->
             </div>
             <div class="mt-6">
                 <button pButton label="Add Section" icon="pi pi-plus" class="btn-add" (click)="startAddingSection()"></button>

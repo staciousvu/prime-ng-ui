@@ -56,4 +56,8 @@ export class CourseService {
     const url = `${this.labelUrl}/add/${labelName}`;
     return this.http.post<any>(url, labelRequest);
   }
+  createDraftCourse(title: string): Observable<any> {
+    let params = new HttpParams().set('title', title);
+    return this.http.post<any>(`${this.API_URL}/draft`, {}, { params });
+  }
 }

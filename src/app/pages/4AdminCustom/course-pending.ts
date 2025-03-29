@@ -24,6 +24,8 @@ import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CourseData } from '../service/data.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { BreadcrumpComponent } from './breadcrump';
+import { HttpClient } from '@angular/common/http';
+import { ToastModule } from 'primeng/toast';
 interface City {
     name: string;
     code: string;
@@ -31,14 +33,14 @@ interface City {
 @Component({
     selector: 'app-course-pending',
     standalone: true,
-    imports: [RouterModule, Dialog, DialogModule, ConfirmDialogModule, InputTextModule, InputIconModule, IconFieldModule, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule],
+    imports: [ToastModule,RouterModule, Dialog, DialogModule, ConfirmDialogModule, InputTextModule, InputIconModule, IconFieldModule, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule],
     template: `
         <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg shadow-md mb-4">
             <p class="font-bold text-xl flex items-center">
                 <svg class="w-6 h-6 mr-2 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 22a10 10 0 100-20 10 10 0 000 20z" />
                 </svg>
-                Có {{totalRecords}} khóa học mới đang chờ phê duyệt
+                Có {{ totalRecords }} khóa học mới đang chờ phê duyệt
             </p>
         </div>
         <style>
@@ -96,76 +98,126 @@ interface City {
                         <p-tag [value]="'PENDING'" [severity]="'warn'" />
                     </td>
                     <td>
-                        <p-button icon="pi pi-check" class="mr-2" [rounded]="true" [outlined]="true" (click)="openConfirmation()" />
-                        <p-button icon="pi pi-times-circle" severity="danger" [rounded]="true" [outlined]="true" (click)="openReject()" />
+                        <p-button icon="pi pi-check" class="mr-2" [rounded]="true" [outlined]="true" (click)="openConfirmation(course.id)" />
+                        <p-button icon="pi pi-times-circle" severity="danger" [rounded]="true" [outlined]="true" (click)="openReject(course.id)" />
                     </td>
                     <td>
-                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" />
+                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" (click)="view(course.id)" />
                     </td>
                 </tr>
             </ng-template>
         </p-table>
-        <!-- dialog -->
         <p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
             <div class="flex items-center justify-center">
                 <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
-                <span>Are you sure you want to proceed?</span>
+                <span>Bạn có chắc muốn phê duyệt khóa học này?</span>
             </div>
             <ng-template #footer>
-                <p-button label="No" icon="pi pi-times" (click)="closeConfirmation()" text severity="secondary" />
-                <p-button label="Yes" icon="pi pi-check" (click)="closeConfirmation()" severity="danger" outlined autofocus />
+                <p-button label="Không" icon="pi pi-times" (click)="closeConfirmation()" text severity="secondary" />
+                <p-button label="Có" icon="pi pi-check" (click)="confirmApproval()" severity="danger" outlined autofocus />
             </ng-template>
         </p-dialog>
-        <p-dialog header="Confirmation" [(visible)]="displayReject" [style]="{ width: '350px' }" [modal]="true">
+
+        <p-dialog header="Reject" [(visible)]="displayReject" [style]="{ width: '350px' }" [modal]="true">
             <div class="flex items-center justify-center">
                 <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
-                <span>Are you sure you want to proceed?</span>
+                <span>Bạn có chắc muốn từ chối khóa học?</span>
             </div>
             <ng-template #footer>
-                <p-button label="No" icon="pi pi-times" (click)="closeReject()" text severity="secondary" />
-                <p-button label="Yes" icon="pi pi-check" (click)="closeReject()" severity="danger" outlined autofocus />
+                <p-button label="Không" icon="pi pi-times" (click)="closeReject()" text severity="secondary" />
+                <p-button label="Có" icon="pi pi-check" (click)="confirmReject()" severity="danger" outlined autofocus />
             </ng-template>
         </p-dialog>
+
+        <!-- dialog -->
+        <p-toast></p-toast>
     `,
-    styles: ``,
-    providers: [CourseService, CourseData]
+    styles: `
+    .p-toast {
+  @apply w-96; /* width 24rem */
+}
+
+.p-toast-message {
+  @apply text-base p-4 rounded-xl;
+}
+    `,
+    providers: [CourseService, CourseData,MessageService]
 })
 export class CoursePendingComponent implements OnInit {
-    totalRecords:number=0;
-    courses: any[]=[];
+    totalRecords: number = 0;
+    courses: any[] = [];
     selectedCourses!: any;
     visible: boolean = false;
     displayConfirmation: boolean = false;
     displayReject: boolean = false;
+
+    selectedCourseId: number | null = null;
     closeConfirmation() {
         this.displayConfirmation = false;
+        this.cdr.detectChanges()
     }
     closeReject() {
         this.displayReject = false;
+        this.cdr.detectChanges()
     }
-    openConfirmation() {
+    confirmApproval() {
+        if (this.selectedCourseId) {
+            this.http.put<any>(`http://localhost:8080/course/${this.selectedCourseId}/accept`,{}).subscribe(
+                (res)=>{
+                        this.displayConfirmation = false;
+                        this.courses = this.courses.filter(course => course.id !== this.selectedCourseId);
+                        this.totalRecords = this.courses.length;
+                        this.showAccept()
+                        this.cdr.detectChanges()
+                }
+            );
+
+        }
+    }
+    
+    confirmReject() {
+        if (this.selectedCourseId) {
+            this.http.put<any>(`http://localhost:8080/course/${this.selectedCourseId}/reject`,{}).subscribe(
+                (res)=>{
+                this.displayReject = false;
+                this.courses = this.courses.filter(course => course.id !== this.selectedCourseId);
+                this.totalRecords = this.courses.length;
+                this.showReject();
+                this.cdr.detectChanges()
+                }
+            );
+        }
+    }
+    
+    openConfirmation(courseId: number) {
+        this.selectedCourseId = courseId;
         this.displayConfirmation = true;
+        this.cdr.detectChanges()
     }
-    openReject() {
+
+    openReject(courseId: number) {
+        this.selectedCourseId = courseId;
         this.displayReject = true;
+        this.cdr.detectChanges()
     }
     showDialog() {
         this.visible = true;
+        this.cdr.detectChanges()
     }
     constructor(
         private courseService: CourseService,
-        private router: Router
+        private router: Router,
+        private http:HttpClient,
+        private cdr:ChangeDetectorRef,
+        private messageService:MessageService
     ) {}
 
     ngOnInit() {
-        this.courseService.getPendingCourses().subscribe(
-            (response) => {
-                this.courses = response.data;
-                this.totalRecords=this.courses.length
-                console.log(this.courses)
-              }
-        );
-
+        this.courseService.getPendingCourses().subscribe((response) => {
+            this.courses = response.data;
+            this.totalRecords = this.courses.length;
+            console.log(this.courses);
+        });
     }
     getSeverity(status: string) {
         switch (status) {
@@ -178,5 +230,14 @@ export class CoursePendingComponent implements OnInit {
             default:
                 return 'info';
         }
+    }
+    view(id: string) {
+        this.router.navigate(['/courses/view-course', id]);
+    }
+    showAccept() {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Đã phê duyệt!' });
+    }
+    showReject() {
+        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Đã từ chối!' });
     }
 }
