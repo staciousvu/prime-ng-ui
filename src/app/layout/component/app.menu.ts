@@ -27,29 +27,33 @@ export class AppMenu {
             {
                 label: 'Quản lý khóa học',
                 items: [
-                    { label: 'List courses', icon: 'pi pi-fw pi-book', routerLink: ['/courses/list'] },
-                    { label: 'Approve course', icon: 'pi pi-fw pi-check', routerLink: ['/courses/approve-course'] },
-                    { label: 'Label', icon: 'pi pi-fw pi-tag', routerLink: ['/courses/label'] },
-                    { label: 'Category', icon: 'pi pi-fw pi-tags',routerLink: ['/courses/category']  },
+                    // { label: 'List courses', icon: 'pi pi-fw pi-book', routerLink: ['/courses/list'] },
+                    // { label: 'Approve course', icon: 'pi pi-fw pi-check', routerLink: ['/courses/approve-course'] },
+                    // { label: 'Label', icon: 'pi pi-fw pi-tag', routerLink: ['/courses/label'] },
+                    // { label: 'Category', icon: 'pi pi-fw pi-tags',routerLink: ['/courses/category']  },
+                    { label: 'List courses', icon: 'pi pi-fw pi-book', routerLink: ['/admin/courses/list'] },
+                    { label: 'Approve course', icon: 'pi pi-fw pi-check', routerLink: ['/admin/courses/approve-course'] },
+                    { label: 'Label', icon: 'pi pi-fw pi-tag', routerLink: ['/admin/courses/label'] },
+                    { label: 'Category', icon: 'pi pi-fw pi-tags',routerLink: ['/admin/courses/category']  },
                 ]
             },
             {
                 label: 'Quản lý voucher',
                 items: [
-                    { label: 'List vouchers', icon: 'pi pi-fw pi-ticket', routerLink: ['/vouchers/list'] },
-                    { label: 'Add voucher', icon: 'pi pi-fw pi-plus', routerLink: ['/vouchers/add-course'] },
+                    { label: 'List vouchers', icon: 'pi pi-fw pi-ticket', routerLink: ['/admin/vouchers/list'] },
+                    { label: 'Add voucher', icon: 'pi pi-fw pi-plus', routerLink: ['/admin/vouchers/add-voucher'] },
                 ]
             },
             {
                 label: 'Quản lý đánh giá',
                 items: [
-                    { label: 'List reviews', icon: 'pi pi-fw pi-ticket', routerLink: ['/reviews/list'] },
+                    { label: 'List reviews', icon: 'pi pi-fw pi-ticket', routerLink: ['/admin/reviews/list'] },
                 ]
             },
             {
                 label: 'Quản lý thông báo',
                 items: [
-                    { label: 'List notification', icon: 'pi pi-fw pi-bell', routerLink: ['/courses/notifications/list'] },
+                    { label: 'List notification', icon: 'pi pi-fw pi-bell', routerLink: ['/admin/notifications/list'] },
                 ]
             },
             {

@@ -1,14 +1,14 @@
 import { Routes } from "@angular/router";
-import { CourseList } from "./course";
-import { AddCourse } from "./add-course";
-import { UpdateCourse } from "./update-course";
-import { CurriculumComponent } from "./curriculum";
-import { ApproveCourseComponent } from "./approve-course";
-import { ViewCourseComponent } from "./view-course";
-import { CategoryComponent } from "./category";
-import { TestComponent } from "./test";
-import { CourseLabelComponent } from "./label-course";
-import { NotificationComponent } from "./notification/notification";
+import { CourseList } from "../course";
+import { AddCourse } from "../add-course";
+import { UpdateCourse } from "../update-course";
+import { CurriculumComponent } from "../curriculum";
+import { ApproveCourseComponent } from "../approve-course";
+import { ViewCourseComponent } from "../view-course";
+import { CategoryComponent } from "../category";
+import { TestComponent } from "../test";
+import { CourseLabelComponent } from "../label-course";
+import { NotificationComponent } from "../notification/notification";
 
 
 
