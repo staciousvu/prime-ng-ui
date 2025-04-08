@@ -119,6 +119,7 @@ export class AppTopbar {
         console.log("Logout clicked in AppTopbar!");
         
         this.auth.logout();
+        window.location.href = '/auth/admin/login'; 
     }
     isOpen = false;
 

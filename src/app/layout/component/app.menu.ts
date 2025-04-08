@@ -22,7 +22,7 @@ export class AppMenu {
         this.model = [
             {
                 label: 'Home',
-                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'] }]
+                items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/admin'] }]
             },
             {
                 label: 'Quản lý khóa học',
@@ -57,11 +57,11 @@ export class AppMenu {
                 ]
             },
             {
-                label: 'Quản lý người dùng',
+                label: 'Quản lý tài khoản',
                 items: [
-                    { label: 'Danh sách người dùng', icon: 'pi pi-fw pi-users', routerLink: ['/users'] },
-                    { label: 'Giảng viên', icon: 'pi pi-fw pi-user-tie', routerLink: ['/instructors'] },
-                    { label: 'Học viên', icon: 'pi pi-fw pi-user', routerLink: ['/students'] }
+                    { label: 'Admin', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-admin'] },
+                    { label: 'Instructor', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-instructor'] },
+                    { label: 'Learner', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-student'] }
                 ]
             },
             {
@@ -74,7 +74,7 @@ export class AppMenu {
             {
                 label: 'Hệ thống',
                 items: [
-                    { label: 'Cài đặt', icon: 'pi pi-fw pi-cog', routerLink: ['/settings'] },
+                    { label: 'Cài đặt', icon: 'pi pi-fw pi-cog', routerLink: ['/admin/account/view-instructor'] },
                     { label: 'Báo cáo & Thống kê', icon: 'pi pi-fw pi-chart-line', routerLink: ['/reports'] }
                 ]
             },

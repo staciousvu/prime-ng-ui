@@ -44,7 +44,7 @@ import { UpdateTargetComponent } from './update-course/target';
         <div class="card" style="padding: 6px; margin: 8px; background-color: transparent;">
             <div class="flex items-center justify-between">
                 <div class="flex items-center">
-                    <p-button label="Back" icon="pi pi-arrow-left" class="me-5" [routerLink]="['/courses/list']" />
+                    <p-button label="Back" icon="pi pi-arrow-left" class="me-5" [routerLink]="['/admin/courses/list']" />
                     <span class="font-semibold text-xl text-gray-800">Edit course</span>
                 </div>
                 <div class="flex flex-col items-center">

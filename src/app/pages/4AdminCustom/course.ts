@@ -105,35 +105,35 @@ export class FilterRequest {
     <ng-template #header>
       <tr>
 
-        <th><p-tableHeaderCheckbox /></th>
+        <!-- <th><p-tableHeaderCheckbox /></th> -->
         <th style="min-width: 10rem">Hình ảnh</th>
         <th style="min-width: 10rem">Tiêu đề</th>
-        <th style="min-width: 10rem">Tác giả</th>
+        <th style="min-width: 8rem">Tác giả</th>
         <!-- <th >Danh mục</th> -->
         <th >Giá</th>
         <th >Thời lượng</th>
         <th >Reviews</th>
-        <th style="min-width: 10rem">Ngôn ngữ</th>
+        <th style="min-width: 8rem">Ngôn ngữ</th>
         <th >Trình độ</th>
-        <th style="min-width: 14rem">
+        <th style="min-width: 12rem">
           Thao tác
         </th>
       </tr>
     </ng-template>
     <ng-template #body let-course>
       <tr>
-        <td>
+        <!-- <td>
             <p-tableCheckbox [value]="course" />
-        </td>
+        </td> -->
 
         <td>
-          <img src="https://th.bing.com/th/id/OIF.cHcR9RNGeslvhw6dAwJC1A?rs=1&pid=ImgDetMain" alt="thumbnail" class="w-50 rounded"/>
+          <img [src]="course.thumbnail" alt="thumbnail" class="w-50 rounded"/>
         </td>
         <td>{{ course.title }}</td>
         <td>
         <div class="flex items-center gap-2">
                     <!-- <img [src]="course.authorAvatar" width="50" style="vertical-align: middle"/> -->
-                    <img src="https://www.aceshowbiz.com/images/still/avatar09.jpg" width="50" style="vertical-align: middle"/>
+                    <!-- <img src="https://www.aceshowbiz.com/images/still/avatar09.jpg" width="50" style="vertical-align: middle"/> -->
                     <span class="font-bold ml-2">{{ course.authorName }}</span>
                 </div>
         </td>
@@ -271,18 +271,18 @@ export class CourseList implements OnInit {
     this.visible = false;
     this.courseService.createDraftCourse(this.title).subscribe(
       (response: any) => {
-        this.router.navigate(['/courses/update-course', response.data]);
+        this.router.navigate(['/admin/courses/update-course', response.data]);
       }
     );
     
   }
 
   edit(id: string) {
-    this.router.navigate(['/courses/update-course', id]);
+    this.router.navigate(['/admin/courses/update-course', id]);
   }
 
   view(id: string) {
-    this.router.navigate(['/courses/view-course', id]);
+    this.router.navigate(['/admin/courses/view-course', id]);
   }
 
   getSeverity(status: string) {

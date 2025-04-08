@@ -102,7 +102,7 @@ import { BreadcrumpComponent } from './breadcrump';
                         <p-tableCheckbox [value]="course"></p-tableCheckbox>
                     </td>
                     <td>
-                        <img src="https://th.bing.com/th/id/OIF.cHcR9RNGeslvhw6dAwJC1A?rs=1&pid=ImgDetMain" alt="thumbnail" width="90" class="rounded" />
+                        <img [src]="course.thumbnail" alt="thumbnail" width="90" class="rounded" />
                     </td>
                     <td>{{ course.title }}</td>
                     <td>

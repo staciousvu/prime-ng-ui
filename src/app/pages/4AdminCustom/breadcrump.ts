@@ -15,7 +15,7 @@ import { BreadcrumbModule } from "primeng/breadcrumb";
                 <i class="pi pi-home"></i>
             </a>
             <span class="separator">/</span>
-            <a [routerLink]="['/courses/list']" class="breadcrumb-item">{{manager}}</a>
+            <a [routerLink]="['/admin/courses/list']" class="breadcrumb-item">{{manager}}</a>
             <span class="separator">/</span>
             <span class="breadcrumb-item active">{{apr}}</span>
         </nav>

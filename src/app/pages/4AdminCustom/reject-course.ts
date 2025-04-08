@@ -187,6 +187,6 @@ export class CourseRejectComponent implements OnInit {
       }
   }
     view(id: string) {
-        this.router.navigate(['/courses/view-course', id]);
+        this.router.navigate(['/admin/courses/view-course', id]);
       }
 }

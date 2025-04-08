@@ -69,11 +69,23 @@ export class Login {
     password: string = '12345678';
 
     checked: boolean = false;
-    constructor(private authService: AuthService, private router: Router) {}
+    constructor(
+        private authService: AuthService,
+        private router: Router
+    ) {}
     onSubmit() {
-        this.authService.login({ username: this.email, password: this.password }).subscribe({
-          next: () => this.router.navigate(['admin']),
-          error: (err) => console.error('Login failed', err)
+        this.login();
+    }
+    login() {
+        this.authService.login(this.email, this.password).subscribe((response) => {
+            if (response.success) {
+                if (response.data.roles.includes('ADMIN')) {
+                    this.router.navigate(['/admin']);
+                } 
+                // else {
+                //     this.router.navigate(['/home']);
+                // }
+            }
         });
-      }
+    }
 }
