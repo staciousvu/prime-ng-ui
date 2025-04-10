@@ -31,7 +31,7 @@ export const appRoutes: Routes = [
             {path:'home',component:HomeComponent},
             {path:'cart',component:CartComponent},
             {path:'my-learning',component:MyLearningComponent},
-            {path:'course-detail',component:CourseDetailComponent}
+            {path:'course-detail/:id',component:CourseDetailComponent}
         ]
     },
     {

@@ -33,7 +33,7 @@ interface City {
 @Component({
     selector: 'app-course-pending',
     standalone: true,
-    imports: [ToastModule,RouterModule, Dialog, DialogModule, ConfirmDialogModule, InputTextModule, InputIconModule, IconFieldModule, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule],
+    imports: [ToastModule, RouterModule, Dialog, DialogModule, ConfirmDialogModule, InputTextModule, InputIconModule, IconFieldModule, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule],
     template: `
         <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg shadow-md mb-4">
             <p class="font-bold text-xl flex items-center">
@@ -65,26 +65,24 @@ interface City {
                 <tr>
                     <th style="min-width: 10rem">Hình ảnh</th>
                     <th style="min-width: 10rem">Tiêu đề</th>
-                    <th style="min-width: 14rem">Tác giả</th>
+                    <th style="min-width: 8rem">Tác giả</th>
                     <th>Giá</th>
                     <th>Thời lượng</th>
-                    <!-- <th style="min-width: 10rem">Ngôn ngữ</th> -->
                     <th>Trình độ</th>
                     <th>Trạng thái</th>
-                    <th style="min-width: 10rem">Phê duyệt</th>
-                    <th style="min-width: 10rem">Thao tác</th>
+                    <th style="min-width: 8rem">Phê duyệt</th>
+                    <th style="min-width: 6rem">Thao tác</th>
                 </tr>
             </ng-template>
             <ng-template #body let-course>
                 <tr>
                     <td>
-                    <img [src]="course.thumbnail" alt="thumbnail" class="w-50 rounded"/>
+                        <img [src]="course.thumbnail" alt="thumbnail" class="w-50 rounded" />
                     </td>
                     <td>{{ course.title }}</td>
                     <td>
                         <div class="flex items-center gap-2">
                             <!-- <img [src]="course.authorAvatar" width="50" style="vertical-align: middle"/> -->
-                            <img src="https://www.aceshowbiz.com/images/still/avatar09.jpg" width="50" style="vertical-align: middle" />
                             <span class="font-bold ml-2">{{ course.authorName }}</span>
                         </div>
                     </td>
@@ -133,15 +131,15 @@ interface City {
         <p-toast></p-toast>
     `,
     styles: `
-    .p-toast {
-  @apply w-96; /* width 24rem */
-}
+        .p-toast {
+            @apply w-96; /* width 24rem */
+        }
 
-.p-toast-message {
-  @apply text-base p-4 rounded-xl;
-}
+        .p-toast-message {
+            @apply text-base p-4 rounded-xl;
+        }
     `,
-    providers: [CourseService, CourseData,MessageService]
+    providers: [CourseService, CourseData, MessageService]
 })
 export class CoursePendingComponent implements OnInit {
     totalRecords: number = 0;
@@ -154,62 +152,57 @@ export class CoursePendingComponent implements OnInit {
     selectedCourseId: number | null = null;
     closeConfirmation() {
         this.displayConfirmation = false;
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
     }
     closeReject() {
         this.displayReject = false;
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
     }
     confirmApproval() {
         if (this.selectedCourseId) {
-            this.http.put<any>(`http://localhost:8080/course/${this.selectedCourseId}/accept`,{}).subscribe(
-                (res)=>{
-                        this.displayConfirmation = false;
-                        this.courses = this.courses.filter(course => course.id !== this.selectedCourseId);
-                        this.totalRecords = this.courses.length;
-                        this.showAccept()
-                        this.cdr.detectChanges()
-                }
-            );
-
+            this.http.put<any>(`http://localhost:8080/course/${this.selectedCourseId}/accept`, {}).subscribe((res) => {
+                this.displayConfirmation = false;
+                this.courses = this.courses.filter((course) => course.id !== this.selectedCourseId);
+                this.totalRecords = this.courses.length;
+                this.showAccept();
+                this.cdr.detectChanges();
+            });
         }
     }
-    
+
     confirmReject() {
         if (this.selectedCourseId) {
-            this.http.put<any>(`http://localhost:8080/course/${this.selectedCourseId}/reject`,{}).subscribe(
-                (res)=>{
+            this.http.put<any>(`http://localhost:8080/course/${this.selectedCourseId}/reject`, {}).subscribe((res) => {
                 this.displayReject = false;
-                this.courses = this.courses.filter(course => course.id !== this.selectedCourseId);
+                this.courses = this.courses.filter((course) => course.id !== this.selectedCourseId);
                 this.totalRecords = this.courses.length;
                 this.showReject();
-                this.cdr.detectChanges()
-                }
-            );
+                this.cdr.detectChanges();
+            });
         }
     }
-    
+
     openConfirmation(courseId: number) {
         this.selectedCourseId = courseId;
         this.displayConfirmation = true;
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
     }
 
     openReject(courseId: number) {
         this.selectedCourseId = courseId;
         this.displayReject = true;
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
     }
     showDialog() {
         this.visible = true;
-        this.cdr.detectChanges()
+        this.cdr.detectChanges();
     }
     constructor(
         private courseService: CourseService,
         private router: Router,
-        private http:HttpClient,
-        private cdr:ChangeDetectorRef,
-        private messageService:MessageService
+        private http: HttpClient,
+        private cdr: ChangeDetectorRef,
+        private messageService: MessageService
     ) {}
 
     ngOnInit() {

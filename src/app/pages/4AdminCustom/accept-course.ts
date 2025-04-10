@@ -89,7 +89,7 @@ interface City {
             <ng-template #body let-course>
                 <tr>
                     <td>
-                        <img src="https://th.bing.com/th/id/OIF.cHcR9RNGeslvhw6dAwJC1A?rs=1&pid=ImgDetMain" alt="thumbnail" class="w-50 rounded" />
+                        <img [src]="course.thumbnail" alt="thumbnail" class="w-50 rounded" />
                     </td>
                     <td>{{ course.title }}</td>
                     <td>

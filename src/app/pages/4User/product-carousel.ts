@@ -1,22 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewEncapsulation } from '@angular/core';
 import { CarouselModule } from 'primeng/carousel';
 import { TagModule } from 'primeng/tag';
 import { StarRatingComponent } from './star-rating';
+import { Router, RouterLink } from '@angular/router';
+import { CartService } from '../service/cart.service';
 
 @Component({
     selector: 'app-product-carousel',
     standalone: true,
     encapsulation: ViewEncapsulation.None,
-    imports: [CommonModule, TagModule, CarouselModule, StarRatingComponent],
+    imports: [CommonModule, TagModule, CarouselModule, StarRatingComponent, RouterLink],
     template: `
         <div class="what-will-you-learn-item">
             <h2 class="card-container-title">
-                {{ title }} <span class="keyword">"{{ keyword }}"</span>
+                {{ title }} <span *ngIf="keyword" class="keyword">"{{ keyword }}"</span>
             </h2>
             <div class="card-container">
                 <div class="card-item" *ngFor="let course of courses">
-                    <img [src]="course.thumbnail" alt="" class="card-item-img" />
+                    <img [src]="course.thumbnail" alt="" class="card-item-img" [routerLink]="['/course-detail', course.id]" />
                     <span class="card-item-course-name">{{ course.title }}</span>
                     <span class="card-item-author-name">{{ course.authorName }}</span>
                     <div class="rating-info">
@@ -25,10 +27,9 @@ import { StarRatingComponent } from './star-rating';
                         <span class="total-rating">( {{ course.countRating }} )</span>
                     </div>
                     <div class="price">
-                        <span class="discount-price">d{{ course.discount_price }}</span>
-                        <span class="origin-price">d{{ course.price }}</span>
+                        <span class="discount-price"> đ{{ course.discount_price }} </span>
+                        <span class="origin-price">đ{{ course.price }}</span>
                     </div>
-                    <!-- <span class="label">{{course.label}}</span> -->
                     <span class="label" *ngIf="course.label !== 'NONE'" [ngClass]="course.label.toLowerCase()">
                         {{ course.label }}
                     </span>
@@ -47,9 +48,9 @@ import { StarRatingComponent } from './star-rating';
                                 {{ course.subtitle }}
                             </p>
                             <ul class="learning-content" *ngIf="course.contents.length > 0">
-                                <li class="learning-content-item">{{ course.contents[0] }}</li>
-                                <li class="learning-content-item">{{ course.contents[1] }}</li>
-                                <li class="learning-content-item">{{ course.contents[2] }}</li>
+                                <li class="learning-content-item">{{ course.contents[0].title }}</li>
+                                <li class="learning-content-item">{{ course.contents[1].title }}</li>
+                                <li class="learning-content-item">{{ course.contents[2].title }}</li>
                             </ul>
                             <ul class="learning-content" *ngIf="course.contents.length == 0">
                                 <li class="learning-content-item">Khẳng định mình là một nhà phát triển chuyên nghiệp lành nghề</li>
@@ -57,7 +58,14 @@ import { StarRatingComponent } from './star-rating';
                                 <li class="learning-content-item">Hiểu cách cấu trúc một ứng dụng bằng cách sử dụng các phương pháp hay nhất</li>
                             </ul>
                             <div class="btn-group">
-                                <button class="add-to-cart">Add to cart</button>
+                                <!-- <button class="add-to-cart" (click)="hello()">Add to cart</button> -->
+                                <button class="add-to-cart" (click)="handleCartClick(course.id)" [disabled]="loadingMap[course.id]">
+                                    <span *ngIf="!loadingMap[course.id]">
+                                        {{ isInCartMap[course.id] ? 'Go to cart' : 'Add to cart' }}
+                                    </span>
+                                    <span *ngIf="loadingMap[course.id]" class="spinner"></span>
+                                </button>
+
                                 <button class="add-to-withlist"><i class="bi bi-heart"></i></button>
                             </div>
                         </div>
@@ -67,6 +75,26 @@ import { StarRatingComponent } from './star-rating';
         </div>
     `,
     styles: `
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        // hehe
         .keyword {
             font-size: 24px;
             text-decoration: underline;
@@ -82,8 +110,7 @@ import { StarRatingComponent } from './star-rating';
         .what-will-you-learn-item {
             margin-top: 20px;
             width: 100%;
-            padding: 40px 0;
-            // background-color:rgb(78, 76, 76);
+            padding: 20px 0;
         }
         .card-container-title {
             width: 80%;
@@ -105,7 +132,6 @@ import { StarRatingComponent } from './star-rating';
         .card-item {
             width: 220px;
             border-radius: 12px;
-
             transition:
                 transform 0.3s ease,
                 box-shadow 0.3s ease;
@@ -116,9 +142,9 @@ import { StarRatingComponent } from './star-rating';
             cursor: pointer;
         }
 
-            .card-item:active {
+        .card-item:active {
             background-color: rgba(224, 219, 219, 0.61);
-          }
+        }
 
         .card-item-img {
             width: 100%;
@@ -349,8 +375,39 @@ import { StarRatingComponent } from './star-rating';
         }
     `
 })
-export class ProductCarouselComponent {
+export class ProductCarouselComponent implements OnInit{
+
     @Input() title: string = ''; // Tiêu đề danh sách
-    @Input() keyword: string = '';
+    @Input() keyword?: string; // kwyword danh sach
     @Input() courses: any[] = []; // Danh sách sản phẩm
+    isInCartMap: { [key: number]: boolean } = {};
+    loadingMap: { [key: number]: boolean } = {};
+    constructor(
+        private cartService: CartService,
+        private route: Router
+    ) {}
+    ngOnInit(): void {
+        this.courses.forEach(course => {
+            this.isInCartMap[course.id] = this.cartService.isInCart(course.id);
+            console.log(this.isInCartMap)
+          });
+    }
+    isCourseInCart(courseId: number): boolean {
+        return this.cartService.isInCart(courseId);
+    }
+
+    handleCartClick(courseId: number) {
+        if (this.isCourseInCart(courseId)) {
+            this.route.navigate(['/cart']);
+        } else {
+            this.loadingMap[courseId] = true;
+            this.cartService.addToCart(courseId).subscribe(() => {
+                this.cartService.loadCart();
+                setTimeout(() => {
+                    this.loadingMap[courseId] = false;
+                    this.isInCartMap[courseId] = true;
+                }, 1000);
+            });
+        }
+    }
 }

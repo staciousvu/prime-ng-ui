@@ -31,8 +31,8 @@ import { ActivatedRoute } from '@angular/router';
 
             <div class="description">
                 <h2 class="description-title">Description</h2>
-                <p class="description-content">
-                    {{ course.description }}
+                <p class="description-content" [innerHTML]="course.description">
+                    <!-- {{ course.description }} -->
                 </p>
             </div>
         </div>
@@ -48,6 +48,11 @@ import { ActivatedRoute } from '@angular/router';
         }
         .description-content {
             flex: 7;
+            box-sizing: border-box;
+    overflow-wrap: anywhere;
+    word-break: normal;
+    white-space: pre-line;
+    line-height: 1.6;
         }
         .container {
             max-width: 1024px;

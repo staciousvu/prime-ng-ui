@@ -18,7 +18,6 @@ import { HttpClient } from '@angular/common/http';
     // encapsulation: ViewEncapsulation.None,
     imports: [ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],
     template: `
-
         <app-category-list />
         <div class="welcome">
             <div class="avatar">
@@ -34,11 +33,12 @@ import { HttpClient } from '@angular/common/http';
         </div>
 
         <div class="banner">
-            <img src="https://img-c.udemycdn.com/notices/web_carousel_slide/image/db24b94e-d190-4d5a-b1dd-958f702cc8f5.jpg" alt="" />
-            <div class="banner-info">
+            <!-- <img src="https://img-c.udemycdn.com/notices/web_carousel_slide/image/db24b94e-d190-4d5a-b1dd-958f702cc8f5.jpg" alt="" /> -->
+            <img src="https://unisallevirtual.lasalle.edu.co/pluginfile.php/4049002/course/overviewfiles/6aa96182-b121-4e69-9427-f6450794018b.png" alt="" />
+            <!-- <div class="banner-info">
                 <h3 class="banner-info-title">Hãy bắt đầu ngay hôm nay</h3>
                 <p class="description">Rèn luyện kĩ năng cho hiện tại và cả tương lai , hãy bắt đầu với chúng tôi</p>
-            </div>
+            </div> -->
         </div>
         <!-- let start -->
         <!-- <div class="let-start">
@@ -76,6 +76,12 @@ import { HttpClient } from '@angular/common/http';
             </app-product-carousel>
             <app-product-carousel *ngIf="courses_preference_topic?.[1]?.courses?.length > 0" [title]="'Vì bạn đã chọn chủ đề'" [keyword]="courses_preference_topic[1].categoryName" [courses]="courses_preference_topic[1].courses">
             </app-product-carousel>
+            <app-product-carousel *ngIf="courses_activity" [title]="'Vì bạn đã xem khóa học liên quan đến '" [keyword]="courses_activity.categoryRoot" [courses]="courses_activity.courses">
+            </app-product-carousel>
+            
+            <app-product-carousel *ngIf="courses_keyword" [title]="'Vì bạn tìm kiếm từ khóa'" [keyword]="courses_keyword[0].keyword" [courses]="courses_keyword[0].courses"></app-product-carousel>
+            <app-product-carousel *ngIf="courses_keyword" [title]="'Vì bạn đã tìm kiếm từ khóa'" [keyword]="courses_keyword[1].keyword" [courses]="courses_keyword[1].courses"></app-product-carousel>
+            <app-product-carousel *ngIf="courses_related_enrolled" [title]="'Đề xuất theo những khóa học bạn đã mua gần đây'"  [courses]="courses_related_enrolled"></app-product-carousel>
         </div>
     `,
     styles: `
@@ -267,6 +273,9 @@ import { HttpClient } from '@angular/common/http';
 export class HomeComponent implements OnInit {
     courses_preference_root: any | null;
     courses_preference_topic: any | null;
+    courses_activity: any | null;
+    courses_keyword: any | null;
+    courses_related_enrolled: any|null;
     value: number = 3;
 
     constructor(private http: HttpClient) {}
@@ -277,6 +286,19 @@ export class HomeComponent implements OnInit {
         });
         this.http.get<any>(`http://localhost:8080/recommend/leafs`).subscribe((response) => {
             this.courses_preference_topic = response.data;
+        });
+        this.http.get<any>(`http://localhost:8080/recommend/activity`).subscribe((response) => {
+            this.courses_activity = response.data;
+        });
+        this.http.get<any>(`http://localhost:8080/recommend/keyword`).subscribe((response) => {
+            this.courses_keyword=response.data;
+        });
+        this.http.get<any>(`http://localhost:8080/recommend/leafs`).subscribe((response) => {
+            this.courses_preference_topic = response.data;
+        });
+        this.http.get<any>(`http://localhost:8080/recommend/related-enrolled`).subscribe((response) => {
+            this.courses_related_enrolled = response.data;
+            console.log('related-enrolled:'+this.courses_related_enrolled)
         });
     }
 }

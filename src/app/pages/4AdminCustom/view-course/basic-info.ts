@@ -3,11 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
-
+import { Editor } from 'primeng/editor';
 @Component({
     selector: 'app-view-course-info',
     standalone: true,
-    imports: [
+    imports: [Editor,
         CommonModule,FormsModule,InputTextModule // Only need CommonModule for basic Angular directives
     ],
     template: `
@@ -26,7 +26,8 @@ import { InputTextModule } from 'primeng/inputtext';
                 </div>
                 <div class="flex flex-col gap-2">
                     <label>Description</label>
-                    <input pInputText type="text" [(ngModel)]="course.description" readonly />
+                    <!-- <input pInputText type="text" [(ngModel)]="course.description" readonly /> -->
+                    <p-editor [(ngModel)]="course.description" [style]="{ height: '320px' }" [readonly]="true"/>
                 </div>
                 <div class="flex flex-col gap-2">
                     <label>Category</label>

@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
     template: `
     <div class="custom-rating">
     <ng-container *ngFor="let star of stars; let i = index">
-        <i class="pi pi-star" 
+        <i class="pi pi-star-fill" 
            [class.filled]="i < rating"
            (click)="setRating(i + 1)">
         </i>
@@ -23,14 +23,14 @@ import { Component, EventEmitter, Input, Output } from "@angular/core";
     gap: 5px;
 }
 
-.custom-rating .pi-star {
+.custom-rating .pi-star-fill {
     font-size: 16px;
     color: #ccc; /* Màu sao chưa chọn */
     cursor: pointer;
 }
 
-.custom-rating .pi-star.filled {
-    color: #ffb400 !important; /* Màu vàng cho sao đã chọn */
+.custom-rating .pi-star-fill.filled {
+    color: #ffb400 !important; 
 }
 
     `

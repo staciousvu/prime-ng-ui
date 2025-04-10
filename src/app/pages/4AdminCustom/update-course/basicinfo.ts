@@ -22,10 +22,12 @@ import { CurriculumComponent } from '../curriculum';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { Editor } from 'primeng/editor';
 @Component({
     selector: 'app-update-basic-info',
     standalone: true,
     imports: [
+        Editor,
         FileUploadModule,
         FluidModule,
         TabsModule,
@@ -44,12 +46,13 @@ import { ToastModule } from 'primeng/toast';
         FormsModule,
         TagModule,
         TextareaModule,
-        ProgressSpinnerModule
-    ,ToastModule],
+        ProgressSpinnerModule,
+        ToastModule
+    ],
     template: `
-    <div class="flex justify-end">
-  <p-button label="Save" icon="pi pi-check" iconPos="right" (click)="save()"></p-button>
-</div>
+        <div class="flex justify-end">
+            <p-button label="Save" icon="pi pi-check" iconPos="right" (click)="save()"></p-button>
+        </div>
 
         <p-fluid>
             <div *ngIf="loading">Đang tải dữ liệu khóa học...</div>
@@ -68,7 +71,8 @@ import { ToastModule } from 'primeng/toast';
                             </div>
                             <div class="flex flex-col gap-2">
                                 <label>Description</label>
-                                <textarea pTextarea rows="5" [(ngModel)]="course.description"></textarea>
+                                <!-- <textarea pTextarea rows="5" [(ngModel)]="course.description"></textarea> -->
+                                <p-editor [(ngModel)]="course.description" [style]="{ height: '320px' }" />
                             </div>
                             <div class="flex flex-wrap gap-6">
                                 <div class="flex flex-col grow basis-0 gap-2">
@@ -107,7 +111,7 @@ import { ToastModule } from 'primeng/toast';
                                 <p-fileUpload name="imageUpload" mode="basic" accept="image/*" (onSelect)="onThumbnailSelected($event)" chooseLabel="Choose Image" />
                             </div>
                             <div *ngIf="previewUrl" class="grid grid-cols-12 gap-2">
-                            <div class="col-span-12 flex justify-center" *ngIf="isUploadingThumbnail">
+                                <div class="col-span-12 flex justify-center" *ngIf="isUploadingThumbnail">
                                     <p-progressSpinner strokeWidth="4"></p-progressSpinner>
                                 </div>
                                 <div class="col-span-12 flex justify-center" *ngIf="!isUploadingThumbnail && previewUrl">
@@ -126,7 +130,11 @@ import { ToastModule } from 'primeng/toast';
                                 </div>
 
                                 <div class="col-span-12 flex justify-center" *ngIf="!isUploadingVideo && videoUrl">
-                                    <video [src]="videoUrl" controls class="w-100 rounded-lg shadow-lg border"></video>
+                                    <!-- <video [src]="videoUrl" controls class="w-100 rounded-lg shadow-lg border"></video> -->
+                                    <video controls class="w-100 rounded-lg shadow-lg border">
+                                        <source [src]="videoUrl" type="video/mp4" />
+                                        Trình duyệt của bạn không hỗ trợ video.
+                                    </video>
                                 </div>
                             </div>
                         </div>
@@ -136,16 +144,15 @@ import { ToastModule } from 'primeng/toast';
         </p-fluid>
         <p-toast></p-toast>
     `,
-    providers:[MessageService],
-    styles:`
-    .p-toast {
-  @apply w-96; /* width 24rem */
-}
+    providers: [MessageService],
+    styles: `
+        .p-toast {
+            @apply w-96; /* width 24rem */
+        }
 
-.p-toast-message {
-  @apply text-base p-4 rounded-xl;
-}
-
+        .p-toast-message {
+            @apply text-base p-4 rounded-xl;
+        }
     `
 })
 export class UpdateBasicInfoComponent implements OnInit, OnChanges {
@@ -168,7 +175,7 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
         { name: 'Japanese', code: 'JP' },
         { name: 'Chinese', code: 'CH' },
         { name: 'Korean', code: 'KR' },
-        { name: 'Spanish', code: 'SP' },
+        { name: 'Spanish', code: 'SP' }
     ];
     selectedLanguage: any = null;
 
@@ -186,7 +193,10 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
     ];
     selectedPrice: any = null;
 
-    constructor(private http: HttpClient,private messageService:MessageService) {}
+    constructor(
+        private http: HttpClient,
+        private messageService: MessageService
+    ) {}
 
     ngOnInit(): void {
         this.loadRootCategories();
@@ -284,7 +294,7 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
     selectedThumbnail: File | null = null;
     selectedVideo: File | null = null;
     isUploadingVideo: boolean = false;
-    isUploadingThumbnail:boolean =false;
+    isUploadingThumbnail: boolean = false;
     onThumbnailSelected(event: any) {
         const file = event.files?.[0];
         if (file) {
@@ -312,7 +322,8 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
                     this.isUploadingThumbnail = false;
                 }
             },
-            error: (err) => {console.error('❌ Thumbnail upload failed', err)
+            error: (err) => {
+                console.error('❌ Thumbnail upload failed', err);
 
                 this.isUploadingThumbnail = false;
             }
@@ -353,21 +364,19 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
             }
         });
     }
-    save(){
+    save() {
         const data = {
-            "title": this.course.title,
-            "subtitle":this.course.subtitle,
-            "price":this.course.price,
-            "description":this.course.description,
-            "language":this.course.language,
-            "level":this.course.level,
-            "categoryId":this.selectedTopic.id
-        }
-        this.http.put<any>(`http://localhost:8080/course/${this.courseId}`,data).subscribe(
-            (res) => {
-                this.showSuccess()
-            }
-        );
+            title: this.course.title,
+            subtitle: this.course.subtitle,
+            price: this.course.price,
+            description: this.course.description,
+            language: this.course.language,
+            level: this.course.level,
+            categoryId: this.selectedTopic.id
+        };
+        this.http.put<any>(`http://localhost:8080/course/${this.courseId}`, data).subscribe((res) => {
+            this.showSuccess();
+        });
     }
     showSuccess() {
         this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Cập nhật khóa học thành công!' });

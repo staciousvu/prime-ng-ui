@@ -74,7 +74,7 @@ import { BreadcrumpComponent } from './breadcrump';
                 <tr>
                     <th style="min-width: 10rem">Hình ảnh</th>
                     <th style="min-width: 10rem">Tiêu đề</th>
-                    <th style="min-width: 14rem">Tác giả</th>
+                    <th style="min-width: 10rem">Tác giả</th>
                     <th>Giá</th>
                     <th>Thời lượng</th>
                     <!-- <th style="min-width: 10rem">Ngôn ngữ</th> -->
@@ -86,13 +86,13 @@ import { BreadcrumpComponent } from './breadcrump';
             <ng-template #body let-course>
                 <tr>
                     <td>
-                        <img src="https://th.bing.com/th/id/OIF.cHcR9RNGeslvhw6dAwJC1A?rs=1&pid=ImgDetMain" alt="thumbnail" class="w-50 rounded" />
+                    <img [src]="course.thumbnail" alt="thumbnail" class="w-50 rounded" />
                     </td>
                     <td>{{ course.title }}</td>
                     <td>
                         <div class="flex items-center gap-2">
                             <!-- <img [src]="course.authorAvatar" width="50" style="vertical-align: middle"/> -->
-                            <img src="https://www.aceshowbiz.com/images/still/avatar09.jpg" width="50" style="vertical-align: middle" />
+                            <!-- <img src="https://www.aceshowbiz.com/images/still/avatar09.jpg" width="50" style="vertical-align: middle" /> -->
                             <span class="font-bold ml-2">{{ course.authorName }}</span>
                         </div>
                     </td>

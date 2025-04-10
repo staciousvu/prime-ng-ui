@@ -1,5 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { NavBarComponent } from "./component/navbar";
+import { CartService } from "../service/cart.service";
 
 
 @Component({
@@ -178,8 +179,8 @@ import { NavBarComponent } from "./component/navbar";
     align-items: flex-start;
 }
 .myshoppingcart_content__item-course-img{
-    width: 120px;
-    height: 100px;
+    width: 150px;
+    // height: 100px;
 }
 .myshoppingcart_content__item-course-information{
     width: 50%;
@@ -372,7 +373,14 @@ import { NavBarComponent } from "./component/navbar";
     `,
 
 })
-export class CartComponent {
+export class CartComponent implements OnInit{
+    myCarts:any[]=[]
+    constructor(private cartService: CartService) {}
+    ngOnInit(): void {
+        this.cartService.carts$.subscribe((carts) => {
+            this.myCarts = carts;
+          });
+    }
 
  
 }
