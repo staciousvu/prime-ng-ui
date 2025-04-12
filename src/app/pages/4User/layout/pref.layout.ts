@@ -5,7 +5,7 @@ import { RouterOutlet } from "@angular/router";
 
 
 @Component({
-    selector: 'app-blank-layout',
+    selector: 'app-pref-layout',
     standalone:true,
     imports: [RouterOutlet],
     template: `
@@ -13,6 +13,6 @@ import { RouterOutlet } from "@angular/router";
     `,
     styles:``
 })
-export class BlankLayoutComponent{
+export class PrefLayoutComponent{
 
 }

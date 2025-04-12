@@ -11,6 +11,7 @@ import { StarRatingComponent } from './star-rating';
 import { ProductCarouselComponent } from './product-carousel';
 import { CategoryNavComponent } from './component/category-list';
 import { HttpClient } from '@angular/common/http';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'app-navbar',
@@ -21,13 +22,17 @@ import { HttpClient } from '@angular/common/http';
         <app-category-list />
         <div class="welcome">
             <div class="avatar">
-                <img src="http://localhost:8080/images/avatar/avatar1.jpg" alt="" />
+            <img class="avatar" [src]="avatarUrl ? avatarUrl : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />
             </div>
             <div class="info">
-                <p class="welcome-name">Bạn đã trở lại, Stacious Vu</p>
-                <div class="major">
-                    <span class="major-name">Danh mục yêu thích: IT and SoftWare</span>
+                <p class="welcome-name">Bạn đã trở lại, {{fullname}}</p>
+                <div class="major" *ngIf="favoriteCategory">
+                    <span class="major-name">Danh mục yêu thích: {{favoriteCategory}}</span>
                     <a href="#" class="edit-major">Chỉnh sửa thông tin</a>
+                </div>
+                <div class="major" *ngIf="!favoriteCategory">
+                    <span class="major-name">Chưa có danh mục yêu thích</span>
+                    <a href="#" class="edit-major">Thêm thông tin</a>
                 </div>
             </div>
         </div>
@@ -71,12 +76,12 @@ import { HttpClient } from '@angular/common/http';
             </div>
         </div> -->
         <div class="what-will-you-learn" style="position: relative;">
-            <app-product-carousel *ngIf="courses_preference_root" [title]="'Vì bạn đã chọn danh mục yêu thích'" [keyword]="courses_preference_root.categoryRoot" [courses]="courses_preference_root.courses"> </app-product-carousel>
+            <app-product-carousel *ngIf="courses_preference_root.courses.length > 0" [title]="'Vì bạn đã chọn danh mục yêu thích'" [keyword]="courses_preference_root.categoryRoot" [courses]="courses_preference_root.courses"> </app-product-carousel>
             <app-product-carousel *ngIf="courses_preference_topic?.[0]?.courses?.length > 0" [title]="'Vì bạn đã chọn chủ đề'" [keyword]="courses_preference_topic[0].categoryName" [courses]="courses_preference_topic[0].courses">
             </app-product-carousel>
             <app-product-carousel *ngIf="courses_preference_topic?.[1]?.courses?.length > 0" [title]="'Vì bạn đã chọn chủ đề'" [keyword]="courses_preference_topic[1].categoryName" [courses]="courses_preference_topic[1].courses">
             </app-product-carousel>
-            <app-product-carousel *ngIf="courses_activity" [title]="'Vì bạn đã xem khóa học liên quan đến '" [keyword]="courses_activity.categoryRoot" [courses]="courses_activity.courses">
+            <app-product-carousel *ngIf="courses_activity.courses.length > 0" [title]="'Vì bạn đã xem khóa học liên quan đến '" [keyword]="courses_activity.categoryRoot" [courses]="courses_activity.courses">
             </app-product-carousel>
             
             <app-product-carousel *ngIf="courses_keyword" [title]="'Vì bạn tìm kiếm từ khóa'" [keyword]="courses_keyword[0].keyword" [courses]="courses_keyword[0].courses"></app-product-carousel>
@@ -277,10 +282,16 @@ export class HomeComponent implements OnInit {
     courses_keyword: any | null;
     courses_related_enrolled: any|null;
     value: number = 3;
+    avatarUrl:string | null |undefined;
+    fullname:string | null |undefined;
+    favoriteCategory:string | null |undefined;
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient,private authService:AuthService) {}
 
     ngOnInit() {
+        this.avatarUrl = this.authService.getAvatar();
+        this.fullname = this.authService.getFullname();
+        this.favoriteCategory = this.authService.getFavoriteCategory();
         this.http.get<any>(`http://localhost:8080/recommend/root`).subscribe((response) => {
             this.courses_preference_root = response.data;
         });

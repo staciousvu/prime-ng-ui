@@ -1,5 +1,5 @@
 // auth.service.ts
-import { Injectable } from '@angular/core';
+import { Injectable, RESPONSE_INIT } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -22,6 +22,10 @@ export class AuthService {
                 if (response.success) {
                     localStorage.setItem('token', response.data.token);
                     localStorage.setItem('role', response.data.roles[0]);
+                    localStorage.setItem('email',response.data.email);
+                    localStorage.setItem('avatar',response.data.avatarUrl);
+                    localStorage.setItem('fullname',response.data.name);
+                    localStorage.setItem('favoriteCategory',response.data.favoriteCategory);
                     this.authStatus.next(true);
                 }
             })
@@ -35,6 +39,20 @@ export class AuthService {
     getRole(): string | null {
         return localStorage.getItem('role');
     }
+    getEmail():string| null {
+        return localStorage.getItem('email');
+    }
+    getAvatar():string| null {
+        return localStorage.getItem('avatar');
+    }
+
+    getFullname():string| null {
+        return localStorage.getItem('fullname');
+    }
+    getFavoriteCategory():string| null {
+        return localStorage.getItem('favoriteCategory');
+    }
+
 
     isAuthenticated(): boolean {
         return !!this.getToken();
@@ -49,6 +67,10 @@ export class AuthService {
     logout() {
       localStorage.removeItem('token');
       localStorage.removeItem('role');
+      localStorage.removeItem('email');
+      localStorage.removeItem('avatar');
+      localStorage.removeItem('fullname');
+      localStorage.removeItem('favoriteCategory');
       this.authStatus.next(false);  // Phát sự kiện: "Đã đăng xuất"
   }
 

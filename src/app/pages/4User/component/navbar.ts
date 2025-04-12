@@ -91,7 +91,7 @@ import { CartService } from '../../service/cart.service';
                             </div>
                         </li>
                         <li class="nav-link-item user-menu" style="position: relative;">
-                            <img class="avatar" src="https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7" alt="" />
+                            <img class="avatar" [src]="avatarUrl ? avatarUrl : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />
                             <ul class="dropdown">
                                 <li class="dropdown-item"><a href="#">Profile</a></li>
                                 <li class="dropdown-item" [routerLink]="'/my-learning'"><a>My Learning</a></li>
@@ -653,6 +653,7 @@ export class NavBarComponent implements OnInit {
     mycourses:any[]=[];
     mycarts:any[]=[];
     totalInCart:any;
+    avatarUrl:string | null |undefined;
     calculateTotalInCart(){
         let total = 0;
         this.mycarts.forEach(item => {
@@ -680,7 +681,13 @@ export class NavBarComponent implements OnInit {
         
         this.authService.getAuthStatus().subscribe((status) => {
             this.isLoggedIn = status;
+            if (status) {
+                // Khi vừa login, gọi lại API để lấy cart mới nhất
+                
+                this.cartService.loadCart();
+            }
         });
+        this.avatarUrl = this.authService.getAvatar();
         this.http.get<any>(`http://localhost:8080/course/my-courses/learner?page=0&size=10`).subscribe(
             (response) => {
                 this.mycourses = response.data.content;

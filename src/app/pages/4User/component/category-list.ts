@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
     selector: 'app-category-list',
     standalone: true,
     imports: [CommonModule],
     template: `
-        <div class="categories-wrapper">
+        <!-- <div class="categories-wrapper">
             <ul class="categories">
                 <li *ngFor="let item of categories" class="category">
                     {{ item.name }}
@@ -17,9 +18,24 @@ import { Component } from '@angular/core';
                     </div>
                 </li>
             </ul>
+        </div> -->
+        <div class="categories-wrapper">
+            <ul class="categories">
+                <li *ngFor="let item of categoryObject | slice:0:10" class="category click">
+                    {{ item.name }}
+                    <div class="subcategories-wrapper">
+                        <ul class="subcategories">
+                            <li class="subcategory-item click" *ngFor="let subitem of castToArray(item.subCategories) | slice:0:7">{{ subitem.name }}</li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
         </div>
     `,
     styles: `
+    .click:active{
+        background-color:rgba(224, 23, 23, 0.48);
+    }
         .categories-wrapper {
             width: 100vw;
             margin: 0 auto;
@@ -28,7 +44,8 @@ import { Component } from '@angular/core';
         }
 
         .categories {
-            margin: 0;
+            width:80%;
+            margin: 0 auto;
             display: flex;
             justify-content: center;
             list-style: none;
@@ -72,47 +89,18 @@ import { Component } from '@angular/core';
         }
     `
 })
-export class CategoryNavComponent {
-    categories: any[] = [
-        {
-            name: 'Development',
-            subcategories: ['Programming', 'Web Development', 'Mobile Development','Desktop Development']
-        },
-        {
-            name: 'Business',
-            subcategories: ['Finance', 'Entrepreneurship', 'Management']
-        },
-        {
-            name: 'Design',
-            subcategories: ['Graphic Design', 'UX/UI', '3D Design']
-        },
-        {
-            name: 'Marketing',
-            subcategories: ['Digital Marketing', 'SEO', 'Content Marketing']
-        },
-        {
-            name: 'Personal Development',
-            subcategories: ['Productivity', 'Leadership', 'Career Development']
-        },
-        {
-            name: 'Photography',
-            subcategories: ['Portrait', 'Landscape', 'Photo Editing']
-        },
-        {
-            name: 'Music',
-            subcategories: ['Instruments', 'Music Production', 'Music Theory']
-        },
-        {
-            name: 'IT & Software',
-            subcategories: ['Network & Security', 'Hardware', 'Operating Systems']
-        },
-        {
-            name: 'Health & Fitness',
-            subcategories: ['Yoga', 'Nutrition', 'Mental Health']
-        },
-        {
-            name: 'Teaching & Academics',
-            subcategories: ['Science', 'Mathematics', 'Language Learning']
-        }
-    ];
+export class CategoryNavComponent implements OnInit{
+    categoryObject:any[]=[];
+    constructor(private http:HttpClient){}
+    ngOnInit(): void {
+        this.http.get<any>(`http://localhost:8080/categories`).subscribe(
+            (response) => {
+                this.categoryObject=response.data;
+            }
+        )
+    }
+    castToArray(subs: unknown): any[] {
+        return subs as any[];
+      }
+    
 }

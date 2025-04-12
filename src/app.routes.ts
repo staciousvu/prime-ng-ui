@@ -21,6 +21,7 @@ import { QAndAListComponent } from './app/pages/4User/video-learning/QandAList';
 import { QAndADetailComponent } from './app/pages/4User/video-learning/Q&ADetail';
 import { OverviewVideoComponent } from './app/pages/4User/video-learning/overview';
 import { RatingVideoComponent } from './app/pages/4User/video-learning/rating';
+import { SurveyLayoutComponent } from './app/pages/4User/layout/survey.layout';
 export const appRoutes: Routes = [
 
     {
@@ -39,6 +40,7 @@ export const appRoutes: Routes = [
         component:BlankLayoutComponent,
         children:[
             {path:'course/video-learning/:id',component:VideoLearningComponent,},
+            {path:'survey',component:SurveyLayoutComponent}
         ]
     },
     {
