@@ -181,9 +181,10 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
 
     priceTiers = [
         { name: 'Free', value: 0 },
-        { name: '$19.99', value: 19.99 },
-        { name: '$49.99', value: 49.99 },
-        { name: '$99.99', value: 99.99 }
+        { name: '$129.000', value: 129000 },
+        { name: '$229.000', value: 229000 },
+        { name: '$349.000', value: 349000 },
+        { name: '$449.000', value: 449000 },
     ];
     levels = [
         { name: 'ALL', value: 'ALL' },

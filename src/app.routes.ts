@@ -22,6 +22,8 @@ import { QAndADetailComponent } from './app/pages/4User/video-learning/Q&ADetail
 import { OverviewVideoComponent } from './app/pages/4User/video-learning/overview';
 import { RatingVideoComponent } from './app/pages/4User/video-learning/rating';
 import { SurveyLayoutComponent } from './app/pages/4User/layout/survey.layout';
+import { PaymentSuccessComponent } from './app/pages/4User/payment-success';
+import { PaymentFailedComponent } from './app/pages/4User/payment-failed';
 export const appRoutes: Routes = [
 
     {
@@ -32,14 +34,16 @@ export const appRoutes: Routes = [
             {path:'home',component:HomeComponent},
             {path:'cart',component:CartComponent},
             {path:'my-learning',component:MyLearningComponent},
-            {path:'course-detail/:id',component:CourseDetailComponent}
+            {path:'course-detail/:id',component:CourseDetailComponent},
+            {path:'payment-success',component:PaymentSuccessComponent},
+            {path:'payment-failed',component:PaymentFailedComponent},
         ]
     },
     {
         path:'',
         component:BlankLayoutComponent,
         children:[
-            {path:'course/video-learning/:id',component:VideoLearningComponent,},
+            {path:'course/video-learning/:id',component:VideoLearningComponent},
             {path:'survey',component:SurveyLayoutComponent}
         ]
     },

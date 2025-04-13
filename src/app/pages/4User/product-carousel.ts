@@ -27,8 +27,8 @@ import { CartService } from '../service/cart.service';
                         <span class="total-rating">( {{ course.countRating }} )</span>
                     </div>
                     <div class="price">
-                        <span class="discount-price"> đ{{ course.discount_price }} </span>
-                        <span class="origin-price">đ{{ course.price }}</span>
+                        <span class="discount-price"> đ{{ course.discount_price | number:'1.0-0' }} </span>
+                        <span class="origin-price">đ{{ course.price | number:'1.0-0' }}</span>
                     </div>
                     <span class="label" *ngIf="course.label !== 'NONE'" [ngClass]="course.label.toLowerCase()">
                         {{ course.label }}

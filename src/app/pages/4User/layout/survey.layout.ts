@@ -12,10 +12,10 @@ import { CommonModule } from "@angular/common";
     imports: [SurveyHeaderComponent,StepOneComponent,StepTwoComponent,CommonModule],
     template: `
     <app-survey-header/>
-    <app-stepone *ngIf="currentStep === 1" (next)="goToStepTwo()" [prefRootId]="prefRootId" 
-    (next)="goToStepTwo()" 
+    <app-stepone *ngIf="currentStep === 1" [prefRootId]="prefRootId" 
+    (next)="goToStepTwo($event)" 
     (prefRootIdChange)="updatePrefRootId($event)"></app-stepone>
-    <app-steptwo *ngIf="currentStep === 2" (prev)="goBackToStepOne()"></app-steptwo>
+    <app-steptwo *ngIf="currentStep === 2" (prev)="goBackToStepOne()" [prefRootId]="prefRootId"></app-steptwo>
 
     `,
     styles:``
@@ -23,7 +23,8 @@ import { CommonModule } from "@angular/common";
 export class SurveyLayoutComponent{
   prefRootId: string | null = null; // Lưu trữ lựa chọn của người dùng
     currentStep:number =1;
-    goToStepTwo() {
+    goToStepTwo(prefId:string |null) {
+      this.prefRootId = prefId;
         this.currentStep = 2;
       }
     

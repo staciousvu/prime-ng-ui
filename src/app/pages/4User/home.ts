@@ -12,12 +12,13 @@ import { ProductCarouselComponent } from './product-carousel';
 import { CategoryNavComponent } from './component/category-list';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../service/auth.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
     selector: 'app-navbar',
     standalone: true,
     // encapsulation: ViewEncapsulation.None,
-    imports: [ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],
+    imports: [RouterLink,ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],
     template: `
         <app-category-list />
         <div class="welcome">
@@ -28,11 +29,11 @@ import { AuthService } from '../service/auth.service';
                 <p class="welcome-name">Bạn đã trở lại, {{fullname}}</p>
                 <div class="major" *ngIf="favoriteCategory">
                     <span class="major-name">Danh mục yêu thích: {{favoriteCategory}}</span>
-                    <a href="#" class="edit-major">Chỉnh sửa thông tin</a>
+                    <a href="#" class="edit-major" [routerLink]="['/survey']">Chỉnh sửa thông tin</a>
                 </div>
                 <div class="major" *ngIf="!favoriteCategory">
                     <span class="major-name">Chưa có danh mục yêu thích</span>
-                    <a href="#" class="edit-major">Thêm thông tin</a>
+                    <a href="#" class="edit-major" [routerLink]="['/survey']">Thêm thông tin</a>
                 </div>
             </div>
         </div>

@@ -173,7 +173,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class StepOneComponent implements OnInit {
     @Input() prefRootId: string | null = null;
-    @Output() next = new EventEmitter<void>();
+    @Output() next = new EventEmitter<string | null>();
     @Output() prefRootIdChange = new EventEmitter<string | null>();
     rootCategories: any;
     ngOnInit(): void {
@@ -184,6 +184,9 @@ export class StepOneComponent implements OnInit {
                 // Ưu tiên prefRootId từ component cha, nếu không có thì lấy từ API
                 this.prefRootId = this.prefRootId ?? this.rootCategories.prefRootId ?? null;
                 console.log('prefRootId after init:', this.prefRootId);
+
+                // 👇 Emit luôn giá trị để cha nhận được dù người dùng chưa tương tác
+                this.prefRootIdChange.emit(this.prefRootId);
             },
             error: (err) => {
                 console.error('Failed to load categories', err);
@@ -198,7 +201,7 @@ export class StepOneComponent implements OnInit {
         this.prefRootIdChange.emit(this.prefRootId); // Thông báo thay đổi lên component cha
     }
     onNext() {
-        this.next.emit();
+        this.next.emit(this.prefRootId);
         
       }
 }

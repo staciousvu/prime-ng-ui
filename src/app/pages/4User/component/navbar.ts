@@ -58,12 +58,12 @@ import { CartService } from '../../service/cart.service';
                                         <div class="cart_dropdown__item-information">
                                             <p class="name">{{item.courseResponse.title}}</p>
                                             <p class="author">{{item.courseResponse.authorName}}</p>
-                                            <p class="price">đ{{item.courseResponse.discount_price}}</p>
+                                            <p class="price">đ{{item.courseResponse.discount_price | number:'1.0-0'}}</p>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class="cart_dropdown-bottom">
-                                    <p class="total_price">Total price : {{totalInCart}}đ</p>
+                                    <p class="total_price">Total price : {{totalInCart | number:'1.0-0'}}đ</p>
                                     <button [routerLink]="'/cart'" class="cart_dropdown__bottom-go">Tới giỏ hàng</button>
                                 </div>
                             </div>

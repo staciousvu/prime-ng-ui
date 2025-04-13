@@ -3,6 +3,8 @@ import { NavBarComponent } from './component/navbar';
 import { CartService } from '../service/cart.service';
 import { CommonModule } from '@angular/common';
 import { forkJoin, timer } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-cart',
@@ -45,8 +47,8 @@ import { forkJoin, timer } from 'rxjs';
                                     <p class="move_to_with_list padding-action">Move to Withlist</p>
                                 </div>
                                 <div class="myshoppingcart_content__item-course-price">
-                                    <p class="discount-price">đ{{ item.courseResponse.discount_price }} <i class="fa-solid fa-tag" style="color: #6c28d2;"></i></p>
-                                    <p class="old-price">đ{{ item.courseResponse.price }}</p>
+                                    <p class="discount-price">đ{{ item.courseResponse.discount_price | number:'1.0-1' }} <i class="fa-solid fa-tag" style="color: #6c28d2;"></i></p>
+                                    <p class="old-price">đ{{ item.courseResponse.price | number:'1.0-1' }}</p>
                                 </div>
                             </li>
                         </ul>
@@ -57,10 +59,10 @@ import { forkJoin, timer } from 'rxjs';
                     <div class="myshoppingcart_content-right">
                         <div class="payment-wrapper">
                             <p class="payment_total marginb">Total:</p>
-                            <p class="paymant_total-discount-price marginb">đ{{totalMoney.toFixed(1)}}</p>
-                            <p class="payment_total-oldprice marginb">đ{{totalOldMoney.toFixed(1)}}</p>
+                            <p class="paymant_total-discount-price marginb">đ{{totalMoney | number:'1.0-1'}}</p>
+                            <p class="payment_total-oldprice marginb">đ{{totalOldMoney | number:'1.0-1'}}</p>
                             <p class="percent-off marginb">Sale off {{saleOff.toFixed(1)}} %</p>
-                            <button class="btn-payment marginb">
+                            <button class="btn-payment marginb" (click)="onPayment()">
                                 Payment courses
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
@@ -137,7 +139,7 @@ import { forkJoin, timer } from 'rxjs';
             // height: 100px;
         }
         .myshoppingcart_content__item-course-information {
-            width: 50%;
+            width: 45%;
             margin-left: 20px;
         }
         .myshoppingcart_content__item-course-information .course_name {
@@ -177,8 +179,8 @@ import { forkJoin, timer } from 'rxjs';
         .hour-lecture-level {
             display: flex;
             gap: 15px;
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 12px;
+            font-weight: 900;
             color: rgba(0, 0, 0, 0.747);
         }
         .dotted {
@@ -191,8 +193,8 @@ import { forkJoin, timer } from 'rxjs';
             height: 5px;
             background-color: rgba(0, 0, 0, 0.747);
             border-radius: 100%;
-            top: 42%;
-            left: -6px;
+            top: 35%;
+            left: -10px;
             display: block;
         }
         .myshoppingcart_content__item-course-action {
@@ -332,6 +334,26 @@ import { forkJoin, timer } from 'rxjs';
     `
 })
 export class CartComponent implements OnInit {
+    onPayment() {
+        const request={
+            email:localStorage.getItem('email'),
+            payment_method:"VNPAY",
+            total_amount:this.totalMoney,
+            // total_amount:10000,
+            courses:this.myCarts.map(item => item.courseResponse.id),
+            order_info: `Thanh toán đơn hàng cho user ${localStorage.getItem('email')}`
+        }
+        console.log('request:',request)
+        this.http.post<any>('http://localhost:8080/payment/vn-pay', request).subscribe(
+            (res) => {
+                
+                window.location.href = res.data; 
+            },
+            (err) => {
+                console.error('Lỗi thanh toán:', err);
+            }
+        );
+    }
     loadingRemoveIds: number[] = [];
     totalMoney:number=0;
     totalOldMoney:number=0;
@@ -356,7 +378,7 @@ export class CartComponent implements OnInit {
         });
     }
     myCarts: any[] = [];
-    constructor(private cartService: CartService) {}
+    constructor(private cartService: CartService,private http:HttpClient,private router:Router) {}
     ngOnInit(): void {
         this.cartService.carts$.subscribe((carts) => {
             this.myCarts = carts;
