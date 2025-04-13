@@ -50,8 +50,8 @@ import { CartService } from '../../service/cart.service';
                         </li>
                         <li [routerLink]="'/cart'" class="nav-link-item cart" style="position: relative;">
                             <i class="bi bi-cart"></i>
-                            <span class="badge">{{mycarts.length}}</span>
-                            <div class="cart_dropdown">
+                            <span *ngIf="mycarts.length >0" class="badge">{{mycarts.length}}</span>
+                            <div class="cart_dropdown" *ngIf="mycarts.length >0">
                                 <ul class="cart_dropdown__list">
                                     <li class="cart_dropdown__item" *ngFor="let item of mycarts">
                                         <img [src]="item.courseResponse.thumbnail" alt="" class="cart_dropdown__item-img" />
@@ -70,23 +70,19 @@ import { CartService } from '../../service/cart.service';
                         </li>
                         <li class="nav-link-item notification" style="position: relative;">
                             <i class="bi bi-bell"></i>
-                            <span class="badge">2</span>
-                            <div class="notification_dropdown">
+                            <span *ngIf="notifications.length>0" class="badge">{{notifications.length}}</span>
+                            <div class="notification_dropdown" *ngIf="notifications.length >0">
                                 <div class="notification_dropdown-header">
                                     <p>Notification</p>
                                 </div>
                                 <ul class="notification_dropdown__list">
-                                    <li class="notification_dropdown__list-item">
+                                    <li class="notification_dropdown__list-item" *ngFor="let item of notifications">
                                         <img src="https://cdn1.iconfinder.com/data/icons/man-user-human-profile-avatar-business-person/100/09-1User_3-4-1024.png" alt="Admin" />
-                                        <a href="#">Khóa học mới sắp khai giảng!</a>
-                                    </li>
-                                    <li class="notification_dropdown__list-item">
-                                        <img src="https://cdn1.iconfinder.com/data/icons/man-user-human-profile-avatar-business-person/100/09-1User_3-4-1024.png" alt="Admin" />
-                                        <a href="#"> Cập nhật quan trọng từ hệ thống.</a>
+                                        <a href="#">{{item.message}}</a>
                                     </li>
                                 </ul>
                                 <div class="mask">
-                                    <p>Mask all as read</p>
+                                    <p (click)="maskAllAsRead()">Mask all as read</p>
                                 </div>
                             </div>
                         </li>
@@ -262,7 +258,7 @@ import { CartService } from '../../service/cart.service';
         .notification::after {
             content: '';
             width: 100%;
-            height: 250%;
+            height: 45px;
             position: absolute;
             right: 0;
             z-index: 999;
@@ -272,9 +268,9 @@ import { CartService } from '../../service/cart.service';
         }
         .notification_dropdown {
             position: absolute;
-            top: 240%;
+            top: 147%;
             right: 0;
-            width: 300px;
+            width: 330px;
             background-color: white;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -301,6 +297,7 @@ import { CartService } from '../../service/cart.service';
         //     display:block;
         // }
         .notification_dropdown__list-item {
+        padding: 0 15px 0 0;
             margin: 15px;
             width: 100%;
             /* margin-bottom: 15px; */
@@ -356,8 +353,8 @@ import { CartService } from '../../service/cart.service';
         .cart::after {
             content: '';
             position: absolute;
-            width: 200%;
-            height: 100px; /* Điều chỉnh kích thước phù hợp */
+            width: 150%;
+            height: 20px; /* Điều chỉnh kích thước phù hợp */
             top: 100%;
             right: 0;
             z-index: 999;
@@ -369,7 +366,7 @@ import { CartService } from '../../service/cart.service';
             border: 1px solid #ddd;
             position: absolute;
             width: 320px;
-            top: 240%; /* Xuất hiện ngay bên dưới */
+            top: 147%;
             right: 0;
             display: none;
             box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -484,7 +481,7 @@ import { CartService } from '../../service/cart.service';
             content: '';
             position: absolute;
             width: 100%;
-            height: 100px;
+            height: 45px;
             right: 0;
             background-color: transparent;
             z-index: 999;
@@ -500,7 +497,7 @@ import { CartService } from '../../service/cart.service';
             background-color: white;
             position: absolute;
             right: 0;
-            top: 240%;
+            top: 147%;
             width: 300px;
             display: none;
             z-index: 1000;
@@ -597,7 +594,7 @@ import { CartService } from '../../service/cart.service';
         .user-menu::after {
             content: '';
             position: absolute;
-            top: 100%;
+            top: 20%;
             width: 100%;
             height: 50px;
             right: 0;
@@ -607,7 +604,7 @@ import { CartService } from '../../service/cart.service';
         }
         .dropdown {
             position: absolute;
-            top: 155%;
+            top: 110%;
             right: 0;
             width: 200px;
             background-color: white;
@@ -654,6 +651,7 @@ export class NavBarComponent implements OnInit {
     mycarts:any[]=[];
     totalInCart:any;
     avatarUrl:string | null |undefined;
+    notifications:any[]=[]
     calculateTotalInCart(){
         let total = 0;
         this.mycarts.forEach(item => {
@@ -677,6 +675,24 @@ export class NavBarComponent implements OnInit {
         private http:HttpClient,
         private cartService: CartService,
     ) {}
+    loadNotifications(){
+        this.http.get<any>(`http://localhost:8080/notification/unread`).subscribe(
+            (response) => {
+                this.notifications=response.data;
+            }
+        )
+    }
+    maskAllAsRead() {
+        const request={
+            idsNotificationRead:this.notifications.map(item=>item.id)
+        }
+        this.http.post<any>(`http://localhost:8080/notification/mark-all-as-read`,request).subscribe(
+            (response) => {
+                this.loadNotifications;
+                this.notifications=[];
+            }
+        )
+    }
     ngOnInit(): void {
         
         this.authService.getAuthStatus().subscribe((status) => {
@@ -687,6 +703,7 @@ export class NavBarComponent implements OnInit {
                 this.cartService.loadCart();
             }
         });
+        this.loadNotifications();
         this.avatarUrl = this.authService.getAvatar();
         this.http.get<any>(`http://localhost:8080/course/my-courses/learner?page=0&size=10`).subscribe(
             (response) => {
