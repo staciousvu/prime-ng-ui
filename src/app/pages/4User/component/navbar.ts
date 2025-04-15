@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../service/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { CartService } from '../../service/cart.service';
 import { FormsModule } from '@angular/forms';
 
@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
     selector: 'app-navbar-home',
     standalone: true,
     // encapsulation: ViewEncapsulation.None,
-    imports: [CommonModule, RouterLink,FormsModule],
+    imports: [CommonModule, RouterLink, FormsModule],
     template: `
         <div class="wrapper-nav">
             <nav class="navbar">
@@ -19,12 +19,21 @@ import { FormsModule } from '@angular/forms';
                         <a href="#">Edu<span>Flow</span></a>
                     </div>
                     <span class="explore">Explore</span>
-                    <input type="text" placeholder="Search course for you" class="search-box" [(ngModel)]="searchKeyword" (keydown.enter)="onSearch()" />
+                    <input type="text" placeholder="Search course for you" class="search-box" (input)="onSearchInput()" [(ngModel)]="searchKeyword" (keydown.enter)="onSearch()" />
+                    <ul class="search-result" *ngIf="coursesInput.length > 0">
+                        <li *ngFor="let course of coursesInput" [routerLink]="['/course-detail', course.id]" (click)="clearSuggestions()">
+                            <img [src]="course.thumbnail" alt="Course image" class="course-image" />
+                            <div class="course-info">
+                                <div class="course-title">{{ course.title }}</div>
+                                <div class="course-author">{{ course.authorName }}</div>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
                 <div class="navbar-right">
                     <ul class="nav-links" *ngIf="isLoggedIn">
                         <li class="nav-link-item">Blog</li>
-                        <li class="nav-link-item">Teacher</li>
+                        <li class="nav-link-item" [routerLink]="['/instructor/courses']">Teacher</li>
                         <li [routerLink]="'/my-learning'" class="nav-link-item mylearning" style="position: relative;">
                             My learning
                             <div class="mylearning_dropdown">
@@ -141,12 +150,69 @@ import { FormsModule } from '@angular/forms';
             display: flex;
         }
         .navbar-left {
+            position: relative;
             flex: 6;
             display: flex;
             align-items: center;
             justify-content: space-between;
             gap: 20px;
         }
+        // search result
+        .search-result {
+            position: absolute;
+            top: 100%;
+            left: 30%;
+            width: 500px;
+            z-index: 1000;
+            color: #000;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 0;
+            margin: 5px 0 0 0;
+            list-style: none;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-result li {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .search-result li:hover {
+            background-color: #f9f9f9;
+        }
+
+        .course-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-right: 12px;
+        }
+
+        .course-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .course-title {
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .course-author {
+            font-size: 14px;
+            color: #777;
+        }
+
+        // search result
         .search-box {
             width: 100%;
             height: 40px;
@@ -648,11 +714,38 @@ import { FormsModule } from '@angular/forms';
     `
 })
 export class NavBarComponent implements OnInit {
+    currentPage = 0;
+    pageSize = 8;
+    // searchInputKeyword: string = '';
+    coursesInput:any[]=[]
+    onSearchInput() {
+    
+        if(this.searchKeyword != ''){
+            const request = {
+                keyword: this.searchKeyword.trim()
+              };
+            const params = new HttpParams().set('page', this.currentPage.toString()).set('size', this.pageSize.toString());
+
+            this.http.post<any>(`http://localhost:8080/course/search`, request, { params }).subscribe(
+                (response) => {
+                    this.coursesInput=response.data.content;
+                }
+            )
+        }else {
+            this.coursesInput = [];
+          }
+    }
+    clearSuggestions() {
+        this.coursesInput = [];
+      }
+      
+
     onSearch(): void {
         if (this.searchKeyword.trim()) {
-          this.router.navigate(['/search', this.searchKeyword.trim()]);
+            this.router.navigate(['/search', this.searchKeyword.trim()]);
+            this.coursesInput = [];
         }
-      }
+    }
     mycourses: any[] = [];
     mycarts: any[] = [];
     totalInCart: any;

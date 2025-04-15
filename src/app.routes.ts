@@ -25,6 +25,7 @@ import { SurveyLayoutComponent } from './app/pages/4User/layout/survey.layout';
 import { PaymentSuccessComponent } from './app/pages/4User/payment-success';
 import { PaymentFailedComponent } from './app/pages/4User/payment-failed';
 import { SearchCourseComponent } from './app/pages/4User/search-course';
+import { InstructorLayoutComponent } from './app/pages/4Instructor/layout/instructor.layout';
 export const appRoutes: Routes = [
 
     {
@@ -39,6 +40,13 @@ export const appRoutes: Routes = [
             {path:'payment-success',component:PaymentSuccessComponent},
             {path:'payment-failed',component:PaymentFailedComponent},
             {path:'search/:keyword',component:SearchCourseComponent},
+        ]
+    },
+    {
+        path:'instructor',
+        component:InstructorLayoutComponent,
+        children:[
+            {path:'',loadChildren: () => import('./app/pages/4Instructor/routes/instructor.routes').then(m => m.default) },
         ]
     },
     {

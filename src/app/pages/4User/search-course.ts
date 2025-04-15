@@ -439,24 +439,6 @@ export class SearchCourseComponent implements OnInit {
         { value: 'free', label: 'Free' },
         { value: 'paid', label: 'Paid' }
     ];
-    defaultFilters: Filters = {
-        rating: '',
-        language: {
-          english: false,
-          vietnamese: false,
-          french: false
-        },
-        duration: {
-          short: false,
-          medium: false,
-          long: false,
-          extended: false,
-          ultra: false
-        },
-        level: '',
-        price: ''
-      };
-
     filters: Filters = {
         rating: '', // 3.0, 3.5, 4.0, 4.5
         language: {
