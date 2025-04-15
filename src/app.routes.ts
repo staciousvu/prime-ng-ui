@@ -24,6 +24,7 @@ import { RatingVideoComponent } from './app/pages/4User/video-learning/rating';
 import { SurveyLayoutComponent } from './app/pages/4User/layout/survey.layout';
 import { PaymentSuccessComponent } from './app/pages/4User/payment-success';
 import { PaymentFailedComponent } from './app/pages/4User/payment-failed';
+import { SearchCourseComponent } from './app/pages/4User/search-course';
 export const appRoutes: Routes = [
 
     {
@@ -37,6 +38,7 @@ export const appRoutes: Routes = [
             {path:'course-detail/:id',component:CourseDetailComponent},
             {path:'payment-success',component:PaymentSuccessComponent},
             {path:'payment-failed',component:PaymentFailedComponent},
+            {path:'search/:keyword',component:SearchCourseComponent},
         ]
     },
     {

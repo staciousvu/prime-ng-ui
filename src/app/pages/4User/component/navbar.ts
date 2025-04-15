@@ -4,12 +4,13 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CartService } from '../../service/cart.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-navbar-home',
     standalone: true,
     // encapsulation: ViewEncapsulation.None,
-    imports: [CommonModule, RouterLink],
+    imports: [CommonModule, RouterLink,FormsModule],
     template: `
         <div class="wrapper-nav">
             <nav class="navbar">
@@ -18,7 +19,7 @@ import { CartService } from '../../service/cart.service';
                         <a href="#">Edu<span>Flow</span></a>
                     </div>
                     <span class="explore">Explore</span>
-                    <input type="text" placeholder="Search course for you" class="search-box" />
+                    <input type="text" placeholder="Search course for you" class="search-box" [(ngModel)]="searchKeyword" (keydown.enter)="onSearch()" />
                 </div>
                 <div class="navbar-right">
                     <ul class="nav-links" *ngIf="isLoggedIn">
@@ -33,7 +34,7 @@ import { CartService } from '../../service/cart.service';
                                             <img [src]="item.thumbnail" alt="" />
                                             <div class="mylearning_dropdown-item-info">
                                                 <div class="mylearning_dropdown-item-name">
-                                                    <span class="course-name">{{item.title}}</span>
+                                                    <span class="course-name">{{ item.title }}</span>
                                                 </div>
                                                 <div class="progress"></div>
                                             </div>
@@ -50,35 +51,35 @@ import { CartService } from '../../service/cart.service';
                         </li>
                         <li [routerLink]="'/cart'" class="nav-link-item cart" style="position: relative;">
                             <i class="bi bi-cart"></i>
-                            <span *ngIf="mycarts.length >0" class="badge">{{mycarts.length}}</span>
-                            <div class="cart_dropdown" *ngIf="mycarts.length >0">
+                            <span *ngIf="mycarts.length > 0" class="badge">{{ mycarts.length }}</span>
+                            <div class="cart_dropdown" *ngIf="mycarts.length > 0">
                                 <ul class="cart_dropdown__list">
                                     <li class="cart_dropdown__item" *ngFor="let item of mycarts">
                                         <img [src]="item.courseResponse.thumbnail" alt="" class="cart_dropdown__item-img" />
                                         <div class="cart_dropdown__item-information">
-                                            <p class="name">{{item.courseResponse.title}}</p>
-                                            <p class="author">{{item.courseResponse.authorName}}</p>
-                                            <p class="price">đ{{item.courseResponse.discount_price | number:'1.0-0'}}</p>
+                                            <p class="name">{{ item.courseResponse.title }}</p>
+                                            <p class="author">{{ item.courseResponse.authorName }}</p>
+                                            <p class="price">đ{{ item.courseResponse.discount_price | number: '1.0-0' }}</p>
                                         </div>
                                     </li>
                                 </ul>
                                 <div class="cart_dropdown-bottom">
-                                    <p class="total_price">Total price : {{totalInCart | number:'1.0-0'}}đ</p>
+                                    <p class="total_price">Total price : {{ totalInCart | number: '1.0-0' }}đ</p>
                                     <button [routerLink]="'/cart'" class="cart_dropdown__bottom-go">Tới giỏ hàng</button>
                                 </div>
                             </div>
                         </li>
                         <li class="nav-link-item notification" style="position: relative;">
                             <i class="bi bi-bell"></i>
-                            <span *ngIf="notifications.length>0" class="badge">{{notifications.length}}</span>
-                            <div class="notification_dropdown" *ngIf="notifications.length >0">
+                            <span *ngIf="notifications.length > 0" class="badge">{{ notifications.length }}</span>
+                            <div class="notification_dropdown" *ngIf="notifications.length > 0">
                                 <div class="notification_dropdown-header">
                                     <p>Notification</p>
                                 </div>
                                 <ul class="notification_dropdown__list">
                                     <li class="notification_dropdown__list-item" *ngFor="let item of notifications">
                                         <img src="https://cdn1.iconfinder.com/data/icons/man-user-human-profile-avatar-business-person/100/09-1User_3-4-1024.png" alt="Admin" />
-                                        <a href="#">{{item.message}}</a>
+                                        <a href="#">{{ item.message }}</a>
                                     </li>
                                 </ul>
                                 <div class="mask">
@@ -297,7 +298,7 @@ import { CartService } from '../../service/cart.service';
         //     display:block;
         // }
         .notification_dropdown__list-item {
-        padding: 0 15px 0 0;
+            padding: 0 15px 0 0;
             margin: 15px;
             width: 100%;
             /* margin-bottom: 15px; */
@@ -522,7 +523,7 @@ import { CartService } from '../../service/cart.service';
         .mylearning_dropdown-item {
             display: flex;
             align-items: center;
-            padding :15px 0;
+            padding: 15px 0;
             border-bottom: 1px solid #ddd;
         }
         .mylearning_dropdown-item:hover {
@@ -647,16 +648,22 @@ import { CartService } from '../../service/cart.service';
     `
 })
 export class NavBarComponent implements OnInit {
-    mycourses:any[]=[];
-    mycarts:any[]=[];
-    totalInCart:any;
-    avatarUrl:string | null |undefined;
-    notifications:any[]=[]
-    calculateTotalInCart(){
+    onSearch(): void {
+        if (this.searchKeyword.trim()) {
+          this.router.navigate(['/search', this.searchKeyword.trim()]);
+        }
+      }
+    mycourses: any[] = [];
+    mycarts: any[] = [];
+    totalInCart: any;
+    avatarUrl: string | null | undefined;
+    notifications: any[] = [];
+    searchKeyword: string = '';
+    calculateTotalInCart() {
         let total = 0;
-        this.mycarts.forEach(item => {
+        this.mycarts.forEach((item) => {
             total += item.courseResponse.discount_price;
-        })
+        });
         this.totalInCart = parseFloat(total.toFixed(2));
     }
     login() {
@@ -672,49 +679,42 @@ export class NavBarComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private router: Router,
-        private http:HttpClient,
-        private cartService: CartService,
+        private http: HttpClient,
+        private cartService: CartService
     ) {}
-    loadNotifications(){
-        this.http.get<any>(`http://localhost:8080/notification/unread`).subscribe(
-            (response) => {
-                this.notifications=response.data;
-            }
-        )
+    loadNotifications() {
+        this.http.get<any>(`http://localhost:8080/notification/unread`).subscribe((response) => {
+            this.notifications = response.data;
+        });
     }
     maskAllAsRead() {
-        const request={
-            idsNotificationRead:this.notifications.map(item=>item.id)
-        }
-        this.http.post<any>(`http://localhost:8080/notification/mark-all-as-read`,request).subscribe(
-            (response) => {
-                this.loadNotifications;
-                this.notifications=[];
-            }
-        )
+        const request = {
+            idsNotificationRead: this.notifications.map((item) => item.id)
+        };
+        this.http.post<any>(`http://localhost:8080/notification/mark-all-as-read`, request).subscribe((response) => {
+            this.loadNotifications;
+            this.notifications = [];
+        });
     }
     ngOnInit(): void {
-        
         this.authService.getAuthStatus().subscribe((status) => {
             this.isLoggedIn = status;
             if (status) {
                 // Khi vừa login, gọi lại API để lấy cart mới nhất
-                
+
                 this.cartService.loadCart();
             }
         });
         this.loadNotifications();
         this.avatarUrl = this.authService.getAvatar();
-        this.http.get<any>(`http://localhost:8080/course/my-courses/learner?page=0&size=10`).subscribe(
-            (response) => {
-                this.mycourses = response.data.content;
-                console.log('mycourse:'+this.mycourses);
-            }
-        )
+        this.http.get<any>(`http://localhost:8080/course/my-courses/learner?page=0&size=10`).subscribe((response) => {
+            this.mycourses = response.data.content;
+            console.log('mycourse:' + this.mycourses);
+        });
         this.calculateTotalInCart();
         this.cartService.carts$.subscribe((carts) => {
             this.mycarts = carts;
             this.calculateTotalInCart();
-          });
+        });
     }
 }
