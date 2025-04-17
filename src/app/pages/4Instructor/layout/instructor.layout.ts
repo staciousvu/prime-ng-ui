@@ -49,6 +49,8 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
                         class="flex items-center space-x-2 px-3 py-4
                                 hover:bg-gray-800 rounded-md cursor-pointer 
                                 transition active:scale-95"
+                                routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                                [routerLink]="['/instructor/performances']"
                     >
                         <i class="fa-solid fa-chart-simple me-3"></i>
                         <span
@@ -58,6 +60,23 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
                                    whitespace-nowrap"
                         >
                             Performance
+                        </span>
+                    </div>
+                    <div
+                        class="flex items-center space-x-2 px-3 py-4
+                                hover:bg-gray-800 rounded-md cursor-pointer 
+                                transition active:scale-95"
+                                routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                                [routerLink]="['/instructor/profiles']"
+                    >
+                        <i class="bi bi-person-circle me-3"></i>
+                        <span
+                            class="transition-all duration-300 
+                                   opacity-0 translate-x-[-20px]
+                                   group-hover:opacity-100 group-hover:translate-x-0 
+                                   whitespace-nowrap"
+                        >
+                            Profile
                         </span>
                     </div>
                 </div>

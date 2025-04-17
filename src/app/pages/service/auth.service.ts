@@ -56,8 +56,6 @@ export class AuthService {
     getFavoriteCategory():string| null {
         return localStorage.getItem('favoriteCategory');
     }
-
-
     isAuthenticated(): boolean {
         return !!this.getToken();
     }
@@ -70,6 +68,7 @@ export class AuthService {
     // Khi logout, cập nhật trạng thái
     logout() {
       localStorage.removeItem('token');
+      localStorage.removeItem('id');
       localStorage.removeItem('role');
       localStorage.removeItem('email');
       localStorage.removeItem('avatar');

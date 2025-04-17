@@ -11,35 +11,30 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
             <!-- Sidebar -->
             <nav class="w-64 bg-white shadow-md rounded-lg overflow-hidden p-5">
                 <ul class="space-y-1">
-                    <!-- Q&A -->
+                    <!--Overviews -->
                     <li>
-                        <div routerLink="/instructor/communications/qna" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">Q&A</div>
+                        <div routerLink="/instructor/performances/overview" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" 
+                        class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">Overview</div>
                     </li>
 
-                    <!-- Messages -->
+                    <!-- Students -->
                     <li>
                         <div
-                            routerLink="/instructor/communications/messages"
+                            routerLink="/instructor/performances/student"
                             routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold"
                             class="flex items-center justify-between px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
-                            <span>Messages</span>
-                            <span class="bg-purple-500 text-white text-xs font-semibold rounded-full px-2 py-1">7</span>
+                            <span>Students</span>
+                            <!-- <span class="bg-purple-500 text-white text-xs font-semibold rounded-full px-2 py-1">7</span> -->
                         </div>
                     </li>
 
-                    <!-- Assignments -->
+                    <!-- Reviews -->
                     <li>
-                        <div routerLink="/instructor/communications/assignments" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
-                            Assignments
+                        <div routerLink="/instructor/performances/review" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
+                            Reviews
                         </div>
                     </li>
 
-                    <!-- Announcements -->
-                    <li>
-                        <div routerLink="/instructor/communications/announcements" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
-                            Announcements
-                        </div>
-                    </li>
                 </ul>
             </nav>
 

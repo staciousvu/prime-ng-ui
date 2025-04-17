@@ -720,13 +720,11 @@ export class NavBarComponent implements OnInit {
     coursesInput:any[]=[]
     onSearchInput() {
     
-        if(this.searchKeyword != ''){
-            const request = {
-                keyword: this.searchKeyword.trim()
-              };
-            const params = new HttpParams().set('page', this.currentPage.toString()).set('size', this.pageSize.toString());
+        if(this.searchKeyword.trim() != ''){
+            const params = new HttpParams().set('page', this.currentPage.toString()).set('size', this.pageSize.toString())
+            .set('keyword', this.searchKeyword.trim());
 
-            this.http.post<any>(`http://localhost:8080/course/search`, request, { params }).subscribe(
+            this.http.get<any>(`http://localhost:8080/course/search/basic`,{ params }).subscribe(
                 (response) => {
                     this.coursesInput=response.data.content;
                 }
