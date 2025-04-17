@@ -86,7 +86,7 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
   messages: any[] = [];
   selectedConversationId: number | null = null;
   newMessage: string = '';
-  studentEmail: string = 'student1@gmail.com';
+  studentEmail: string = '' ;
   currentUserId: number = 1;
   defaultAvatar = 'https://th.bing.com/th/id/OIP.hHZesFcNsuFVAfAgYznY0QHaHa?rs=1&pid=ImgDetMain';
 
@@ -102,7 +102,7 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
 
   ngOnInit(): void {
     this.chatService.connect();
-
+    this.studentEmail=localStorage.getItem("email")!;
     this.chatService.getConversationsForStudent(this.studentEmail).subscribe({
       next: (response: any) => {
         this.conversations = response.data;
@@ -111,12 +111,8 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
       error: (err) => console.error('Error fetching conversations:', err)
     });
 
-    const id = this.authService.getId();
-    if (id !== null) {
-      this.currentUserId = Number(id);
-    } else {
-      console.error('User ID is null');
-    }
+    this.currentUserId = Number(this.authService.getId())!;
+
   }
 
   ngOnDestroy(): void {

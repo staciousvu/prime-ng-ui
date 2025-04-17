@@ -39,12 +39,8 @@ import { RouterLink } from '@angular/router';
         </div>
 
         <div class="banner">
-            <!-- <img src="https://img-c.udemycdn.com/notices/web_carousel_slide/image/db24b94e-d190-4d5a-b1dd-958f702cc8f5.jpg" alt="" /> -->
             <img src="https://unisallevirtual.lasalle.edu.co/pluginfile.php/4049002/course/overviewfiles/6aa96182-b121-4e69-9427-f6450794018b.png" alt="" />
-            <!-- <div class="banner-info">
-                <h3 class="banner-info-title">Hãy bắt đầu ngay hôm nay</h3>
-                <p class="description">Rèn luyện kĩ năng cho hiện tại và cả tương lai , hãy bắt đầu với chúng tôi</p>
-            </div> -->
+
         </div>
         <!-- let start -->
         <!-- <div class="let-start">
@@ -77,17 +73,17 @@ import { RouterLink } from '@angular/router';
             </div>
         </div> -->
         <div class="what-will-you-learn" style="position: relative;">
-            <app-product-carousel *ngIf="courses_preference_root.courses.length > 0" [title]="'Vì bạn đã chọn danh mục yêu thích'" [keyword]="courses_preference_root.categoryRoot" [courses]="courses_preference_root.courses"> </app-product-carousel>
-            <app-product-carousel *ngIf="courses_preference_topic?.[0]?.courses?.length > 0" [title]="'Vì bạn đã chọn chủ đề'" [keyword]="courses_preference_topic[0].categoryName" [courses]="courses_preference_topic[0].courses">
+            <app-product-carousel *ngIf="(courses_preference_root != null) && courses_preference_root.courses.length > 0" [title]="'Vì bạn đã chọn danh mục yêu thích'" [keyword]="courses_preference_root.categoryRoot" [courses]="courses_preference_root.courses"> </app-product-carousel>
+            <app-product-carousel *ngIf="(courses_preference_topic != null) && (courses_preference_topic?.[0]?.courses?.length > 0)" [title]="'Vì bạn đã chọn chủ đề'" [keyword]="courses_preference_topic[0].categoryName" [courses]="courses_preference_topic[0].courses">
             </app-product-carousel>
-            <app-product-carousel *ngIf="courses_preference_topic?.[1]?.courses?.length > 0" [title]="'Vì bạn đã chọn chủ đề'" [keyword]="courses_preference_topic[1].categoryName" [courses]="courses_preference_topic[1].courses">
+            <app-product-carousel *ngIf="(courses_preference_topic != null) && (courses_preference_topic?.[1]?.courses?.length > 0)" [title]="'Vì bạn đã chọn chủ đề'" [keyword]="courses_preference_topic[1].categoryName" [courses]="courses_preference_topic[1].courses">
             </app-product-carousel>
-            <app-product-carousel *ngIf="courses_activity.courses.length > 0" [title]="'Vì bạn đã xem khóa học liên quan đến '" [keyword]="courses_activity.categoryRoot" [courses]="courses_activity.courses">
+            <app-product-carousel *ngIf="(courses_activity != null) && (courses_activity.courses.length > 0 )" [title]="'Vì bạn đã xem khóa học liên quan đến '" [keyword]="courses_activity.categoryRoot" [courses]="courses_activity.courses">
             </app-product-carousel>
             
-            <app-product-carousel *ngIf="courses_keyword" [title]="'Vì bạn tìm kiếm từ khóa'" [keyword]="courses_keyword[0].keyword" [courses]="courses_keyword[0].courses"></app-product-carousel>
-            <app-product-carousel *ngIf="courses_keyword" [title]="'Vì bạn đã tìm kiếm từ khóa'" [keyword]="courses_keyword[1].keyword" [courses]="courses_keyword[1].courses"></app-product-carousel>
-            <app-product-carousel *ngIf="courses_related_enrolled" [title]="'Đề xuất theo những khóa học bạn đã mua gần đây'"  [courses]="courses_related_enrolled"></app-product-carousel>
+            <app-product-carousel *ngIf="courses_keyword.length>0" [title]="'Vì bạn tìm kiếm từ khóa'" [keyword]="courses_keyword[0].keyword" [courses]="courses_keyword[0].courses"></app-product-carousel>
+            <app-product-carousel *ngIf="courses_keyword.length>0" [title]="'Vì bạn đã tìm kiếm từ khóa'" [keyword]="courses_keyword[1].keyword" [courses]="courses_keyword[1].courses"></app-product-carousel>
+            <app-product-carousel *ngIf="courses_related_enrolled.length>0" [title]="'Đề xuất theo những khóa học bạn đã mua gần đây'"  [courses]="courses_related_enrolled"></app-product-carousel>
         </div>
     `,
     styles: `
@@ -280,8 +276,8 @@ export class HomeComponent implements OnInit {
     courses_preference_root: any | null;
     courses_preference_topic: any | null;
     courses_activity: any | null;
-    courses_keyword: any | null;
-    courses_related_enrolled: any|null;
+    courses_keyword: any[] =[];
+    courses_related_enrolled: any[] =[];
     value: number = 3;
     avatarUrl:string | null |undefined;
     fullname:string | null |undefined;
@@ -295,18 +291,23 @@ export class HomeComponent implements OnInit {
         this.favoriteCategory = this.authService.getFavoriteCategory();
         this.http.get<any>(`http://localhost:8080/recommend/root`).subscribe((response) => {
             this.courses_preference_root = response.data;
+            console.log('courses_preference_root:',this.courses_preference_root)
         });
         this.http.get<any>(`http://localhost:8080/recommend/leafs`).subscribe((response) => {
             this.courses_preference_topic = response.data;
+            console.log('courses_preference_topic:',this.courses_preference_topic)
         });
         this.http.get<any>(`http://localhost:8080/recommend/activity`).subscribe((response) => {
             this.courses_activity = response.data;
+            console.log('courses_activity:',this.courses_activity)
         });
         this.http.get<any>(`http://localhost:8080/recommend/keyword`).subscribe((response) => {
             this.courses_keyword=response.data;
+            console.log('courses_keyword:',this.courses_keyword)
         });
         this.http.get<any>(`http://localhost:8080/recommend/leafs`).subscribe((response) => {
             this.courses_preference_topic = response.data;
+            console.log('courses_preference_topic:',this.courses_preference_topic)
         });
         this.http.get<any>(`http://localhost:8080/recommend/related-enrolled`).subscribe((response) => {
             this.courses_related_enrolled = response.data;

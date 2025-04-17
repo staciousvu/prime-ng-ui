@@ -102,6 +102,7 @@ import { FormsModule } from '@angular/forms';
                                 <li class="dropdown-item"><a href="#">Profile</a></li>
                                 <li class="dropdown-item" [routerLink]="'/my-learning'"><a>My Learning</a></li>
                                 <li class="dropdown-item" [routerLink]="'/cart'"><a>My Cart</a></li>
+                                <li class="dropdown-item" [routerLink]="'/message'"><a>Message</a></li>
                                 <li class="dropdown-item"><a href="#">Settings</a></li>
                                 <li class="dropdown-item">
                                     <hr />
@@ -716,7 +717,6 @@ import { FormsModule } from '@angular/forms';
 export class NavBarComponent implements OnInit {
     currentPage = 0;
     pageSize = 8;
-    // searchInputKeyword: string = '';
     coursesInput:any[]=[]
     onSearchInput() {
     

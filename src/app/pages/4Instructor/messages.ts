@@ -102,7 +102,7 @@ export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterV
   
     ngOnInit(): void {
       this.chatService.connect();
-  
+      this.instructorEmail=localStorage.getItem("email")!;
       this.chatService.getConversationsForInstructor(this.instructorEmail).subscribe({
         next: (response: any) => {
           this.conversations = response.data;
@@ -110,13 +110,8 @@ export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterV
         },
         error: (err) => console.error('Error fetching conversations:', err)
       });
-  
-      const id = this.authService.getId();
-      if (id !== null) {
-        this.currentUserId = Number(id);
-      } else {
-        console.error('User ID is null');
-      }
+      this.currentUserId = Number(this.authService.getId())!;
+
     }
   
     ngOnDestroy(): void {
@@ -167,6 +162,7 @@ export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterV
     }
   
     sendMessage(): void {
+      console.log('click button send message')
       if (this.newMessage.trim() && this.selectedConversationId) {
         this.chatService.sendMessage(this.selectedConversationId, this.currentUserId, this.newMessage);
         this.newMessage = '';
@@ -184,6 +180,7 @@ export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterV
       return this.conversations.find((c) => c.id === this.selectedConversationId);
     }
     handleEnterKey(event: Event): void {
+      console.log('enter message')
         const keyboardEvent = event as KeyboardEvent;
       
         if (keyboardEvent.shiftKey) {
