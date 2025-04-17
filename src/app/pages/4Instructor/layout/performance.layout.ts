@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
-    selector: 'app-communication-layout',
+    selector: 'app-performance-layout',
     standalone: true,
     imports: [RouterOutlet,RouterLink,RouterModule],
     template: `
@@ -54,4 +54,4 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
     `,
     styles: ``
 })
-export class CommunicationLayoutComponent {}
+export class PerformanceLayoutComponent {}

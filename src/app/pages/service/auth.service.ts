@@ -25,6 +25,7 @@ export class AuthService {
                     localStorage.setItem('email',response.data.email);
                     localStorage.setItem('avatar',response.data.avatarUrl);
                     localStorage.setItem('fullname',response.data.name);
+                    localStorage.setItem('id',response.data.id);
                     localStorage.setItem('favoriteCategory',response.data.favoriteCategory);
                     this.authStatus.next(true);
                 }
@@ -44,6 +45,9 @@ export class AuthService {
     }
     getAvatar():string| null {
         return localStorage.getItem('avatar');
+    }
+    getId():string| null {
+        return localStorage.getItem('id');
     }
 
     getFullname():string| null {

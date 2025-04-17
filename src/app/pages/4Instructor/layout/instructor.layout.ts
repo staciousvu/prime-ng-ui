@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
-import { RouterLink, RouterOutlet } from '@angular/router';
+import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 
 @Component({
     selector: 'app-instructor-layout',
     standalone: true,
-    imports: [RouterOutlet,RouterLink],
+    imports: [RouterOutlet,RouterLink,RouterModule],
     template: `
         <div class="relative h-screen">
             <!-- Sidebar -->
@@ -18,7 +18,9 @@ import { RouterLink, RouterOutlet } from '@angular/router';
                     <div
                         class="flex items-center space-x-2 px-3 py-4
                                 hover:bg-gray-800 rounded-md cursor-pointer 
-                                transition active:scale-95" [routerLink]="['/instructor/courses']">
+                                transition active:scale-95"
+                                routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                                [routerLink]="['/instructor/courses']">
                         <i class="fa-solid fa-video me-3"></i>
                         <span
                             class="transition-all duration-300 
@@ -32,7 +34,9 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 
                     <div class="flex items-center space-x-2 px-3 py-4
                                 hover:bg-gray-800 rounded-md cursor-pointer 
-                                transition active:scale-95" [routerLink]="['/instructor/communications']">
+                                transition active:scale-95" 
+                                routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                                [routerLink]="['/instructor/communications']">
                         <i class="fa-solid fa-comments me-3"></i>
                         <span class="transition-all duration-300 
                                    opacity-0 translate-x-[-20px]

@@ -26,6 +26,7 @@ import { PaymentSuccessComponent } from './app/pages/4User/payment-success';
 import { PaymentFailedComponent } from './app/pages/4User/payment-failed';
 import { SearchCourseComponent } from './app/pages/4User/search-course';
 import { InstructorLayoutComponent } from './app/pages/4Instructor/layout/instructor.layout';
+import { MessageUserComponent } from './app/pages/4User/message';
 export const appRoutes: Routes = [
 
     {
@@ -40,6 +41,7 @@ export const appRoutes: Routes = [
             {path:'payment-success',component:PaymentSuccessComponent},
             {path:'payment-failed',component:PaymentFailedComponent},
             {path:'search/:keyword',component:SearchCourseComponent},
+            {path:'message',component:MessageUserComponent},
         ]
     },
     {
