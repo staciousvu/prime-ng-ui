@@ -99,7 +99,7 @@ import { FormsModule } from '@angular/forms';
                         <li class="nav-link-item user-menu" style="position: relative;">
                             <img class="avatar" [src]="avatarUrl ? avatarUrl : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />
                             <ul class="dropdown">
-                                <li class="dropdown-item"><a href="#">Profile</a></li>
+                                <li class="dropdown-item" [routerLink]="'/instructor/profiles/basic-information'"><a href="#">Profile</a></li>
                                 <li class="dropdown-item" [routerLink]="'/my-learning'"><a>My Learning</a></li>
                                 <li class="dropdown-item" [routerLink]="'/cart'"><a>My Cart</a></li>
                                 <li class="dropdown-item" [routerLink]="'/message'"><a>Message</a></li>

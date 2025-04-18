@@ -43,7 +43,7 @@ export const appRoutes: Routes = [
             {path:'payment-failed',component:PaymentFailedComponent},
             {path:'search/:keyword',component:SearchCourseComponent},
             {path:'message',component:MessageUserComponent},
-            {path:'instructor-detail',component:InstructorDetailComponent},
+            {path:'instructor-detail/:id',component:InstructorDetailComponent},
         ]
     },
     {

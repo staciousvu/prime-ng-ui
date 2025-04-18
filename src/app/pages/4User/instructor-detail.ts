@@ -1,4 +1,6 @@
-import { Component } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 
 
 @Component({
@@ -12,14 +14,14 @@ import { Component } from "@angular/core";
     <div class="max-w-4xl">
       <p class="text-xl font-extrabold text-gray-900 mb-1">INSTRUCTOR</p>
       <h1 class="text-3xl md:text-4xl font-extrabold leading-tight mb-1">
-        Dr. Angela Yu, Developer and Lead Instructor
+        {{user.fullName}}, {{user.expertise}}
       </h1>
       <h2 class="font-extrabold text-gray-900 text-xl mb-4">
-        Developer and Lead Instructor
+      {{user.expertise}}
       </h2>
       <button class="bg-[#a9a6ff] text-[#3f3cd8] font-extrabold text-xs rounded-md px-3 py-1" type="button">
         Eduflow Instructor Partner
-      </button>
+      </button> 
     </div>
   </div>
 
@@ -75,51 +77,29 @@ import { Component } from "@angular/core";
    <h3 class="font-extrabold text-xl md:text-2xl mb-4">
     About me
    </h3>
-   <p class="mb-3 max-w-3xl text-gray-900 text-base md:text-lg leading-relaxed">
-    I'm Angela, I'm a developer with a passion for teaching. I'm the
-    <strong>
-     lead instructor
-    </strong>
-    at the London App Brewery, London's
-      leading
-    <strong>
-     Programming Bootcamp
-    </strong>
-    . I've helped hundreds of
-      thousands of students learn to code and change their lives by becoming a
-      developer. I've been invited by companies such as Twitter, Facebook and
-      Google to teach their employees.
-   </p>
-   <p class="mb-3 max-w-3xl text-gray-900 text-base md:text-lg leading-relaxed">
-    My first foray into programming was when I was just 12 years old, wanting
-      to build my own Space Invader game. Since then, I've made
-    <strong>
-     hundred of websites, apps and games
-    </strong>
-    . But most
-      importantly, I realised that my
-    <strong>
-     greatest passion
-    </strong>
-    is
-      teaching.
-   </p>
-   <p class="max-w-3xl text-gray-900 text-base md:text-lg leading-relaxed">
-    I spend most of my time researching how to make
-    <strong>
-     learning to code fun
-    </strong>
-    and make
-    <strong>
-     hard concepts easy to understand
-    </strong>
-    . I apply everything I discover into my bootcamp
-   </p>
+   <p class="mb-3 max-w-3xl text-gray-900 text-base md:text-lg leading-relaxed overflow-wrap break-words" [innerHTML]="santinizeBio()"></p>
+
+
   </div>
     `,
     styles:``,
     providers:[]
 })
-export class InstructorDetailComponent{
+export class InstructorDetailComponent implements OnInit{
+  userId:any;
+  user:any;
+  check_b:boolean=false;
+  constructor(private http:HttpClient,private router:ActivatedRoute){}
+  ngOnInit(): void {
+    // this.http.get<any>(`http://localhost:8080/enrolls/check`)
+    this.http.get<any>(`http://localhost:8080/profile`).subscribe(
+      (response:any)=>{
+        this.user = response.data;
+      }
+    )
+  }
+  santinizeBio(){
+    return this.user.bio.replace(/&nbsp;/g, ' ');
+  }
     
 }

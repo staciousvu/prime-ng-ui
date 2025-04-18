@@ -366,6 +366,7 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
         });
     }
     save() {
+        console.log(this.course.description)
         const data = {
             title: this.course.title,
             subtitle: this.course.subtitle,

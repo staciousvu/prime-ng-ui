@@ -99,7 +99,8 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 
                     <!-- Avatar -->
                     <div class="relative group cursor-pointer ml-4">
-                        <img src="http://localhost:8080/images/avatar/avatar1.jpg" class="w-10 h-10 rounded-full border-2 border-gray-300" alt="Avatar" />
+                    <img [src]="img" class="w-10 h-10 rounded-full border-2 border-gray-300 object-cover" alt="Avatar" />
+
                         <div class="absolute right-0 mt-2 w-48 bg-white text-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transform transition-all duration-300 z-50">
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Hồ sơ</a>
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Cài đặt</a>
@@ -118,4 +119,6 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
     `,
     styles: ``
 })
-export class InstructorLayoutComponent {}
+export class InstructorLayoutComponent {
+    img:string=localStorage.getItem("avatar")!
+}
