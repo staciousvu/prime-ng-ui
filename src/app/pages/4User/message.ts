@@ -104,7 +104,7 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
 
   ngOnInit(): void {
     this.chatService.connect();
-    this.studentEmail=localStorage.getItem("email")!;
+    this.studentEmail=this.authService.getEmail()!;
     this.chatService.getConversationsForStudent(this.studentEmail).subscribe({
       next: (response: any) => {
         this.conversations = response.data;

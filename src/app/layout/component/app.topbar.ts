@@ -16,7 +16,7 @@ import { AuthService } from '../../pages/service/auth.service';
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
                 <i class="pi pi-bars"></i>
             </button>
-            <a class="layout-topbar-logo" routerLink="/">
+            <a class="layout-topbar-logo" routerLink="/admin">
                 <div class="logo">
       <a href="#">Edu<span>Flow</span></a>
     </div>

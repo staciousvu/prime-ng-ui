@@ -32,8 +32,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(requestToSend).pipe(
     catchError((error) => {
       if (error.status === 401) {
-        const role = authService.getRole(); // Lấy role từ localStorage
-        authService.logout(); // Xoá token, phát authStatus = false
+        const role = authService.getRole(); 
+        authService.logout(); 
 
         if (role === 'ADMIN') {
           router.navigate(['/admin/login']);

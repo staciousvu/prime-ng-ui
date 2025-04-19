@@ -787,25 +787,38 @@ export class NavBarComponent implements OnInit {
             this.notifications = [];
         });
     }
+    private loadUserData() {
+        this.cartService.loadCart();
+        this.loadNotifications();
+        this.avatarUrl = this.authService.getAvatar();
+      
+        this.http.get<any>(`http://localhost:8080/course/my-courses/learner?page=0&size=10`).subscribe((response) => {
+          this.mycourses = response.data.content;
+        });
+      
+        this.cartService.carts$.subscribe((carts) => {
+          this.mycarts = carts;
+          this.calculateTotalInCart();
+        });
+      }
+      
     ngOnInit(): void {
         this.authService.getAuthStatus().subscribe((status) => {
             this.isLoggedIn = status;
             if (status) {
-                // Khi vừa login, gọi lại API để lấy cart mới nhất
-
-                this.cartService.loadCart();
+                this.loadUserData()
             }
         });
-        this.loadNotifications();
-        this.avatarUrl = this.authService.getAvatar();
-        this.http.get<any>(`http://localhost:8080/course/my-courses/learner?page=0&size=10`).subscribe((response) => {
-            this.mycourses = response.data.content;
-            console.log('mycourse:' + this.mycourses);
-        });
-        this.calculateTotalInCart();
-        this.cartService.carts$.subscribe((carts) => {
-            this.mycarts = carts;
-            this.calculateTotalInCart();
-        });
+        // this.loadNotifications();
+        // this.avatarUrl = this.authService.getAvatar();
+        // this.http.get<any>(`http://localhost:8080/course/my-courses/learner?page=0&size=10`).subscribe((response) => {
+        //     this.mycourses = response.data.content;
+        //     console.log('mycourse:' + this.mycourses);
+        // });
+        // this.calculateTotalInCart();
+        // this.cartService.carts$.subscribe((carts) => {
+        //     this.mycarts = carts;
+        //     this.calculateTotalInCart();
+        // });
     }
 }

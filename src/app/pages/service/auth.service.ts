@@ -18,67 +18,92 @@ export class AuthService {
     // Gọi API đăng nhập
     login(username: string, password: string): Observable<any> {
         return this.http.post<any>(`${this.apiUrl}/log-in`, { username, password }).pipe(
-            tap((response) => {
-                if (response.success) {
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('role', response.data.roles[0]);
-                    localStorage.setItem('email',response.data.email);
-                    localStorage.setItem('avatar',response.data.avatarUrl);
-                    localStorage.setItem('fullname',response.data.name);
-                    localStorage.setItem('id',response.data.id);
-                    localStorage.setItem('favoriteCategory',response.data.favoriteCategory);
-                    this.authStatus.next(true);
-                }
-            })
+          tap((response) => {
+            if (response.success) {
+              const userData = {
+                token: response.data.token,
+                roles: response.data.roles,
+                email: response.data.email,
+                avatar: response.data.avatarUrl,
+                fullname: response.data.name,
+                id: response.data.id,
+                favoriteCategory: response.data.favoriteCategory
+              };
+      
+              // Dùng sessionStorage thay vì localStorage
+              const key = userData.roles.includes('ADMIN') ? 'admin_data' : 'user_data';
+              sessionStorage.setItem(key, JSON.stringify(userData));
+              sessionStorage.setItem('roles', JSON.stringify(userData.roles)); // CHUẨN!
+              this.authStatus.next(true);
+            }
+          })
         );
-    }
-
-    getToken(): string | null {
-        return localStorage.getItem('token');
-    }
-
-    getRole(): string | null {
-        return localStorage.getItem('role');
-    }
-    getEmail():string| null {
-        return localStorage.getItem('email');
-    }
-    getAvatar():string| null {
-        return localStorage.getItem('avatar');
-    }
-    getId():string| null {
-        return localStorage.getItem('id');
-    }
-
-    getFullname():string| null {
-        return localStorage.getItem('fullname');
-    }
-    getFavoriteCategory():string| null {
-        return localStorage.getItem('favoriteCategory');
-    }
-    isAuthenticated(): boolean {
+      }
+      
+      private getCurrentUserData(): any | null {
+        const role = this.getRole();
+        const key = role === 'ADMIN' ? 'admin_data' : 'user_data';
+        const json = sessionStorage.getItem(key);  // Sử dụng sessionStorage
+        return json ? JSON.parse(json) : null;
+      }
+      
+      getToken(): any | null {
+        return this.getCurrentUserData()?.token || null;
+      }
+      
+      getRoles(): string[] {
+        const roles = sessionStorage.getItem('roles');
+        try {
+          return roles ? JSON.parse(roles) : [];
+        } catch {
+          return [];
+        }
+      }
+      
+      getRole(): string | null {
+        const roles = this.getRoles();
+        return roles.length > 0 ? roles[0] : null;
+      }
+      
+      
+      
+      
+      getEmail(): string | null {
+        return this.getCurrentUserData()?.email || null;
+      }
+      
+      getAvatar(): string | null {
+        return this.getCurrentUserData()?.avatar || null;
+      }
+      
+      getId(): string | null {
+        return this.getCurrentUserData()?.id || null;
+      }
+      
+      getFullname(): string | null {
+        return this.getCurrentUserData()?.fullname || null;
+      }
+      
+      getFavoriteCategory(): string | null {
+        return this.getCurrentUserData()?.favoriteCategory || null;
+      }
+      
+      isAuthenticated(): boolean {
         return !!this.getToken();
-    }
-
-    isAdmin(): boolean {
+      }
+    
+      isAdmin(): boolean {
         return this.getRole() === 'ADMIN';
-    }
+      }
 
-    // Đăng xuất
-    // Khi logout, cập nhật trạng thái
-    logout() {
-      localStorage.removeItem('token');
-      localStorage.removeItem('id');
-      localStorage.removeItem('role');
-      localStorage.removeItem('email');
-      localStorage.removeItem('avatar');
-      localStorage.removeItem('fullname');
-      localStorage.removeItem('favoriteCategory');
-      this.authStatus.next(false);  // Phát sự kiện: "Đã đăng xuất"
-  }
-
-  // Phương thức để các component theo dõi trạng thái đăng nhập
-  getAuthStatus() {
-      return this.authStatus.asObservable(); // Trả về Observable để các component subscribe
-  }
+      logout(): void {
+        sessionStorage.removeItem('admin_data');  // Xóa dữ liệu admin
+        sessionStorage.removeItem('user_data');   // Xóa dữ liệu user
+        sessionStorage.removeItem('roles');        // Xóa role
+        this.authStatus.next(false);
+      }
+      
+      getAuthStatus() {
+        return this.authStatus.asObservable();
+      }
 }

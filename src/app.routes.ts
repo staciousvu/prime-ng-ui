@@ -36,6 +36,7 @@ export const appRoutes: Routes = [
     {
         path:'',
         component:AppUserLayout,
+        canActivate:[AuthGuard],
         children:[
             {path:'',redirectTo:'home',pathMatch:'full'},
             {path:'home',component:HomeComponent},

@@ -102,11 +102,14 @@ export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterV
   
     ngOnInit(): void {
       this.chatService.connect();
-      this.instructorEmail=localStorage.getItem("email")!;
+      this.instructorEmail=this.authService.getEmail()!;
       this.chatService.getConversationsForInstructor(this.instructorEmail).subscribe({
         next: (response: any) => {
           this.conversations = response.data;
           console.log('conversations:', this.conversations);
+          if(this.conversations.length>0){
+            this.selectConversation(this.conversations[0].id)
+          }
         },
         error: (err) => console.error('Error fetching conversations:', err)
       });
