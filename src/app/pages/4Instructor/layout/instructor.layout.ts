@@ -92,13 +92,12 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
                         <button class="bg-white text-dark px-4 py-3 rounded" [routerLink]="['/home']">Student</button>
                     </div>
 
-                    <div class="relative mx-2 cursor-pointer">
+                    <!-- <div class="relative mx-2 cursor-pointer">
                         <i class="fa-solid fa-bell text-gray-600 text-xl"></i>
                         <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center rounded-full">3</span>
-                    </div>
+                    </div> -->
 
-                    <!-- Avatar -->
-                    <div class="relative group cursor-pointer ml-4">
+                    <!-- <div class="relative group cursor-pointer ml-4">
                     <img [src]="img" class="w-10 h-10 rounded-full border-2 border-gray-300 object-cover" alt="Avatar" />
 
                         <div class="absolute right-0 mt-2 w-48 bg-white text-gray-700 rounded-md shadow-lg opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100 transform transition-all duration-300 z-50">
@@ -106,7 +105,7 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100">Cài đặt</a>
                             <a href="#" class="block px-4 py-2 hover:bg-gray-100 text-red-500">Đăng xuất</a>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
                 <!-- Content có padding -->

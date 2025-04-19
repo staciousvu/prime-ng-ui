@@ -9,16 +9,199 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 
 @Component({
-    selector: 'app-course-detail',
+    selector: 'app-course-detail2',
     standalone: true,
     encapsulation: ViewEncapsulation.None,
-    imports: [AccordionModule, CommonModule, StarRatingComponent,RouterLink,ToastModule],
+    imports: [AccordionModule, CommonModule, StarRatingComponent, RouterLink,ToastModule],
     template: `
-        <div class="wrapper">
+        <div class="bg-[#1d1e27] p-8 md:p-12 lg:p-15 relative overflow-visible">
+            <div class="w-[75%] mx-auto relative z-10">
+                <!-- Nội dung chính -->
+                <div>
+                    <nav class="text-lg text-[#5694E5] space-x-1 mb-4">
+                        <a href="#" class="hover:underline">{{ course.categories[0].categoryName }}</a>
+                        <span>></span>
+                        <a href="#" class="hover:underline">{{ course.categories[1].categoryName }}</a>
+                        <span>></span>
+                        <span class="hover:underline">{{ course.categories[2].categoryName }}</span>
+                    </nav>
+
+                    <h1 class="text-3xl font-bold text-white mb-2">{{ course.title }}</h1>
+                    <p class="text-lg text-white opacity-90 mb-4">{{ course.subtitle }}</p>
+
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-yellow-500 font-semibold">{{ course.avgRating }}</span>
+                        <app-star-rating [rating]="course.avgRating"></app-star-rating>
+                        <span class="text-gray-500">({{ course.countRating }} ratings)</span>
+                        <span class="text-gray-500">({{ course.countEnrolled }} students)</span>
+                    </div>
+
+                    <p class="text-sm text-white opacity:90 mb-2">
+                        Created by
+                        <a [routerLink]="['/instructor-detail', course.author.id]" class="text-[#5694E5] hover:underline">{{ course.author.authorName }}</a>
+                    </p>
+
+                    <p class="text-sm text-white opacity:90"><i class="fa-solid fa-calendar mr-1"></i> Last Updated: October 2025</p>
+                </div>
+
+                <!-- absolute -->
+                <div
+                    class="fixed top-[12%] right-[15%] z-20 
+                    bg-white rounded-lg px-1 py-1 flex flex-col items-start shadow-lg w-[340px]"
+                >
+                    <!-- Video Preview -->
+                    <iframe
+                        class="w-full rounded-md overflow-hidden aspect-video"
+                        src="https://www.youtube.com/embed/l_uTKg05zIU"
+                        title="Course Preview"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowfullscreen
+                    ></iframe>
+
+                    <!-- Info Section -->
+                    <div class="w-full px-5 py-6 border rounded-md shadow-sm">
+                        <!-- Price + Discount -->
+                        <div class="text-3xl font-bold text-gray-900 mb-1">đ{{ course.discount_price | number:'1.0-1' }}</div>
+                        <div *ngIf="course.discount_price !== course.price" class="flex items-center gap-2 mb-2 text-sm">
+                            <span class="line-through text-2xl text-gray-500">đ{{ course.price | number:'1.0-1' }}</span>
+                            <span class="text-red-600 text-xl font-semibold">{{ calculateDiscount(course.price, course.discount_price) }}% off</span>
+                        </div>
+
+                        <!-- Emergency notice -->
+                        <div *ngIf="course.discount_price !== course.price" class="flex items-center text-lg text-red-600 mb-4">
+                            <i class="fa-solid fa-bell mr-2"></i>
+                            <span><strong>10 hours</strong> left at this price</span>
+                        </div>
+
+                        <!-- Add to cart and heart -->
+                        <div class="flex gap-3 mb-6">
+                            <button
+                                class="flex-1 bg-purple-700 hover:bg-purple-600 text-white font-bold py-3 rounded-md transition-all duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                (click)="handleCartClick()"
+                                [disabled]="loading"
+                            >
+                                <span *ngIf="!loading">{{ isInCart ? 'Go to cart' : 'Add to cart' }}</span>
+                                <span *ngIf="loading" class="spinner"></span>
+                            </button>
+
+                            <button class="w-[48px] h-[48px] border border-gray-300 rounded-md flex items-center justify-center hover:border-purple-500 transition">
+                                <i class="fa-regular fa-heart text-xl text-purple-600"></i>
+                            </button>
+                        </div>
+
+                        <!-- Course Includes -->
+                        <div>
+                            <p class="font-semibold text-sm text-gray-900 mb-3">This course includes:</p>
+                            <div class="space-y-3 text-[15px] text-gray-700 leading-5">
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-video"></i>
+                                    <span>{{ course.duration }} hours on-demand video</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-regular fa-file-lines"></i>
+                                    <span>{{ course.articleCount || 40 }} articles</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-download"></i>
+                                    <span>{{ course.resourceCount || 3 }} downloadable resources</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-mobile-screen-button"></i>
+                                    <span>Access on mobile and TV</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-infinity"></i>
+                                    <span>Full lifetime access</span>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <i class="fa-solid fa-trophy"></i>
+                                    <span>Certificate of completion</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="w-[80%] mx-auto px-8 md:px-12 lg:px-20 py-10">
+            <div class="whatwillyoulearn">
+                <h2 class="wwyl-title">Bạn sẽ được học những nội dung</h2>
+                <ul class="wwyl-list">
+                    <li class="wwyl-item text-gray-800" *ngFor="let content of course.contents">{{ content.title }}</li>
+                </ul>
+            </div>
+            <div class="course-content">
+                <h2 class="course-content-title">Course Content</h2>
+                <div class="course-timeline">
+                    <span class="ct-totalsections">21 sections</span>
+                    <span class="ct-totallectures">200 lectures</span>
+                    <span class="ct-totallength">32h 12m total length</span>
+                </div>
+                <div class="card" style="padding:0;width:100%;">
+                    <p-accordion [value]="0" [multiple]="true">
+                        @for (section of courseSections; track section.id) {
+                            <p-accordion-panel [value]="section.id">
+                                <p-accordion-header>{{ section.title }}</p-accordion-header>
+                                <p-accordion-content>
+                                    <ul>
+                                        @for (lecture of section.lectures; track lecture.id) {
+                                            <li>
+                                                {{ lecture.title }} ({{ lecture.duration }} mins)
+                                                <span *ngIf="lecture.type === 'video'">🎥</span>
+                                                <span *ngIf="lecture.type === 'quiz'">📝</span>
+                                            </li>
+                                        }
+                                    </ul>
+                                </p-accordion-content>
+                            </p-accordion-panel>
+                        }
+                    </p-accordion>
+                </div>
+            </div>
+            <div class="course-requirement" *ngIf="course.requirements.length > 0">
+                <h2 class="course-requirement-title">Yêu cầu của khóa học</h2>
+                <ul class="requirement-list">
+                    <li class="requirement-item text-gray-800 " *ngFor="let requirement of course.requirements">{{ requirement.title }}</li>
+                </ul>
+            </div>
+            <div class="course-description" *ngIf="course.description">
+                <h2 class="course-description-title">Mô tả khóa học</h2>
+                <p class="description-content text-gray-800 text-justify" [innerHTML]="santinizeDescription()"></p>
+            </div>
+            <div class="course-target" *ngIf="course.targets.length > 0">
+                <h2 class="course-target-title">Đối tượng phù hợp với khóa học</h2>
+                <ul class="target-list">
+                    <li class="target-item text-gray-800 " *ngFor="let target of course.targets">{{ target.title }}</li>
+                </ul>
+            </div>
+            <div class="w-[60%] p-6 bg-white">
+                <div class="flex flex-col sm:flex-row items-center gap-6">
+                    <img src="{{ course.author.authorAvatar }}" alt="Instructor Photo" class="w-36 h-36 rounded-full object-cover border-4 border-purple-500" />
+                    <div>
+                        <h2 class="text-3xl font-bold">Instructor</h2>
+                        <a [routerLink]="['/instructor-detail', course.author.id]" class="text-xl font-semibold text-purple-700 hover:underline block">{{ course.author.authorName }}</a>
+                        <p class="text-gray-600 mt-1">{{ course.author.expertise }}</p>
+                        <div class="flex flex-wrap gap-4 text-sm mt-4 text-gray-700">
+                            <div class="flex items-center gap-1">⭐ <span>{{ course.avgRating }} Instructor Rating</span></div>
+                            <div class="flex items-center gap-1">📝 <span>1,206,287 Reviews</span></div>
+                            <div class="flex items-center gap-1">👨‍🎓 <span>3,305,306 Students</span></div>
+                            <div class="flex items-center gap-1">🎓 <span>63 Courses</span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-8">
+                <p class="description-content text-gray-800 text-justify" [innerHTML]="santinizeBio()"></p>
+                </div>
+            </div>
+        </div>
+        <p-toast></p-toast>
+
+        <!-- <div class="wrapper">
             <div class="top-container">
                 <div class="grid1">
                     <div class="course-info">
-                        <!-- <p class="breadcrumb">IT & Software > Other IT & Software > Microservices</p> -->
                         <nav class="breadcrumb">
                             <a href="#">{{ course.categories[0].categoryName }}</a>
                             <span class="divider">/</span>
@@ -56,22 +239,18 @@ import { ToastModule } from 'primeng/toast';
                             <div class="cpi-price">
                                 <span class="cpi-discount">đ{{ course.discount_price }}</span>
 
-                                <!-- Chỉ hiển thị nếu có giảm giá -->
                                 <span *ngIf="course.discount_price !== course.price" class="cpi-old-price"> đ{{ course.price }} </span>
 
                                 <span *ngIf="course.discount_price !== course.price" class="cpi-sale-off"> {{ calculateDiscount(course.price, course.discount_price) }}% off </span>
                             </div>
 
-                            <!-- Thông báo khẩn nếu đang giảm giá -->
                             <div *ngIf="course.discount_price !== course.price" class="emergency" style="margin-bottom:6px;">
                                 <i class="fa-solid fa-bell"></i>
                                 <strong>10 hour </strong>left at this price
                             </div>
 
                             <div class="cart-and-favorite">
-                                <!-- <button class="btn-addtocart" (click)="handleCartClick()">
-                                    {{ isInCart ? 'Go to cart' : 'Add to cart' }}
-                                </button> -->
+
                                 <button class="btn-addtocart" (click)="handleCartClick()" [disabled]="loading">
                                     <span *ngIf="!loading">{{ isInCart ? 'Go to cart' : 'Add to cart' }}</span>
                                     <span *ngIf="loading" class="spinner"></span>
@@ -160,25 +339,28 @@ import { ToastModule } from 'primeng/toast';
                     </div>
                 </div>
             </div>
-        </div>
-        <p-toast></p-toast>
+        </div> -->
     `,
     styles: `
-    .spinner {
-  border: 3px solid #f3f3f3;
-  border-top: 3px solid #3498db;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  animation: spin 1s linear infinite;
-  display: inline-block;
-  vertical-align: middle;
-}
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            vertical-align: middle;
+        }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
         .course-instructor {
             padding: 20px;
             background-color: #fdfdfd;
@@ -667,7 +849,7 @@ import { ToastModule } from 'primeng/toast';
     `,
     providers: [MessageService]
 })
-export class CourseDetailComponent implements OnInit {
+export class CourseDetail2Component implements OnInit {
     courseId: any;
     course: any;
     specialObject: any;
@@ -700,27 +882,25 @@ export class CourseDetailComponent implements OnInit {
     isInCart: boolean = false;
     loading: boolean = false;
     handleCartClick() {
-        
         if (this.isInCart) {
-          this.route.navigate(['/cart']);
+            this.route.navigate(['/cart']);
         } else {
-            console.log('inittt add to cart')
-          this.loading = true;
-          this.cartService.addToCart(this.courseId).subscribe(() => {
-            this.cartService.loadCart();
-            // giả lập hiệu ứng loading 1s rồi mới set lại
-            setTimeout(() => {
-              this.loading = false;
-              this.isInCart = true; // nếu bạn không dùng BehaviorSubject thì set thủ công
-            }, 1000);
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Success',
-                detail: 'Add course to cart successfully'
+            this.loading = true;
+            this.cartService.addToCart(this.courseId).subscribe(() => {
+                this.cartService.loadCart();
+                // giả lập hiệu ứng loading 1s rồi mới set lại
+                setTimeout(() => {
+                    this.loading = false;
+                    this.isInCart = true; // nếu bạn không dùng BehaviorSubject thì set thủ công
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Success',
+                        detail: 'Add course to cart successfully'
+                    });
+                }, 1000);
             });
-          });
         }
-      }
+    }
 
     calculateDiscount(original: number, discount: number): number {
         if (!original || original === 0) return 0;
@@ -733,5 +913,11 @@ export class CourseDetailComponent implements OnInit {
 
     trackByLecture(index: number, lecture: any) {
         return lecture.id;
+    }
+    santinizeDescription() {
+        return this.course.description.replace(/&nbsp;/g, ' ');
+    }
+    santinizeBio() {
+        return this.course.author.bio.replace(/&nbsp;/g, ' ');
     }
 }

@@ -3,6 +3,7 @@ import { ChatService } from '../service/chat.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-message-user',
@@ -97,7 +98,8 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
   constructor(
     private chatService: ChatService,
     private authService: AuthService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private router:ActivatedRoute
   ) {}
 
   ngOnInit(): void {
@@ -107,6 +109,17 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
       next: (response: any) => {
         this.conversations = response.data;
         console.log('conversations:', this.conversations);
+        this.router.queryParams.subscribe(params => {
+          const conversationId = Number(params['conversationId']);
+          console.log('hello haha:', conversationId);
+          if (conversationId) {
+            console.log('hello haha1');
+            this.selectConversation(conversationId);
+          }else{
+            this.selectConversation(this.conversations[0].id)
+          }
+        });
+        
       },
       error: (err) => console.error('Error fetching conversations:', err)
     });

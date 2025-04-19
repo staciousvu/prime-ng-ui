@@ -113,7 +113,7 @@ import { FormsModule } from '@angular/forms';
                     </ul>
                     <ul class="nav-links-noauth" *ngIf="!isLoggedIn">
                         <li class="nav-link-item-noauth"><button (click)="login()" class="login">Login</button></li>
-                        <li class="nav-link-item-noauth"><button class="signup">Sign up</button></li>
+                        <li class="nav-link-item-noauth"><button class="signup" [routerLink]="'/user/register'">Sign up</button></li>
                     </ul>
                 </div>
             </nav>

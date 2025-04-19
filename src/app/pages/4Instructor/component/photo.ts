@@ -3,11 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
     selector: 'app-profile-photo',
     standalone: true,
-    imports: [CommonModule, FormsModule, ImageCropperComponent],
+    imports: [CommonModule, FormsModule, ImageCropperComponent,ToastModule],
     template: `
         <div class="max-w-xl mx-auto p-8 rounded-2xl">
   <h2 class="text-2xl font-bold text-center text-gray-800 mb-2">Upload & Crop Avatar</h2>
@@ -46,9 +48,10 @@ import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
   </form>
 </div>
 
-
+<p-toast></p-toast>
     `,
-    styles: ``
+    styles: ``,
+    providers:[MessageService]
 })
 export class ProfilePhotoComponent implements OnInit {
   user: any;
@@ -56,7 +59,7 @@ export class ProfilePhotoComponent implements OnInit {
   croppedImage: string = '';            // Ảnh sau khi crop hoặc ban đầu
   imageChangedEvent: any = '';          // Sự kiện thay đổi ảnh
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,private messageService:MessageService) {}
 
   ngOnInit(): void {
     this.http.get<any>('http://localhost:8080/profile').subscribe((response) => {
@@ -97,13 +100,13 @@ export class ProfilePhotoComponent implements OnInit {
 
   onSubmit(): void {
     if (!this.croppedImage) {
-      alert('❌ Không có ảnh để gửi');
+      alert('Không có ảnh để gửi');
       return;
     }
 
     // Kiểm tra nếu ảnh đã crop là giống ảnh cũ thì không cần gửi
     if (this.croppedImage === this.currentAvatarUrl) {
-      alert('✅ Ảnh vẫn giữ nguyên như cũ');
+      alert('Ảnh vẫn giữ nguyên như cũ');
       return;
     }
 
@@ -118,20 +121,46 @@ export class ProfilePhotoComponent implements OnInit {
         };
         reader.readAsDataURL(blob);
       });
-
-    alert('🎉 Ảnh mới đã được gửi!');
   }
 
   uploadImage(base64Image: string): void {
     const formData = new FormData();
-    formData.append('file', base64Image);
+    const file = this.base64ToFile(base64Image, 'avatar.png'); // chuyển base64 -> file
+    formData.append('file', file);
+    // formData.append('file', base64Image);
 
     // Gửi ảnh lên server (viết theo backend của bạn)
     // Ví dụ:
-    // this.http.post('http://localhost:8080/profile/avatar', formData).subscribe(response => {
-    //   console.log('Upload thành công', response);
-    // }, error => {
-    //   console.error('Upload thất bại', error);
-    // });
+    this.http.post('http://localhost:8080/user/upload-avatar', formData).subscribe(response => {
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Avatar updated successfully'
+    });
+    }, error => {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to update avatar'
+    });
+    });
   }
+  base64ToFile(dataurl: string, filename: string): File {
+    const arr = dataurl.split(',');
+    const match = arr[0].match(/:(.*?);/);
+    if (!match) {
+      throw new Error("Không thể lấy MIME type từ base64 string.");
+    }
+    const mime = match[1];
+    const bstr = atob(arr[1]);
+    let n = bstr.length;
+    const u8arr = new Uint8Array(n);
+  
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n);
+    }
+  
+    return new File([u8arr], filename, { type: mime });
+  }
+  
 }

@@ -28,6 +28,9 @@ import { SearchCourseComponent } from './app/pages/4User/search-course';
 import { InstructorLayoutComponent } from './app/pages/4Instructor/layout/instructor.layout';
 import { MessageUserComponent } from './app/pages/4User/message';
 import { InstructorDetailComponent } from './app/pages/4User/instructor-detail';
+import { CourseDetail2Component } from './app/pages/4User/course-detail2';
+import { Cart2Component } from './app/pages/4User/cart2';
+import { UserRegisterComponent } from './app/pages/auth/register';
 export const appRoutes: Routes = [
 
     {
@@ -36,9 +39,9 @@ export const appRoutes: Routes = [
         children:[
             {path:'',redirectTo:'home',pathMatch:'full'},
             {path:'home',component:HomeComponent},
-            {path:'cart',component:CartComponent},
+            {path:'cart',component:Cart2Component},
             {path:'my-learning',component:MyLearningComponent},
-            {path:'course-detail/:id',component:CourseDetailComponent},
+            {path:'course-detail/:id',component:CourseDetail2Component},
             {path:'payment-success',component:PaymentSuccessComponent},
             {path:'payment-failed',component:PaymentFailedComponent},
             {path:'search/:keyword',component:SearchCourseComponent},
@@ -74,6 +77,7 @@ export const appRoutes: Routes = [
     },
     { path:'admin/login',component:Login},
     { path:'user/login',component:UserLoginComponent},
+    { path:'user/register',component:UserRegisterComponent},
     { path: 'home', component: HomeComponent },
     { path: 'landing', component: Landing },
     { path: 'notfound', component: Notfound },

@@ -77,7 +77,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
                     <!-- No data -->
                     <div class="py-4 min-h-[240px]">
   <table class="w-full text-left border border-gray-200 rounded-md overflow-hidden shadow-sm">
-    <thead class="bg-gray-100 text-gray-700 text-xl">
+    <thead class="bg-gray-100 text-gray-700 text-lg">
       <tr>
         <th class="px-4 py-2 border-b">Course</th>
         <th class="px-4 py-2 border-b">Enrollments</th>
@@ -85,7 +85,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
         <th class="px-4 py-2 border-b">Date</th>
       </tr>
     </thead>
-    <tbody class="text-xs text-gray-900">
+    <tbody class="text-lg text-gray-900">
       <tr class="hover:bg-gray-50">
         <td class="px-4 py-2 border-b">Java Basics</td>
         <td class="px-4 py-2 border-b">123</td>

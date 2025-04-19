@@ -17,11 +17,11 @@ import { Router } from '@angular/router';
         <div class="container">
             <div class="question-box">Answer a few questions to improve your content recommendations</div>
 
-            <h2>What field are you learning for?</h2>
+            <h2>What topic are you learning for?</h2>
 
             <form>
                 <div class="grid">
-                    <label *ngFor="let item of TopicsByPrefId"><input type="checkbox" name="field[]" [value]="item.id" [checked]="selectedTopicsIds.includes(item.id)" (change)="onCheckboxChange($event, item.id)" /> {{ item.name }}:{{item.id}}</label>
+                    <label *ngFor="let item of TopicsByPrefId"><input type="checkbox" name="field[]" [value]="item.id" [checked]="selectedTopicsIds.includes(item.id)" (change)="onCheckboxChange($event, item.id)" /> {{ item.name }}</label>
                 </div>
             </form>
         </div>
@@ -85,7 +85,7 @@ import { Router } from '@angular/router';
         }
 
         input[type='checkbox'] {
-            accent-color: #4f46e5;
+            accent-color: #7E42D9;
             width: 18px;
             height: 18px;
         }
