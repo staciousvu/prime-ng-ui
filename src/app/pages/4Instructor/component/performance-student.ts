@@ -104,31 +104,37 @@ import { RouterModule, RouterOutlet } from '@angular/router';
     `,
     styles: ``
 })
-export class PerformanceStudentComponent implements OnInit{
+export class PerformanceStudentComponent implements OnInit {
+
   instructor_courses: any[] = [];
-    reviews: any[] = [];
+  selectedCourseId: string = 'all';
+  data: any[] = [];
 
-    constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-    ngOnInit(): void {
-        this.http.get<any>(`http://localhost:8080/instructor/my-courses`).subscribe((response) => {
-            this.instructor_courses = response.data;
-        });
+  ngOnInit(): void {
+    this.getCourses();
+  }
+
+  getCourses(): void {
+    this.http.get<any>(`http://localhost:8080/instructor/my-courses`).subscribe((response) => {
+      this.instructor_courses = response.data;
+      this.selectedCourseId = 'all';
+      this.onCourseChange({ target: { value: 'all' } } as any);
+    });
+  }
+
+  onCourseChange(event: Event): void {
+    const selectedValue = (event.target as HTMLSelectElement).value;
+    this.selectedCourseId = selectedValue;
+
+    let url = `http://localhost:8080/dashboard/performance-student?search=&status=All&page=0&size=10`;
+    if (selectedValue !== 'all') {
+      url += `&courseId=${selectedValue}`;
     }
 
-    onCourseChange(event: Event) {
-        const selectedValue = (event.target as HTMLSelectElement).value;
-        let url = '';
-
-        if (selectedValue === 'all') {
-            url = `http://localhost:8080/review/instructor/all-course?page=0&size=10`;
-        } else {
-            url = `http://localhost:8080/review/course/${selectedValue}?page=0&size=10`;
-        }
-
-        this.http.get<any>(url).subscribe((res) => {
-            this.reviews = res.data; // Tùy vào format response của bạn
-        });
-    }
-
+    this.http.get<any>(url).subscribe((res) => {
+      this.data = res.data.content;
+    });
+  }
 }
