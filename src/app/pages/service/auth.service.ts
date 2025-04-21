@@ -16,29 +16,41 @@ export class AuthService {
     constructor(private http: HttpClient,private router: Router) {}
 
     // Gọi API đăng nhập
-    login(username: string, password: string): Observable<any> {
-        return this.http.post<any>(`${this.apiUrl}/log-in`, { username, password }).pipe(
-          tap((response) => {
-            if (response.success) {
-              const userData = {
-                token: response.data.token,
-                roles: response.data.roles,
-                email: response.data.email,
-                avatar: response.data.avatarUrl,
-                fullname: response.data.name,
-                id: response.data.id,
-                favoriteCategory: response.data.favoriteCategory
-              };
-      
-              // Dùng sessionStorage thay vì localStorage
-              const key = userData.roles.includes('ADMIN') ? 'admin_data' : 'user_data';
-              sessionStorage.setItem(key, JSON.stringify(userData));
-              sessionStorage.setItem('roles', JSON.stringify(userData.roles)); // CHUẨN!
-              this.authStatus.next(true);
+    login(username: string, password: string, mode: 'admin' | 'user'): Observable<any> {
+      return this.http.post<any>(`${this.apiUrl}/log-in`, { username, password }).pipe(
+        tap((response) => {
+          if (response.success) {
+            const roles = response.data.roles;
+            
+            // Kiểm tra role tùy theo mode
+            if (mode === 'admin' && !roles.includes('ADMIN')) {
+              throw new Error('Bạn không có quyền truy cập trang admin!');
             }
-          })
-        );
-      }
+    
+            if (mode === 'user' && roles.includes('ADMIN')) {
+              throw new Error('Admin không được đăng nhập tại giao diện user!');
+            }
+    
+            const userData = {
+              token: response.data.token,
+              roles,
+              email: response.data.email,
+              avatar: response.data.avatarUrl,
+              fullname: response.data.name,
+              id: response.data.id,
+              favoriteCategory: response.data.favoriteCategory
+            };
+    
+            const key = roles.includes('ADMIN') ? 'admin_data' : 'user_data';
+            sessionStorage.setItem(key, JSON.stringify(userData));
+            sessionStorage.setItem('roles', JSON.stringify(roles));
+            this.authStatus.next(true);
+          }
+        })
+      );
+    }
+    
+    
       
       private getCurrentUserData(): any | null {
         const role = this.getRole();

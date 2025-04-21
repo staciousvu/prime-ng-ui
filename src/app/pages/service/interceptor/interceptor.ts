@@ -3,21 +3,20 @@ import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from '../auth.service';
 import { catchError, throwError } from 'rxjs';
-import { Router } from '@angular/router';
-
-
+const baseApiUrl = 'http://localhost:8080';
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const router = inject(Router) as Router;
   const token = authService.getToken();
 
   const publicEndpoints = [
-    '/auth/login',
-    '/auth/register',
-    '/products/public',
-    '/home'
+    `${baseApiUrl}/auth/log-in`,
+    `${baseApiUrl}/user/sent-otp`,
+    `${baseApiUrl}/user/create`,
+    `${baseApiUrl}/user/sent-otp-reset`,
+    `${baseApiUrl}/home`
   ];
-  const isPublic = publicEndpoints.some(endpoint => req.url.includes(endpoint));
+
+  const isPublic = publicEndpoints.some(endpoint => req.url.startsWith(endpoint));
 
   let requestToSend = req;
 
@@ -32,14 +31,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(requestToSend).pipe(
     catchError((error) => {
       if (error.status === 401) {
-        const role = authService.getRole(); 
-        authService.logout(); 
-
-        if (role === 'ADMIN') {
-          router.navigate(['/admin/login']);
-        } else {
-          router.navigate(['/user/login']);
-        }
+        authService.logout();
+        // Có thể điều hướng về trang login nếu muốn
       }
       return throwError(() => error);
     })
@@ -48,26 +41,3 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
 
 
-
-// export const authInterceptor: HttpInterceptorFn = (req, next) => {
-//   const authService = inject(AuthService);
-//   const token = authService.getToken();
-//   const publicEndpoints = [
-//     '/auth/login',
-//     '/auth/register',
-//     '/products/public',
-//     '/home'
-//   ];
-//   const isPublic = publicEndpoints.some(endpoint => req.url.includes(endpoint));
-
-//   if (!isPublic && token) {
-//     const clonedReq = req.clone({
-//       setHeaders: {
-//         Authorization: `Bearer ${token}`
-//       }
-//     });
-//     return next(clonedReq);
-//   }
-
-//   return next(req);
-// };

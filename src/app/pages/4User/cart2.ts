@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { forkJoin, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AuthService } from '../service/auth.service';
 
 @Component({
     selector: 'app-cart2',
@@ -389,7 +390,7 @@ import { Router } from '@angular/router';
 export class Cart2Component implements OnInit {
     onPayment() {
         const request = {
-            email: localStorage.getItem('email'),
+            email: this.authService.getEmail(),
             payment_method: 'VNPAY',
             total_amount: this.totalMoney,
             // total_amount:10000,
@@ -433,7 +434,8 @@ export class Cart2Component implements OnInit {
     constructor(
         private cartService: CartService,
         private http: HttpClient,
-        private router: Router
+        private router: Router,
+        private authService:AuthService
     ) {}
     ngOnInit(): void {
         this.cartService.carts$.subscribe((carts) => {

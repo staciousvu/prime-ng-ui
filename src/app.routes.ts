@@ -9,7 +9,6 @@ import AdminRoutes from './app/pages/4AdminCustom/routes/4Admin.routes';
 import { HomeComponent } from './app/pages/4User/home';
 import { AppUserLayout } from './app/pages/4User/layout/user.layout';
 import { AdminGuard } from './app/pages/service/guard/admin-guard';
-import { Login } from './app/pages/auth/admin-login';
 import { UserLoginComponent } from './app/pages/auth/user-login';
 import { BlankLayoutComponent } from './app/pages/4User/layout/blank.layout';
 import { CartComponent } from './app/pages/4User/cart';
@@ -31,6 +30,10 @@ import { InstructorDetailComponent } from './app/pages/4User/instructor-detail';
 import { CourseDetail2Component } from './app/pages/4User/course-detail2';
 import { Cart2Component } from './app/pages/4User/cart2';
 import { UserRegisterComponent } from './app/pages/auth/register';
+import { AdminLoginComponent } from './app/pages/auth/admin-login';
+import { RegisterOtpComponent } from './app/pages/auth/register-otp';
+import { ResetPasswordComponent } from './app/pages/auth/reset';
+import { ResetOtpComponent } from './app/pages/auth/reset-otp';
 export const appRoutes: Routes = [
 
     {
@@ -53,6 +56,7 @@ export const appRoutes: Routes = [
     {
         path:'instructor',
         component:InstructorLayoutComponent,
+        canActivate:[AuthGuard],
         children:[
             {path:'',loadChildren: () => import('./app/pages/4Instructor/routes/instructor.routes').then(m => m.default) },
         ]
@@ -60,6 +64,7 @@ export const appRoutes: Routes = [
     {
         path:'',
         component:BlankLayoutComponent,
+        canActivate:[AuthGuard],
         children:[
             {path:'course/video-learning/:id',component:VideoLearningComponent},
             {path:'survey',component:SurveyLayoutComponent}
@@ -76,9 +81,12 @@ export const appRoutes: Routes = [
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
         ]
     },
-    { path:'admin/login',component:Login},
+    { path:'admin/login',component:AdminLoginComponent},
     { path:'user/login',component:UserLoginComponent},
+    { path:'user/verify-otp',component:RegisterOtpComponent},
     { path:'user/register',component:UserRegisterComponent},
+    { path:'user/reset-password',component:ResetPasswordComponent},
+    { path:'user/verify-reset-otp',component:ResetOtpComponent},
     { path: 'home', component: HomeComponent },
     { path: 'landing', component: Landing },
     { path: 'notfound', component: Notfound },

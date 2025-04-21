@@ -8,7 +8,7 @@ import { Router, RouterLink } from '@angular/router';
 @Component({
     selector: 'app-user-login',
     standalone: true,
-    imports: [CommonModule, FormsModule, NavBarComponent,RouterLink],
+    imports: [CommonModule, FormsModule, NavBarComponent, RouterLink],
     template: `
         <app-navbar-home></app-navbar-home>
         <div class="py-16">
@@ -52,16 +52,22 @@ import { Router, RouterLink } from '@angular/router';
                     <div class="mt-4">
                         <div class="flex justify-between">
                             <label class="block text-gray-700 text-sm font-bold mb-2">Password</label>
-                            <a href="#" class="text-xs text-gray-500">Forget Password?</a>
+                            <a [routerLink]="'/user/reset-password'" class="text-xs text-gray-500">Forget Password?</a>
                         </div>
                         <input [(ngModel)]="password" class="bg-gray-200 text-gray-700 focus:outline-none focus:shadow-outline border border-gray-300 rounded py-2 px-4 block w-full appearance-none" type="password" />
                     </div>
                     <div class="mt-8">
                         <button (click)="login()" class="bg-gray-700 text-white font-bold py-2 px-4 w-full rounded hover:bg-gray-600">Login</button>
                     </div>
+                    <div class="fixed bottom-5 left-1/2 transform -translate-x-1/2 w-80 p-4 bg-red-500 text-white rounded-lg shadow-md"
+                        *ngIf="errorMessage" [ngClass]="{'opacity-100': errorMessage, 'opacity-0': !errorMessage}">
+                        <p class="text-center">{{ errorMessage }}</p>
+                    </div>
+
+
                     <div class="mt-4 flex items-center justify-between">
                         <span class="border-b w-1/5 md:w-1/4"></span>
-                        <a href="#" class="text-xs text-gray-500 uppercase" [routerLink]="'/user/register'">or sign up</a>
+                        <a class="text-xs text-gray-500 uppercase" [routerLink]="'/user/register'">or sign up</a>
                         <span class="border-b w-1/5 md:w-1/4"></span>
                     </div>
                 </div>
@@ -71,23 +77,46 @@ import { Router, RouterLink } from '@angular/router';
     styles: [``]
 })
 export class UserLoginComponent {
-    email: string = 'test@gmail.com';
-    password: string = '12345678';
-
-    onSubmit() {
-        console.log('Email:', this.email, 'Password:', this.password);
-    }
+    email: string = 'vunguyenba310703@gmail.com';
+    password: string = '12345';
+    errorMessage: string | null = null;
+  
     constructor(
-        private authService: AuthService,
-        private router: Router
+      private authService: AuthService,
+      private router: Router
     ) {}
+  
     login() {
-        this.authService.login(this.email, this.password).subscribe((response) => {
-            if (response.success) {
-                if (response.data.roles.includes('LEARNER')) {
-                    this.router.navigate(['/home']);
-                }
+      this.authService.login(this.email, this.password, 'user').subscribe({
+        next: (response) => {
+          if (response.success) {       
+            const roles = response.data.roles;
+  
+            if (roles.includes('LEARNER')) {
+              this.router.navigate(['/home']);
+            } else {
+              this.errorMessage = 'Tài khoản không hợp lệ cho trang người dùng!';
+              this.autoHideError();
             }
-        });
+          } else {
+            this.errorMessage = 'Sai email hoặc mật khẩu.';
+            this.autoHideError();
+          }
+        },
+        error: (err) => {
+            // this.errorMessage = err.error?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại.';
+            this.errorMessage = 'Đăng nhập thất bại. Vui lòng kiểm tra lại.';
+            this.autoHideError();
+        }
+      });
     }
-}
+  
+    autoHideError() {
+      setTimeout(() => {
+        this.errorMessage = null;
+      }, 3000);  // Sau 3 giây sẽ tự động ẩn thông báo lỗi
+    }
+  }
+  
+
+

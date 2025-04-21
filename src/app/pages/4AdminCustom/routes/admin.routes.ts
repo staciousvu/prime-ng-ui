@@ -1,7 +1,6 @@
 // admin.routes.ts
 import { Routes } from '@angular/router';
 import { Dashboard } from '../../dashboard/dashboard';
-import { Login } from '../../auth/admin-login';
 
 export const AdminRoutes: Routes = [
     {

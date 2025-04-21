@@ -8,11 +8,12 @@ import { PasswordModule } from 'primeng/password';
 import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '../../layout/component/app.floatingconfigurator';
 import { AuthService } from '../service/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-login',
     standalone: true,
-    imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
+    imports: [CommonModule,ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
     template: `
         <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
@@ -56,6 +57,10 @@ import { AuthService } from '../service/auth.service';
                                 <span class="font-medium no-underline ml-2 text-right cursor-pointer text-primary">Forgot password?</span>
                             </div>
                             <p-button label="Sign In" styleClass="w-full" (onClick)="onSubmit()"></p-button>
+                            <div class="fixed bottom-5 left-1/2 transform -translate-x-1/2 w-80 p-4 bg-red-500 text-white rounded-lg shadow-md"
+                                *ngIf="errorMessage" [ngClass]="{'opacity-100': errorMessage, 'opacity-0': !errorMessage}">
+                                <p class="text-center">{{ errorMessage }}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -63,29 +68,50 @@ import { AuthService } from '../service/auth.service';
         </div>
     `
 })
-export class Login {
+export class AdminLoginComponent {
     email: string = 'vunguyenba310703@gmail.com';
-
     password: string = '12345678';
-
+    errorMessage: string | null = null; // Thêm biến để lưu thông báo lỗi
+  
     checked: boolean = false;
+  
     constructor(
-        private authService: AuthService,
-        private router: Router
+      private authService: AuthService,
+      private router: Router
     ) {}
+  
     onSubmit() {
-        this.login();
+      this.login();
     }
+  
     login() {
-        this.authService.login(this.email, this.password).subscribe((response) => {
-            if (response.success) {
-                if (response.data.roles.includes('ADMIN')) {
-                    this.router.navigate(['/admin']);
-                } 
-                // else {
-                //     this.router.navigate(['/home']);
-                // }
+      this.authService.login(this.email, this.password, 'admin').subscribe({
+        next: (response) => {
+          if (response.success) {
+            // Kiểm tra vai trò ADMIN
+            if (response.data.roles.includes('ADMIN')) {
+              this.router.navigate(['/admin']);
+            } else {
+              this.errorMessage = 'Tài khoản không có quyền truy cập trang Admin!';
+              this.autoHideError();
             }
-        });
+          } else {
+            this.errorMessage = 'Sai email hoặc mật khẩu.';
+            this.autoHideError();
+          }
+        },
+        error: () => {
+          this.errorMessage = 'Đăng nhập thất bại. Vui lòng kiểm tra lại.';
+          this.autoHideError();
+        }
+      });
     }
-}
+  
+    // Hàm tự động ẩn thông báo lỗi sau 3 giây
+    autoHideError() {
+      setTimeout(() => {
+        this.errorMessage = null;
+      }, 3000);  // Sau 3 giây sẽ tự động ẩn thông báo lỗi
+    }
+  }
+  

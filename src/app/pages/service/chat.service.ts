@@ -46,10 +46,14 @@ export class ChatService {
 
   // Đăng ký lắng nghe tin nhắn từ một conversation
   subscribeToConversation(conversationId: number, callback: (message: any) => void): void {
+    console.log('subcribe to conversation enter....')
     if (this.client.connected) {
+      console.log('subcribe to conversation enter....connected')
       this.subscription = this.client.subscribe(`/topic/conversations/${conversationId}`, (message) => {
         callback(JSON.parse(message.body));
       });
+    }else{
+      console.log('cannot connect websocket')
     }
   }
 
