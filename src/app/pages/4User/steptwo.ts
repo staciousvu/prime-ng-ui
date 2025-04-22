@@ -179,6 +179,7 @@ export class StepTwoComponent implements OnInit, OnChanges {
 
         this.http.post('http://localhost:8080/preference/edit', requestBody).subscribe({
             next: () => {
+                
                 this.router.navigate(['/home']);
                 // TODO: emit hoặc chuyển sang bước tiếp theo nếu cần
             },

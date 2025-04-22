@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Client, StompSubscription } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
@@ -9,17 +9,14 @@ import SockJS from 'sockjs-client';
 })
 export class ChatService {
   private apiUrl = 'http://localhost:8080'; // URL backend
+  private connectedSubject = new BehaviorSubject<boolean>(false);
   private client: Client;
   private subscription: StompSubscription | null = null;
+
   constructor(private http: HttpClient) {
-    const socket = new WebSocket(`${this.apiUrl.replace('http', 'ws')}/ws`);
     this.client = new Client({
-      // webSocketFactory: () => new SockJS(`${this.apiUrl}/ws`),
-      webSocketFactory: () => socket,
+      webSocketFactory: () => new SockJS(`${this.apiUrl}/ws`),
       reconnectDelay: 5000,
-      // connectHeaders: {
-      //   Authorization: `Bearer ${localStorage.getItem("token") || ''}`,
-      // },
       onStompError: (frame) => {
         console.error('STOMP Error:', frame);
       },
@@ -29,15 +26,19 @@ export class ChatService {
     });
   }
 
-  // Kết nối WebSocket
   connect(): void {
-    console.log("initt connect to websocketttttttttttttttt")
-    console.log("token:",localStorage.getItem("token"))
     this.client.onConnect = () => {
-      console.log('Connected to WebSocket');
+      console.log('✅ WebSocket connected');
+      this.connectedSubject.next(true);
     };
+
     this.client.activate();
   }
+
+  onConnected(): Observable<boolean> {
+    return this.connectedSubject.asObservable();
+  }
+  
 
   // Ngắt kết nối WebSocket
   disconnect(): void {

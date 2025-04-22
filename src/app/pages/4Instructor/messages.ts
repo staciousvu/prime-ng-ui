@@ -100,21 +100,42 @@ export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterV
       private cdRef: ChangeDetectorRef
     ) {}
   
-    ngOnInit(): void {
-      this.chatService.connect();
-      this.instructorEmail=this.authService.getEmail()!;
-      this.chatService.getConversationsForInstructor(this.instructorEmail).subscribe({
-        next: (response: any) => {
-          this.conversations = response.data;
-          console.log('conversations:', this.conversations);
-          if(this.conversations.length>0){
-            this.selectConversation(this.conversations[0].id)
-          }
-        },
-        error: (err) => console.error('Error fetching conversations:', err)
-      });
-      this.currentUserId = Number(this.authService.getId())!;
+    // ngOnInit(): void {
+    //   this.chatService.connect();
+    //   this.instructorEmail=this.authService.getEmail()!;
+    //   this.chatService.getConversationsForInstructor(this.instructorEmail).subscribe({
+    //     next: (response: any) => {
+    //       this.conversations = response.data;
+    //       console.log('conversations:', this.conversations);
+    //       if(this.conversations.length>0){
+    //         this.selectConversation(this.conversations[0].id)
+    //       }
+    //     },
+    //     error: (err) => console.error('Error fetching conversations:', err)
+    //   });
+    //   this.currentUserId = Number(this.authService.getId())!;
 
+    // }
+    ngOnInit(): void {
+      this.instructorEmail = this.authService.getEmail()!;
+      this.currentUserId = Number(this.authService.getId());
+    
+      this.chatService.connect(); // vẫn gọi connect bình thường
+    
+      this.chatService.onConnected().subscribe((connected) => {
+        if (connected) {
+          this.chatService.getConversationsForInstructor(this.instructorEmail).subscribe({
+            next: (response: any) => {
+              this.conversations = response.data;
+              console.log('conversations:', this.conversations);
+              if(this.conversations.length>0){
+                this.selectConversation(this.conversations[0].id)
+              }
+            },
+            error: (err) => console.error('Error fetching conversations:', err)
+          });
+        }
+      });
     }
   
     ngOnDestroy(): void {

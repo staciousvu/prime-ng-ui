@@ -8,12 +8,13 @@ import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
 import { AuthService } from './app/pages/service/auth.service';
 import { authInterceptor } from './app/pages/service/interceptor/interceptor';
+import { provideCharts, withDefaultRegisterables } from 'ng2-charts';
 export const appConfig: ApplicationConfig = {
     providers: [
         provideRouter(appRoutes, withInMemoryScrolling({ anchorScrolling: 'enabled', scrollPositionRestoration: 'enabled' }), withEnabledBlockingInitialNavigation()),
         provideHttpClient(withFetch(),withInterceptors([authInterceptor])),
         provideAnimationsAsync(),
         providePrimeNG({ theme: { preset: Lara, options: { darkModeSelector: '.app-dark' } } }),
-        
+        provideCharts(withDefaultRegisterables())
     ]
 };

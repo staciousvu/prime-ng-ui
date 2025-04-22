@@ -19,8 +19,8 @@ import FileSaver from 'file-saver';
                         aria-label="All courses dropdown"
                         class="text-purple-700 font-semibold text-xl bg-white px-3 py-2"
                     >
-                        <option class="text-black font-normal" selected value="0">All courses</option>
-                        <option *ngFor="let course of instructor_courses" [value]="course.courseId" class="text-gray-800 font-normal">
+                        <option class="text-black font-extralight" selected value="0">All courses</option>
+                        <option *ngFor="let course of instructor_courses" [value]="course.courseId" class="text-gray-800 font-extralight">
                             {{ course.courseName }}
                         </option>
                     </select>

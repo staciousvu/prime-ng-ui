@@ -102,31 +102,60 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
     private router:ActivatedRoute
   ) {}
 
-  ngOnInit(): void {
-    this.chatService.connect();
-    this.studentEmail=this.authService.getEmail()!;
-    this.chatService.getConversationsForStudent(this.studentEmail).subscribe({
-      next: (response: any) => {
-        this.conversations = response.data;
-        console.log('conversations:', this.conversations);
-        this.router.queryParams.subscribe(params => {
-          const conversationId = Number(params['conversationId']);
-          console.log('hello haha:', conversationId);
-          if (conversationId) {
-            console.log('hello haha1');
-            this.selectConversation(conversationId);
-          }else{
-            this.selectConversation(this.conversations[0].id)
-          }
-        });
+  // ngOnInit(): void {
+  //   this.chatService.connect();
+  //   this.studentEmail=this.authService.getEmail()!;
+  //   this.chatService.getConversationsForStudent(this.studentEmail).subscribe({
+  //     next: (response: any) => {
+  //       this.conversations = response.data;
+  //       console.log('conversations:', this.conversations);
+  //       this.router.queryParams.subscribe(params => {
+  //         const conversationId = Number(params['conversationId']);
+  //         console.log('hello haha:', conversationId);
+  //         if (conversationId) {
+  //           console.log('hello haha1');
+  //           this.selectConversation(conversationId);
+  //         }else{
+  //           this.selectConversation(this.conversations[0].id)
+  //         }
+  //       });
         
-      },
-      error: (err) => console.error('Error fetching conversations:', err)
+  //     },
+  //     error: (err) => console.error('Error fetching conversations:', err)
+  //   });
+
+  //   this.currentUserId = Number(this.authService.getId())!;
+
+  // }
+  ngOnInit(): void {
+    this.studentEmail = this.authService.getEmail()!;
+    this.currentUserId = Number(this.authService.getId());
+  
+    this.chatService.connect(); // vẫn gọi connect bình thường
+  
+    this.chatService.onConnected().subscribe((connected) => {
+      if (connected) {
+        this.chatService.getConversationsForStudent(this.studentEmail).subscribe({
+          next: (response: any) => {
+            this.conversations = response.data;
+            console.log('conversations:', this.conversations);
+  
+            this.router.queryParams.subscribe(params => {
+              const conversationId = Number(params['conversationId']);
+              if (conversationId) {
+                this.selectConversation(conversationId);
+              } else if (this.conversations.length > 0) {
+                this.selectConversation(this.conversations[0].id);
+              }
+            });
+          },
+          error: (err) => console.error('Error fetching conversations:', err)
+        });
+      }
     });
-
-    this.currentUserId = Number(this.authService.getId())!;
-
   }
+  
+  
 
   ngOnDestroy(): void {
     this.chatService.disconnect();
