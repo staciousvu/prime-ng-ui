@@ -18,6 +18,7 @@ import { PerformanceReviewComponent } from "../component/performance-review";
 
 
 
+
 export default [
     {path:'',redirectTo:'courses',pathMatch:'full'},
     { path: 'courses', data: { breadcrumb: 'Button' }, component: InstructorCoursesComponent },

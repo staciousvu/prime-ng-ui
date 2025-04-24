@@ -34,6 +34,13 @@ import { AdminLoginComponent } from './app/pages/auth/admin-login';
 import { RegisterOtpComponent } from './app/pages/auth/register-otp';
 import { ResetPasswordComponent } from './app/pages/auth/reset';
 import { ResetOtpComponent } from './app/pages/auth/reset-otp';
+import { EditCourseInstructorLayoutComponent } from './app/pages/4Instructor/layout/edit-course-instructor.layout';
+import { EditCourseCurriculumComponent } from './app/pages/4Instructor/curriculum';
+import { EditCourseIntendedLearnerComponent } from './app/pages/4Instructor/intended-learner';
+import { PerformanceLayoutComponent } from './app/pages/4Instructor/layout/performance.layout';
+import { EditCourseLandingPageComponent } from './app/pages/4Instructor/landing-page';
+import { EditCoursePriceComponent } from './app/pages/4Instructor/price';
+import { TestToastComponent } from './app/pages/4Instructor/component/test';
 export const appRoutes: Routes = [
 
     {
@@ -62,12 +69,24 @@ export const appRoutes: Routes = [
         ]
     },
     {
+        path:'test',
+        component:TestToastComponent,
+    },
+    {
         path:'',
         component:BlankLayoutComponent,
-        canActivate:[AuthGuard],
+        // canActivate:[AuthGuard],
         children:[
             {path:'course/video-learning/:id',component:VideoLearningComponent},
-            {path:'survey',component:SurveyLayoutComponent}
+            {path:'survey',component:SurveyLayoutComponent},
+            { path: 'edit-course/:id', data: { breadcrumb: 'Button' }, component: EditCourseInstructorLayoutComponent,
+            children:[
+                { path: '', redirectTo: 'goals', pathMatch: 'full' },
+                {path:'goals',component:EditCourseIntendedLearnerComponent},
+                {path:'curriculum',component:EditCourseCurriculumComponent},
+                {path:'landing-page',component:EditCourseLandingPageComponent},
+                {path:'price',component:EditCoursePriceComponent},
+            ] },
         ]
     },
     {

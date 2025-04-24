@@ -1,63 +1,127 @@
+import { trigger, transition, style, animate } from '@angular/animations';
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Toast } from '../models/toast';
 
 @Component({
   selector: 'app-toast-notification',
   standalone:true,
   imports:[CommonModule],
   template:`
-  <div *ngIf="message"
-  [ngClass]="{
-    'bg-green-500 text-white': type === 'success',
-    'bg-red-500 text-white': type === 'error',
-    'bg-yellow-400 text-black': type === 'warn'
-  }"
-  class="fixed top-6 right-6 z-50 px-4 py-2 rounded-lg shadow-lg transition-transform duration-300 ease-in-out">
-  
-  <i class="fas"
-    [ngClass]="{
-      'fa-check-circle': type === 'success',
-      'fa-times-circle': type === 'error',
-      'fa-exclamation-triangle': type === 'warn'
-    }"></i>
-  <span>{{ message }}</span>
-
-  <!-- Thanh tiến trình -->
-  <div class="progress-bar"></div>
-</div>
+  <div class="toast {{toast.type}}" @toastAnimation [style.--duration]="toast.duration + 'ms'">
+      <div class="column">
+        <i class="fa-solid {{icon}}"></i>
+        <span>{{toast.message}}</span>
+      </div>
+      <i class="fa-solid fa-xmark" (click)="close()"></i>
+    </div>
 
   `,
   styles:`
-  .toast-box {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 50;
-}
-
-.progress-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  height: 3px;
-  background-color: white;
-  animation: toast-progress 3s linear forwards;
-}
-
-@keyframes toast-progress {
-  from { width: 100%; }
-  to { width: 0%; }
-}
-
-  `
+  :host {
+      display: block;
+    }
+    .toast {
+      width: 400px;
+      border-radius: 4px;
+      padding: 16px 17px;
+      background: #ffffff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .toast::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 3px;
+      width: 100%;
+      animation: progress var(--duration) linear forwards;
+    }
+    @keyframes progress {
+      100% { width: 0%; }
+    }
+    .toast.success::before {
+      background: #0ABF30;
+    }
+    .toast.error::before {
+      background: #E24D4C;
+    }
+    .toast.warning::before {
+      background: #E9BD0C;
+    }
+    .toast.info::before {
+      background: #3498DB;
+    }
+    .column {
+      display: flex;
+      align-items: center;
+    }
+    .column i {
+      font-size: 1.75rem;
+    }
+    .column span {
+      font-size: 1.07rem;
+      margin-left: 12px;
+    }
+    .fa-xmark {
+      cursor: pointer;
+      color: #aeb0d7;
+    }
+    .fa-xmark:hover {
+      color: #34495E;
+    }
+    .toast.success .column i {
+      color: #0ABF30;
+    }
+    .toast.error .column i {
+      color: #E24D4C;
+    }
+    .toast.warning .column i {
+      color: #E9BD0C;
+    }
+    .toast.info .column i {
+      color: #3498DB;
+    }
+  `,
+  animations: [
+    trigger('toastAnimation', [
+      transition(':enter', [
+        style({ transform: 'translateX(100%)' }),
+        animate('0.3s ease', style({ transform: 'translateX(0)' }))
+      ]),
+      transition(':leave', [
+        animate('0.3s ease', style({ transform: 'translateX(100%)' }))
+      ])
+    ])
+  ]
 })
 export class ToastNotificationComponent implements OnInit {
-  @Input() type: 'success' | 'error' | 'warn' = 'success';
-  @Input() message: string = '';
+  @Input() toast!: Toast;
+  @Output() onClose = new EventEmitter<void>();
+  icon: string = '';
 
-  constructor() { }
+  ngOnInit() {
+    this.icon = this.getIcon(this.toast.type);
+    setTimeout(() => this.onClose.emit(), this.toast.duration);
+  }
 
-  ngOnInit(): void {
+  getIcon(type: string): string {
+    switch (type) {
+      case 'success': return 'fa-circle-check';
+      case 'error': return 'fa-circle-xmark';
+      case 'warning': return 'fa-triangle-exclamation';
+      case 'info': return 'fa-circle-info';
+      default: return '';
+    }
+  }
+
+  close() {
+    this.onClose.emit();
   }
 
 }
