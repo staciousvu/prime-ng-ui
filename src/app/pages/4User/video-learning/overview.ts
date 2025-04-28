@@ -8,105 +8,39 @@ import { ActivatedRoute } from '@angular/router';
     standalone: true,
     imports: [CommonModule],
     template: `
-        <div class="container" *ngIf="course">
-            <h1 class="title">{{ course.title }}</h1>
+    <div class="w-full mx-auto" *ngIf="course">
+      <h1 class="text-2xl font-medium text-gray-600 mb-6">{{ course.title }}</h1>
 
-            <div class="info">
-                <div class="rating">
-                    <span class="score">{{ course.avgRating ? course.avgRating.toFixed(1) : 0 }} <i class="fas fa-star star"></i></span>
-
-                    <span class="count">{{ course.countRating | number }} ratings</span>
-                </div>
-
-                <div class="students">
-                    <span class="count">{{ course.countEnrolled | number }}</span>
-                    <span class="sub">students</span>
-                </div>
-
-                <div class="hours">
-                    <span class="count">{{ course.duration }}</span>
-                    <span class="sub">hours</span>
-                </div>
-            </div>
-
-            <div class="description">
-                <h2 class="description-title">Description</h2>
-                <p class="description-content" [innerHTML]="course.description">
-                    <!-- {{ course.description }} -->
-                </p>
-            </div>
+      <div class="flex flex-wrap gap-8 border-b border-gray-300 pb-6 mb-8">
+        <div class="flex flex-col items-start">
+          <span class="text-2xl font-semibold text-gray-800 flex items-center gap-1">
+            {{ course.avgRating ? course.avgRating.toFixed(1) : 0 }}
+            <i class="fas fa-star text-yellow-400"></i>
+          </span>
+          <span class="text-sm text-gray-500">{{ course.countRating | number }} ratings</span>
         </div>
+
+        <div class="flex flex-col items-start">
+          <span class="text-2xl font-semibold text-gray-800">{{ course.countEnrolled | number }}</span>
+          <span class="text-sm text-gray-500">students</span>
+        </div>
+
+        <div class="flex flex-col items-start">
+          <span class="text-2xl font-semibold text-gray-800">{{ course.duration }}</span>
+          <span class="text-sm text-gray-500">hours</span>
+        </div>
+      </div>
+
+      <div class="flex flex-col md:flex-row gap-6">
+        <h2 class="text-xl font-bold text-gray-800 flex-1">Description</h2>
+        <p class="text-gray-700 flex-2 leading-relaxed whitespace-pre-line" [innerHTML]="santinizeDescription()">
+        </p>
+      </div>
+    </div>
+
     `,
     styles: `
-        .description {
-            margin-top: 15px;
-            width: 100%;
-            display: flex;
-        }
-        .description-title {
-            flex: 3;
-        }
-        .description-content {
-            flex: 7;
-            box-sizing: border-box;
-    overflow-wrap: anywhere;
-    word-break: normal;
-    white-space: pre-line;
-    line-height: 1.6;
-        }
-        .container {
-            max-width: 1024px;
-            margin: 0 auto;
-        }
-        .title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2d3748;
-            margin-bottom: 16px;
-        }
-        .info {
-            // color:rgb(78, 79, 80);
-            border-bottom: 1px solid rgba(78, 79, 80, 0.57);
-            padding-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 50px;
-        }
-        .rating {
-            flex-direction: column;
-            display: flex;
-            align-items: start;
-            gap: 4px;
-        }
-        .rating .score {
-            font-size: 20px;
-            font-weight: bold;
-            color: #2d3748;
-        }
-        .rating .star {
-            color: #f6ad55;
-        }
-        .rating .count {
-            font-size: 14px;
-            color: #718096;
-        }
-        .students,
-        .hours {
-            display: flex;
-            flex-direction: column;
-            align-items: start;
-            font-size: 20px;
-            font-weight: bold;
-            color: #2d3748;
-        }
-        .students .sub {
-            font-size: 14px;
-            font-weight: 400;
-        }
-        .hours .sub {
-            font-size: 14px;
-            font-weight: 400;
-        }
+
     `,
     providers: []
 })
@@ -123,7 +57,6 @@ export class OverviewVideoComponent implements OnInit {
             this.http.get<any>(`http://localhost:8080/course/basicinfo/${this.courseId}`).subscribe({
                 next: (res) => {
                     this.course = res.data;
-                    console.log(this.course);
                     this.isLoading = false;
                 },
                 error: (err) => {
@@ -132,5 +65,8 @@ export class OverviewVideoComponent implements OnInit {
                 }
             });
         }
+    }
+    santinizeDescription() {
+        return this.course.description.replace(/&nbsp;/g, ' ');
     }
 }

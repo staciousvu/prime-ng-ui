@@ -7,6 +7,7 @@ import { StarRatingComponent } from './star-rating';
 import { CartService } from '../service/cart.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ToastService } from '../service/toast.service';
 
 @Component({
     selector: 'app-course-detail2',
@@ -198,148 +199,7 @@ import { ToastModule } from 'primeng/toast';
         </div>
         <p-toast></p-toast>
 
-        <!-- <div class="wrapper">
-            <div class="top-container">
-                <div class="grid1">
-                    <div class="course-info">
-                        <nav class="breadcrumb">
-                            <a href="#">{{ course.categories[0].categoryName }}</a>
-                            <span class="divider">/</span>
-                            <a href="#">{{ course.categories[1].categoryName }}</a>
-                            <span class="divider">/</span>
-                            <span class="current">{{ course.categories[2].categoryName }}</span>
-                        </nav>
-
-                        <h1 class="course-detail-title">{{ course.title }}</h1>
-                        <p class="course-subtitle">{{ course.subtitle }}</p>
-                        <div class="rating-info">
-                            <div class="rating-group" style="display: flex;gap:5px;">
-                                <span class="avg-rating">{{ course.avgRating }}</span>
-                                <app-star-rating [rating]="course.avgRating"></app-star-rating>
-                            </div>
-                            <span class="total-ratings">( {{ course.countRating }} ratings )</span>
-                            <span class="total-students">( {{ course.countEnrolled }} students )</span>
-                        </div>
-                        <p class="author">
-                            Created by <a [routerLink]="['/instructor-detail',course.author.id]" class="author-link">{{ course.author.authorName }}</a>
-                        </p>
-                        <p class="updated-at"><i class="fa-solid fa-calendar"></i> Last Updated: October 2025</p>
-                    </div>
-                    <div class="course-preview">
-                        <iframe
-                            style="width: 100%;"
-                            src="https://www.youtube.com/embed/l_uTKg05zIU"
-                            title="PHD | Khởi Nghiệp Với 200 Nghìn Bằng Nghề Lái Xe Ôm Trong 30 Giờ | Tập 2 | Start Up"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                            referrerpolicy="strict-origin-when-cross-origin"
-                            allowfullscreen
-                        ></iframe>
-                        <div class="course-preview-info">
-                            <div class="cpi-price">
-                                <span class="cpi-discount">đ{{ course.discount_price }}</span>
-
-                                <span *ngIf="course.discount_price !== course.price" class="cpi-old-price"> đ{{ course.price }} </span>
-
-                                <span *ngIf="course.discount_price !== course.price" class="cpi-sale-off"> {{ calculateDiscount(course.price, course.discount_price) }}% off </span>
-                            </div>
-
-                            <div *ngIf="course.discount_price !== course.price" class="emergency" style="margin-bottom:6px;">
-                                <i class="fa-solid fa-bell"></i>
-                                <strong>10 hour </strong>left at this price
-                            </div>
-
-                            <div class="cart-and-favorite">
-
-                                <button class="btn-addtocart" (click)="handleCartClick()" [disabled]="loading">
-                                    <span *ngIf="!loading">{{ isInCart ? 'Go to cart' : 'Add to cart' }}</span>
-                                    <span *ngIf="loading" class="spinner"></span>
-                                </button>
-                                <i class="fa-solid fa-heart heart"></i>
-                            </div>
-                            <div class="benefits">
-                                <p class="benefit-title">This course includes:</p>
-                                <ul class="benefit-list">
-                                    <li class="benefit-item"><i class="fa-solid fa-video"></i>{{ course.duration }} hours on-demand video</li>
-                                    <li class="benefit-item"><i class="fa-regular fa-file"></i>1 article</li>
-                                    <li class="benefit-item"><i class="fa-solid fa-download"></i>3 downloadable resources</li>
-                                    <li class="benefit-item"><i class="fa-solid fa-mobile"></i>Access on mobile and TV</li>
-                                    <li class="benefit-item"><i class="fa-solid fa-infinity"></i>Full lifetime access</li>
-                                    <li class="benefit-item"><i class="fa-solid fa-trophy"></i>Certificate of completion</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="bot-container">
-                <div class="grid">
-                    <div class="content-bottom">
-                        <div class="whatwillyoulearn">
-                            <h2 class="wwyl-title">Bạn sẽ được học những nội dung</h2>
-                            <ul class="wwyl-list">
-                                <li class="wwyl-item" *ngFor="let content of course.contents">{{ content.title }}</li>
-                            </ul>
-                        </div>
-                        <div class="course-content">
-                            <h2 class="course-content-title">Course Content</h2>
-                            <div class="course-timeline">
-                                <span class="ct-totalsections">21 sections</span>
-                                <span class="ct-totallectures">200 lectures</span>
-                                <span class="ct-totallength">32h 12m total length</span>
-                            </div>
-                            <div class="card" style="padding:0;width:100%;">
-                                <p-accordion [value]="0" [multiple]="true">
-                                    @for (section of courseSections; track section.id) {
-                                        <p-accordion-panel [value]="section.id">
-                                            <p-accordion-header>{{ section.title }}</p-accordion-header>
-                                            <p-accordion-content>
-                                                <ul>
-                                                    @for (lecture of section.lectures; track lecture.id) {
-                                                        <li>
-                                                            {{ lecture.title }} ({{ lecture.duration }} mins)
-                                                            <span *ngIf="lecture.type === 'video'">🎥</span>
-                                                            <span *ngIf="lecture.type === 'quiz'">📝</span>
-                                                        </li>
-                                                    }
-                                                </ul>
-                                            </p-accordion-content>
-                                        </p-accordion-panel>
-                                    }
-                                </p-accordion>
-                            </div>
-                        </div>
-                        <div class="course-requirement" *ngIf="course.requirements.length > 0">
-                            <h2 class="course-requirement-title">Yêu cầu của khóa học</h2>
-                            <ul class="requirement-list">
-                                <li class="requirement-item" *ngFor="let requirement of course.requirements">{{ requirement.title }}</li>
-                            </ul>
-                        </div>
-                        <div class="course-description" *ngIf="course.description">
-                            <h2 class="course-description-title">Mô tả khóa học</h2>
-                            <p class="description-content" [innerHTML]="course.description"></p>
-                        </div>
-                        <div class="course-target" *ngIf="course.targets.length > 0">
-                            <h2 class="course-target-title">Đối tượng phù hợp với khóa học</h2>
-                            <ul class="target-list">
-                                <li class="target-item" *ngFor="let target of course.targets">{{ target.title }}</li>
-                            </ul>
-                        </div>
-                        <div class="course-instructor">
-                            <h2 class="course-instructor-title">Giáo viên khóa học</h2>
-                            <div class="course-instructor-content">
-                                <a href="#" class="instructor-name">{{ course.author.authorName }}</a>
-                                <span class="expertise">{{ course.author.expertise }}</span>
-                                <div class="img-group">
-                                    <img src="{{ course.author.authorAvatar }}" alt="Avatar" />
-                                </div>
-                                <span class="bio">{{ course.author.bio }}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+        
     `,
     styles: `
         .spinner {
@@ -859,7 +719,8 @@ export class CourseDetail2Component implements OnInit {
         private http: HttpClient,
         private cartService: CartService,
         private route: Router,
-        private messageService:MessageService
+        private messageService:MessageService,
+        private toastService:ToastService
     ) {}
     ngOnInit(): void {
         this.router.paramMap.subscribe((params) => {
@@ -892,11 +753,7 @@ export class CourseDetail2Component implements OnInit {
                 setTimeout(() => {
                     this.loading = false;
                     this.isInCart = true; // nếu bạn không dùng BehaviorSubject thì set thủ công
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'Add course to cart successfully'
-                    });
+                    this.toastService.addToast("success","Thêm vào giỏ hàng thành công")
                 }, 1000);
             });
         }

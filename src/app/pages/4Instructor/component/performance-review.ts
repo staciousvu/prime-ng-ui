@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import * as XLSX from 'xlsx';
@@ -20,8 +20,8 @@ import FileSaver from 'file-saver';
                         class="text-purple-700 font-semibold text-xl bg-white px-3 py-2"
                     >
                         <option class="text-black font-extralight" selected value="0">All courses</option>
-                        <option *ngFor="let course of instructor_courses" [value]="course.courseId" class="text-gray-800 font-extralight">
-                            {{ course.courseName }}
+                        <option *ngFor="let course of instructor_courses" [value]="course.id" class="text-gray-800 font-extralight">
+                            {{ course.title }} 
                         </option>
                     </select>
                 </div>
@@ -143,8 +143,12 @@ export class PerformanceReviewComponent implements OnInit {
     constructor(private http: HttpClient) {}
 
     ngOnInit(): void {
-        this.http.get<any>(`http://localhost:8080/instructor/my-courses`).subscribe((response) => {
-            this.instructor_courses = response.data;
+        let params = new HttpParams();
+            params = params.set('page', 0);
+            params = params.set('size', 100);
+            params = params.set('keyword','');
+        this.http.get<any>(`http://localhost:8080/instructor/my-courses`,{params}).subscribe((response) => {
+            this.instructor_courses = response.data.content;
         });
 
         // Gọi mặc định lần đầu tiên để load tất cả

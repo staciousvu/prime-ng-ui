@@ -177,7 +177,6 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
         { name: 'Korean', code: 'KR' },
         { name: 'Spanish', code: 'SP' }
     ];
-    selectedLanguage: any = null;
 
     priceTiers = [
         { name: 'Free', value: 0 },
@@ -192,8 +191,6 @@ export class UpdateBasicInfoComponent implements OnInit, OnChanges {
         { name: 'BEGINNER', value: 'BEGINNER' },
         { name: 'EXPERT', value: 'EXPERT' }
     ];
-    selectedPrice: any = null;
-
     constructor(
         private http: HttpClient,
         private messageService: MessageService

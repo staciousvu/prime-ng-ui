@@ -7,6 +7,7 @@ import { Router, RouterLink } from '@angular/router';
 import { CartService } from '../service/cart.service';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
+import { ToastService } from '../service/toast.service';
 
 @Component({
     selector: 'app-product-carousel',
@@ -389,7 +390,8 @@ export class ProductCarouselComponent implements OnInit{
     constructor(
         private cartService: CartService,
         private route: Router,
-        private messageService:MessageService
+        private messageService:MessageService,
+        private toastService:ToastService
     ) {}
     ngOnInit(): void {
         this.courses.forEach(course => {
@@ -411,11 +413,7 @@ export class ProductCarouselComponent implements OnInit{
                 setTimeout(() => {
                     this.loadingMap[courseId] = false;
                     this.isInCartMap[courseId] = true;
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Success',
-                        detail: 'Add course to cart successfully'
-                    });
+                    this.toastService.addToast("success","Thêm vào giỏ hàng thành công")
                 }, 1000);
             });
         }

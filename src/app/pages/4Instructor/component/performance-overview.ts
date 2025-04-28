@@ -20,8 +20,8 @@ import { BaseChartDirective } from 'ng2-charts';
                 <!-- Sửa thành select thay vì button -->
                 <select [(ngModel)]="selectedCourseId" (ngModelChange)="getPerformanceData()" aria-label="All courses dropdown" class="ml-4 text-purple-700 font-semibold text-xl bg-white px-2 py-1 focus:outline-none">
                     <option value="all">All courses</option>
-                    <option *ngFor="let course of courses" [value]="course.courseId" class="text-gray-800 font-extralight">
-                        {{ course.courseName }}
+                    <option *ngFor="let course of courses" [value]="course.id" class="text-gray-800 font-extralight">
+                        {{ course.title }}
                     </option>
                 </select>
 
@@ -124,9 +124,13 @@ export class PerformanceOverviewComponent implements OnInit {
     }
 
     getCourses(): void {
-        this.http.get<any>(`${this.apiUrl}/instructor/my-courses`).subscribe({
+        let params = new HttpParams();
+            params = params.set('page', 0);
+            params = params.set('size', 100);
+            params = params.set('keyword','');
+        this.http.get<any>(`${this.apiUrl}/instructor/my-courses`,{params}).subscribe({
             next: (response) => {
-                this.courses = response.data;
+                this.courses = response.data.content;
             },
             error: (error) => {
                 this.errorMessage = 'Failed to load courses. Please try again.';
@@ -147,6 +151,7 @@ export class PerformanceOverviewComponent implements OnInit {
                 params = params.set('months', this.selectedRange.months.toString());
             }
         }
+        console.log(params)
         this.http.get<any>(`${this.apiUrl}/dashboard/performance-overview`, { params }).subscribe({
             next: (response) => {
                 if (response.success) {

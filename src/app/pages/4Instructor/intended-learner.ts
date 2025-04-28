@@ -37,7 +37,7 @@ import { ToastService } from '../service/toast.service';
                     </p>
 
 
-                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none" [disabled]="!canAddMoreCourseContent()" (click)="addInputCourseContent()">
+                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none" (click)="addInputCourseContent()">
                         <i class="fas fa-plus mr-2"></i> Add more to your response
                     </button>
                 </div>
@@ -64,7 +64,7 @@ import { ToastService } from '../service/toast.service';
                         {{ errorMessageRequirement }}
                     </p>
 
-                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none" [disabled]="!canAddMoreCourseRequirement()" (click)="addInputCourseRequirement()">
+                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none"  (click)="addInputCourseRequirement()">
                         <i class="fas fa-plus mr-2"></i> Add more to your response
                     </button>
                 </div>
@@ -83,7 +83,7 @@ import { ToastService } from '../service/toast.service';
                         {{ errorMessageTarget }}
                     </p>
 
-                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none" [disabled]="!canAddMoreCourseTarget()" (click)="addInputCourseTarget()">
+                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none" (click)="addInputCourseTarget()">
                         <i class="fas fa-plus mr-2"></i> Add more to your response
                     </button>
                 </div>
@@ -101,28 +101,34 @@ export class EditCourseIntendedLearnerComponent implements OnInit, OnDestroy {
     errorMessageRequirement:string='';
     errorMessageTarget:string='';
 
-    canAddMoreCourseTarget(): boolean {
-        // kiểm tra có ít nhất 1 mục đã nhập không rỗng
-        return this.courseTarget.filter((item) => item.trim() !== '').length >= 1;
-    }
-    canAddMoreCourseRequirement(): boolean {
-        // kiểm tra có ít nhất 1 mục đã nhập không rỗng
-        return this.courseRequirement.filter((item) => item.trim() !== '').length >= 1;
-    }
-    canAddMoreCourseContent(): boolean {
-        // kiểm tra có ít nhất 4 mục đã nhập không rỗng
-        return this.courseContent.filter((item) => item.trim() !== '').length >= 4;
-    }
 
     addInputCourseContent(): void {
+        if (this.courseContent.some(item => item.trim() === '')) {
+            this.errorMessageContent = 'Vui lòng điền đầy đủ các mục hiện có trước khi thêm mục mới.';
+            return;
+        }
+        this.errorMessageContent = '';
         this.courseContent.push('');
     }
+    
     addInputCourseRequirement(): void {
+        if (this.courseRequirement.some(item => item.trim() === '')) {
+            this.errorMessageRequirement = 'Vui lòng điền đầy đủ các mục hiện có trước khi thêm mục mới.';
+            return;
+        }
+        this.errorMessageRequirement = '';
         this.courseRequirement.push('');
     }
+    
     addInputCourseTarget(): void {
+        if (this.courseTarget.some(item => item.trim() === '')) {
+            this.errorMessageTarget = 'Vui lòng điền đầy đủ các mục hiện có trước khi thêm mục mới.';
+            return;
+        }
+        this.errorMessageTarget = '';
         this.courseTarget.push('');
     }
+    
     constructor(
         private headerService: HeaderControlService,
         private http: HttpClient,
@@ -179,18 +185,43 @@ export class EditCourseIntendedLearnerComponent implements OnInit, OnDestroy {
     }
 
     onSave() {
-        const ccData = this.courseContent.filter((item) => item.trim() !== '').map((content) => ({ title: content }));
-        const crData = this.courseRequirement.filter((item) => item.trim() !== '').map((content) => ({ title: content }));
-        const ctData = this.courseTarget.filter((item) => item.trim() !== '').map((content) => ({ title: content }));
+        const ccValid = this.courseContent.filter((item) => item.trim() !== '');
+        const crValid = this.courseRequirement.filter((item) => item.trim() !== '');
+        const ctValid = this.courseTarget.filter((item) => item.trim() !== '');
+    
+        // Reset lỗi
+        this.errorMessageContent = '';
+        this.errorMessageRequirement = '';
+        this.errorMessageTarget = '';
+    
+        let isValid = true;
+    
+        if (ccValid.length < 4) {
+            this.errorMessageContent = 'Vui lòng nhập ít nhất 4 nội dung khóa học.';
+            isValid = false;
+        }
+        if (crValid.length < 1) {
+            this.errorMessageRequirement = 'Vui lòng nhập ít nhất 1 yêu cầu khóa học.';
+            isValid = false;
+        }
+        if (ctValid.length < 1) {
+            this.errorMessageTarget = 'Vui lòng nhập ít nhất 1 đối tượng học viên.';
+            isValid = false;
+        }
+    
+        if (!isValid) return; // Không submit nếu có lỗi
+    
         const request = {
-            contents: ccData,
-            requirements: crData,
-            targets: ctData
+            contents: ccValid.map((content) => ({ title: content })),
+            requirements: crValid.map((content) => ({ title: content })),
+            targets: ctValid.map((content) => ({ title: content }))
         };
+    
         this.http.post<any>(`http://localhost:8080/course-content/save3/${this.courseId}`, request).subscribe((response) => {
-            this.toastService.addToast('success', 'Update intended learner successfully');
+            this.toastService.addToast('success', 'Cập nhật thông tin khóa học thành công');
         });
     }
+    
 
     ngOnDestroy(): void {
         this.headerService.clearControls();

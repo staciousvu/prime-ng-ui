@@ -41,6 +41,7 @@ import { PerformanceLayoutComponent } from './app/pages/4Instructor/layout/perfo
 import { EditCourseLandingPageComponent } from './app/pages/4Instructor/landing-page';
 import { EditCoursePriceComponent } from './app/pages/4Instructor/price';
 import { TestToastComponent } from './app/pages/4Instructor/component/test';
+import { VideoLearning1Component } from './app/pages/4User/video-learning1';
 export const appRoutes: Routes = [
 
     {
@@ -77,7 +78,7 @@ export const appRoutes: Routes = [
         component:BlankLayoutComponent,
         // canActivate:[AuthGuard],
         children:[
-            {path:'course/video-learning/:id',component:VideoLearningComponent},
+            {path:'course/video-learning/:id',component:VideoLearning1Component},
             {path:'survey',component:SurveyLayoutComponent},
             { path: 'edit-course/:id', data: { breadcrumb: 'Button' }, component: EditCourseInstructorLayoutComponent,
             children:[

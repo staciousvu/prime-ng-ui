@@ -21,8 +21,8 @@ import { RouterModule, RouterOutlet } from '@angular/router';
     <select (change)="onCourseChange($event)" aria-label="All courses dropdown" 
             class="ml-4 text-purple-700 font-semibold text-xl bg-white px-2 py-1 focus:outline-none">
       <option value="all">All courses</option>
-      <option *ngFor="let course of courses" [value]="course.courseId" class="text-gray-800 font-extralight">
-        {{ course.courseName }}
+      <option *ngFor="let course of courses" [value]="course.id" class="text-gray-800 font-extralight">
+        {{ course.title }}
       </option>
     </select>
   </header>
@@ -155,9 +155,14 @@ export class PerformanceStudentComponent implements OnInit {
   }
 
   getCourses(): void {
-    this.http.get<any>(`${this.apiUrl}/instructor/my-courses`).subscribe({
+    let params = new HttpParams();
+            params = params.set('page', 0);
+            params = params.set('size', 100);
+            params = params.set('keyword','');
+    this.http.get<any>(`${this.apiUrl}/instructor/my-courses`,{params}).subscribe({
       next: (response) => {
-        this.courses = response.data;
+        this.courses = response.data.content;
+        console.log(this.courses)
         this.loadStudents();
       },
       error: (error) => {

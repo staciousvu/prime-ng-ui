@@ -13,10 +13,10 @@ import { ActivatedRoute } from '@angular/router';
             <!-- Hoặc bạn có thể dùng spinner ở đây -->
         </div>
         <ul class="review-list" *ngIf="!isLoading">
-            <h2 class="review-title">Student Feedbacks</h2>
+            <h2 class="text-2xl font-medium mb-6 text-gray-600">Student Feedbacks</h2>
             <li class="review" *ngFor="let review of reviews">
                 <img [src]="review.reviewerAvatar || 'https://i.pravatar.cc/48?u=default'" alt="{{ review.reviewerName }}" class="avatar" />
-
+                
                 <div class="review-content">
                     <div class="review-header">
                         <h4>{{ review.reviewerName }}</h4>
@@ -25,7 +25,7 @@ import { ActivatedRoute } from '@angular/router';
                         </div>
                         <span class="time">{{ getTimeAgo(review.updatedAt) }}</span>
                     </div>
-                    <p class="review-text">{{ review.review }}</p>
+                    <p class="review-text">{{ review.review }}</p> 
                     <div class="review-footer">
                         <div>
                             <i class="fas fa-thumbs-up"></i>
@@ -218,7 +218,7 @@ export class RatingVideoComponent implements OnInit {
                     }));
                     setTimeout(() => {
                         this.isLoading = false; // Sau khi dữ liệu đã được load xong
-                    }, 2000);
+                    }, 500);
                 },
                 error: (err) => {
                     console.error('Error fetching reviews:', err);

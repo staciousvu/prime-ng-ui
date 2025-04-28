@@ -109,9 +109,7 @@ export interface LectureResponse {
                                 <!--  -->
 
                             <!--  -->
-                            <!-- <div *ngIf="lecture.contentUrl" class="flex justify-center items-center mt-4">
-                                <video [src]="lecture.contentUrl" controls class="w-1/4 md:w-1/2 rounded-lg shadow-lg border"></video>
-                            </div> -->
+
                         </div>
                     </div>
                     <p-button label="Add Lecture" icon="pi pi-plus" class="btn-add" (click)="startAddingLecture(sectionIndex)" />

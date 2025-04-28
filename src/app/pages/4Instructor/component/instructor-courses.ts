@@ -1,15 +1,21 @@
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
+import { StarRatingComponent } from "../../4User/star-rating";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { FormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
+import { RouterLink } from "@angular/router";
 
 
 
 @Component({
     selector: 'app-instructor-courses',
     standalone:true,
+    imports:[StarRatingComponent,FormsModule,CommonModule,RouterLink],
     template: `
     <div class="p-10">
     <div class="w-full">
         <h1 class="text-4xl font-bold mb-6">Courses</h1>
-        <div class="bg-white border border-gray-200 rounded-lg p-6">
+        <!-- <div class="bg-white border border-gray-200 rounded-lg p-6">
             <div class="flex items-start mb-4">
                 <i class="fas fa-info-circle text-purple-600 text-2xl mr-4"></i>
                 <div>
@@ -23,13 +29,13 @@ import { Component } from "@angular/core";
                     <button class="bg-white border border-purple-600 text-purple-600 font-bold py-2 px-4 rounded hover:bg-purple-50">Dismiss</button>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
     <div class="w-full mt-5">
    <!-- Header -->
    <div class="flex justify-between items-center mb-4">
     <div class="flex items-center space-x-2">
-     <input class="border border-gray-300 rounded px-4 py-3" placeholder="Search your courses" type="text"/>
+     <input (input)="load()" [(ngModel)]="this.keyword" class="border border-gray-300 rounded px-4 py-3" placeholder="Search your courses" type="text"/>
      <button class="bg-purple-600 text-white px-4 py-3 rounded">
       <i class="fas fa-search">
       </i>
@@ -44,60 +50,60 @@ import { Component } from "@angular/core";
    <!-- Course List -->
    <div class="space-y-4">
     <!-- Course Item -->
-    <div class="border border-gray-300 rounded p-4 flex justify-between items-center">
-     <div class="flex items-center space-x-4">
-      <img alt="Course thumbnail" class="w-24 h-24 object-cover" src="http://localhost:8080/images/course0.png"/>
-      <div>
-       <h2 class="text-xl font-bold">
-        yeah my friend
-       </h2>
-       <p class="text-gray-500">
-        DRAFT Public
-       </p>
-       <p class="text-gray-500">
-        .NET &amp; Microservices DDD, CQRS Vertical/ Clean Architecture
-       </p>
-       <p class="text-gray-500">
-        4.5 ★★★★★ (200 Reviews)
-       </p>
-       <p class="text-gray-500">
-        ₹24,000 (₹30,000)
-       </p>
-      </div>
-     </div>
-     <div class="flex items-center space-x-4">
-      <p class="font-bold">
-       Finish your course
-      </p>
-      <div class="w-64 bg-gray-200 rounded-full h-2.5">
-       <div class="bg-purple-600 h-2.5 rounded-full" style="width: 50%">
-       </div>
-      </div>
-     </div>
-    </div>
-    <!-- Course Item -->
-    <div class="border border-gray-300 rounded p-4 flex justify-between items-center">
-     <div class="flex items-center space-x-4">
-      <img alt="Course thumbnail" class="w-24 h-24 object-cover" src="http://localhost:8080/images/course1.png"/>
-      <div>
-       <h2 class="text-xl font-bold">
-        okok
-       </h2>
-       <p class="text-gray-500">
-        DRAFT Public
-       </p>
-      </div>
-     </div>
-     <div class="flex items-center space-x-4">
-      <p class="font-bold">
-       Finish your course
-      </p>
-      <div class="w-64 bg-gray-200 rounded-full h-2.5">
-       <div class="bg-purple-600 h-2.5 rounded-full" style="width: 20%">
-       </div>
-      </div>
-     </div>
-    </div>
+    <div *ngFor="let course of courses" class="relative border border-gray-300 rounded p-4 flex items-center hover:bg-gray-100 group overflow-hidden">
+  <!-- Overlay for Edit Course -->
+  <div class="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition duration-300 z-10">
+  <button [routerLink]="['/edit-course', course.id, 'goals']"
+  [queryParams]="{ courseName: course.title, status: course.status }"
+  class="bg-purple-600 text-white text-sm px-4 py-2 rounded shadow 
+         hover:bg-purple-700 active:scale-95 transition transform duration-200">
+    Edit Course
+  </button>
+
+  </div>
+
+  <!-- Thumbnail Section -->
+  <div class="w-32 h-32 overflow-hidden rounded flex-shrink-0">
+    <img 
+      alt="Course thumbnail" 
+      class="w-full h-full object-cover" 
+      [src]="course.thumbnail" 
+    />
+  </div>
+
+  <!-- Course Info Section -->
+  <div class="ml-6 flex flex-col space-y-2">
+    <h2 class="text-xl font-bold">
+      {{course.title}}
+    </h2>
+    <p 
+  class="px-2 py-1 rounded-full text-xs font-semibold inline-block"
+        [ngClass]="{
+          'bg-gray-200 text-gray-800': course.status === 'DRAFT',
+          'bg-green-200 text-green-800': course.status === 'ACCEPTED',
+          'bg-red-200 text-red-800': course.status === 'REJECTED'
+        }">
+      {{ course.status }}
+    </p>
+
+    <p class="text-gray-500">
+      {{course.subtitle}}
+    </p>
+    <p class="text-gray-500 flex items-center space-x-2">
+    <span>{{course.avgRating}}</span>
+    <app-star-rating [rating]="course.avgRating"></app-star-rating>
+    <span>{{course.countRating}} Reviews</span>
+    </p>
+
+    <p class="text-gray-500">
+      đ{{course.price}}
+    </p>
+  </div>
+</div>
+
+
+
+
 
    </div>
   </div>
@@ -105,6 +111,26 @@ import { Component } from "@angular/core";
     `,
     styles: ``
 })
-export class InstructorCoursesComponent{
+export class InstructorCoursesComponent implements OnInit{
+  courses:any[]=[]
+  keyword:string='';
+  page:any=0;
+  size:any=100;
+  constructor(private http:HttpClient){}
+  ngOnInit(): void {
+    this.load()
+  }
+  load(){
+    let params = new HttpParams();
+    params = params.set('page', this.page);
+    params = params.set('size', this.size);
+    params = params.set('keyword', this.keyword);
+
+    this.http.get<any>(`http://localhost:8080/instructor/my-courses`,{params}).subscribe(
+      (res)=>{
+        this.courses=res.data.content;
+      }
+    )
+  }
 
 }

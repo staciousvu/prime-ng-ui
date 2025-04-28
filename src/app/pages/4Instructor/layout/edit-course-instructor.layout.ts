@@ -9,9 +9,9 @@ import { CourseHeaderComponent } from '../component/course-header';
     imports: [RouterModule, RouterOutlet, CourseHeaderComponent, RouterLink],
     template: `
         <!-- Top nav -->
-        <app-course-header [courseName]="courseName"/>
+        <app-course-header [courseName]="courseName" [status]="status"/>
 
-        <main class="flex mx-auto mt-10 px-6 sm:px-8 lg:px-10 max-w-7xl">
+        <main class="flex mx-auto py-10 px-6 sm:px-8 lg:px-10 max-w-7xl" style="margin-top:20px;">
             <!-- Sidebar -->
             <aside class="w-72 flex-shrink-0 pr-10 mt-10">
                 <!-- PLAN YOUR COURSE -->
@@ -82,7 +82,8 @@ import { CourseHeaderComponent } from '../component/course-header';
 })
 export class EditCourseInstructorLayoutComponent implements OnInit {
     courseId: number = 0;
-    courseName:string=''
+    courseName:string='';
+    status:string='';
     constructor(private activatedRoute: ActivatedRoute) {}
     ngOnInit(): void {
         this.activatedRoute.paramMap.subscribe((params) => {
@@ -90,6 +91,7 @@ export class EditCourseInstructorLayoutComponent implements OnInit {
         });
         this.activatedRoute.queryParams.subscribe(params => {
           this.courseName = params['courseName'];
+          this.status = params['status'];
         });
     }
 }

@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, OnInit, ViewChild, OnDestroy, ViewEncapsulation, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, ElementRef, OnInit, ViewChild, OnDestroy, ViewEncapsulation, Input, OnChanges, SimpleChanges, EventEmitter, Output } from '@angular/core';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import videojs from 'video.js';
 // import type { Player } from 'video.js';
@@ -7,20 +8,12 @@ import Player from 'video.js';
 @Component({
     selector: 'app-video-player',
     encapsulation: ViewEncapsulation.None,
-    imports:[ProgressSpinnerModule,CommonModule],
+    imports: [ProgressSpinnerModule, CommonModule],
     template: `
-        <!-- <video #videoElement class="video-js vjs-default-skin" width="640" height="360">
+
+        <video #videoElement class="video-js vjs-default-skin" width="800">
             <p class="vjs-no-js">Để xem video này, vui lòng bật JavaScript và sử dụng trình duyệt hỗ trợ HTML5.</p>
-        </video> -->
-        <video #videoElement class="video-js vjs-default-skin" width="640" height="360">
-    <p class="vjs-no-js">Để xem video này, vui lòng bật JavaScript và sử dụng trình duyệt hỗ trợ HTML5.</p>
-</video>
-
-<!-- Hiển thị spinner khi video đang tải -->
-<!-- <p-progress-spinner *ngIf="loading" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '100%', height: '100%', position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }">
-</p-progress-spinner> -->
-
-
+        </video>
     `,
     styles: [
         `
@@ -37,7 +30,7 @@ import Player from 'video.js';
 
             .video-js {
                 width: 100% !important;
-                height: 100% !important;
+                // height: 100% !important;
             }
             video {
                 width: 100% !important;
@@ -67,14 +60,15 @@ import Player from 'video.js';
 export class VideoPlayerComponent implements OnInit, OnDestroy, OnChanges {
     @ViewChild('videoElement', { static: true }) videoElement!: ElementRef;
     @Input() videoUrl: any;
+    @Input() lectureId:any;
+    @Output() lectureCompleted = new EventEmitter<string>(); 
     player!: any;
-    loading: boolean = true;
+    constructor(private http:HttpClient){}
 
     ngOnInit(): void {}
 
     ngOnChanges(): void {
         if (this.videoUrl && this.videoElement) {
-            this.loading = true;
 
             if (this.player) {
                 this.player.src({ type: 'video/mp4', src: this.videoUrl });
@@ -90,7 +84,12 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, OnChanges {
                 });
 
                 this.player.on('ended', () => {
-                    console.log('🎉 Video đã kết thúc, gửi API...');
+                    this.http.post<any>(`http://localhost:8080/progress/complete-lecture/${this.lectureId}`,{}).subscribe(
+                        (res)=>{
+                            console.log('🎉 Video đã kết thúc, gửi API...');
+                            this.lectureCompleted.emit(this.lectureId);
+                        }
+                    )
                 });
 
                 this.player.ready(() => {
@@ -107,7 +106,6 @@ export class VideoPlayerComponent implements OnInit, OnDestroy, OnChanges {
 
             // Khi video bắt đầu tải
             this.player.on('loadeddata', () => {
-                this.loading = false; // Ẩn spinner khi video đã tải xong
             });
         }
     }
