@@ -94,7 +94,7 @@ import { ToastService } from '../service/toast.service';
 
                                             <div class="lecture-right">
                                                 <i class="fa fa-play-circle"></i>
-                                                <span class="lecture-duration">{{ lecture.duration || '1min' }}</span>
+                                                <span class="lecture-duration">{{ lecture.duration || '1' }}min</span>
                                             </div>
                                         </li>
                                     </ul>
@@ -279,12 +279,14 @@ import { ToastService } from '../service/toast.service';
 
         .lecture-item {
             display: flex;
+            flex-direction:column;
             justify-content: space-between;
-            align-items: center;
+            align-items: start;
             padding: 12px 8px;
             border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.2s;
+            gap:5px;
         }
 
         .lecture-item:hover {

@@ -12,8 +12,8 @@ import { ToastService } from '../service/toast.service';
     imports: [RouterModule, CommonModule, FormsModule],
     template: `
         <section class="bg-white rounded-md shadow-sm flex-grow max-w-6xl min-w-0 border border-[#E2E8F0] pb-14" aria-label="Intended learners">
-            <header class="border-b border-[#E2E8F0] px-10 py-7">
-                <h1 class="text-2xl font-semibold text-[#1E293B]">Intended learners</h1>
+        <header class="border-b border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
+                <h1 class="text-2xl font-semibold text-[#1E293B] mb-0">Intended learner</h1>
             </header>
             <div class="px-10 pt-10 space-y-8 text-[#334155] text-base font-normal max-w-4xl">
                 <p>

@@ -12,8 +12,8 @@ import { FormsModule } from '@angular/forms';
     imports: [RouterModule, CommonModule, FormsModule],
     template: `
         <section class="bg-white rounded-md shadow-sm flex-grow w-full min-w-0 border border-[#E2E8F0] pb-14" aria-label="Intended learners">
-            <header class="border-b border-[#E2E8F0] px-10 py-7">
-                <h1 class="text-2xl font-semibold text-[#1E293B]">Price</h1>
+        <header class="border-b border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
+                <h1 class="text-2xl font-semibold text-[#1E293B] mb-0">Price</h1>
             </header>
             <div class="px-10 pt-10 space-y-8 text-[#334155] text-base font-normal max-w-4xl">
                 <div class="max-w-xl">
@@ -36,13 +36,7 @@ import { FormsModule } from '@angular/forms';
                                 <option [ngValue]="null" disabled>Choose a pricetier</option>
                                 <option *ngFor="let lvl of priceTiers" [ngValue]="lvl.value">{{ lvl.name }}</option>
                             </select>
-                            <!-- <select id="priceTier" name="priceTier" class="bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 text-sm w-36 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-600">
-          <option>Free</option>
-          <option>đ129.000</option>
-          <option>đ229.000</option>
-          <option>đ349.000</option>
-          <option>đ499.000</option>
-        </select> -->
+
                         </div>
                         <button (click)="save()" type="submit" class="bg-purple-700 text-white font-semibold rounded-md px-5 py-2 text-sm hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-600">Save</button>
                     </form>

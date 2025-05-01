@@ -81,7 +81,8 @@ import { RouterLink } from "@angular/router";
         [ngClass]="{
           'bg-gray-200 text-gray-800': course.status === 'DRAFT',
           'bg-green-200 text-green-800': course.status === 'ACCEPTED',
-          'bg-red-200 text-red-800': course.status === 'REJECTED'
+          'bg-red-200 text-red-800': course.status === 'REJECTED',
+          'bg-yellow-200 text-yellow-800': course.status === 'PENDING'
         }">
       {{ course.status }}
     </p>
@@ -90,7 +91,7 @@ import { RouterLink } from "@angular/router";
       {{course.subtitle}}
     </p>
     <p class="text-gray-500 flex items-center space-x-2">
-    <span>{{course.avgRating}}</span>
+    <span>{{course.avgRating | number:'1.0-1'}}</span>
     <app-star-rating [rating]="course.avgRating"></app-star-rating>
     <span>{{course.countRating}} Reviews</span>
     </p>

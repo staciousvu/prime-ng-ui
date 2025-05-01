@@ -18,9 +18,9 @@ import { CourseHeaderComponent } from '../component/course-header';
                 <nav aria-label="Plan your course" class="mb-12">
                     <p class="font-semibold text-base text-[#1E293B] mb-5">Plan your course</p>
                     <ul class="space-y-2 text-base font-normal">
-                        <li [routerLink]="['/edit-course', courseId, 'goals']" routerLinkActive="border-l-4 border-purple-500 font-semibold" class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200">
+                        <li [routerLink]="['/edit-course', courseId, 'goals']" routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold"  class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200">
                             <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100"> </span>
-                            <label class="select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Intended learners </label>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Intended learners </label>
                         </li>
                     </ul>
                 </nav>
@@ -31,11 +31,19 @@ import { CourseHeaderComponent } from '../component/course-header';
                     <ul class="space-y-2 text-base font-normal">
                         <li
                             [routerLink]="['/edit-course', courseId, 'curriculum']"
-                            routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                            routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold" 
                             class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200"
                         >
                             <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100"> </span>
-                            <label class="select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Curriculum </label>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Curriculum </label>
+                        </li>
+                        <li
+                            [routerLink]="['/edit-course', courseId, 'quiz']"
+                            routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold" 
+                            class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200"
+                        >
+                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100"> </span>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Quiz </label>
                         </li>
                     </ul>
                 </nav>
@@ -47,19 +55,19 @@ import { CourseHeaderComponent } from '../component/course-header';
                         <!-- ACTIVE ITEM -->
                         <li
                             [routerLink]="['/edit-course', courseId, 'landing-page']"
-                            routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                            routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold" 
                             class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200"
                         >
                             <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100">
                                 <!-- <i class="fas fa-check text-xs"></i> -->
                             </span>
-                            <label class="select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Course landing page </label>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Course landing page </label>
                         </li>
 
                         <!-- OTHER ITEMS -->
-                        <li [routerLink]="['/edit-course', courseId, 'price']" routerLinkActive="border-l-4 border-purple-500 font-semibold" class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200">
+                        <li [routerLink]="['/edit-course', courseId, 'price']" routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold"  class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200">
                             <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100"> </span>
-                            <label class="select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Pricing </label>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Pricing </label>
                         </li>
                     </ul>
                 </nav>

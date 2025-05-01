@@ -1,25 +1,15 @@
 import { Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
-import { Dashboard } from './app/pages/dashboard/dashboard';
 import { Documentation } from './app/pages/documentation/documentation';
 import { Landing } from './app/pages/landing/landing';
 import { Notfound } from './app/pages/notfound/notfound';
 import { AuthGuard } from './app/pages/service/guard/auth-guard';
-import AdminRoutes from './app/pages/4AdminCustom/routes/4Admin.routes';
 import { HomeComponent } from './app/pages/4User/home';
 import { AppUserLayout } from './app/pages/4User/layout/user.layout';
 import { AdminGuard } from './app/pages/service/guard/admin-guard';
 import { UserLoginComponent } from './app/pages/auth/user-login';
 import { BlankLayoutComponent } from './app/pages/4User/layout/blank.layout';
-import { CartComponent } from './app/pages/4User/cart';
 import { MyLearningComponent } from './app/pages/4User/mylearning';
-import { CourseDetailComponent } from './app/pages/4User/course-detail';
-import { VideoLearningComponent } from './app/pages/4User/video-learning';
-import { QAndAComponent } from './app/pages/4User/video-learning/Q&A';
-import { QAndAListComponent } from './app/pages/4User/video-learning/QandAList';
-import { QAndADetailComponent } from './app/pages/4User/video-learning/Q&ADetail';
-import { OverviewVideoComponent } from './app/pages/4User/video-learning/overview';
-import { RatingVideoComponent } from './app/pages/4User/video-learning/rating';
 import { SurveyLayoutComponent } from './app/pages/4User/layout/survey.layout';
 import { PaymentSuccessComponent } from './app/pages/4User/payment-success';
 import { PaymentFailedComponent } from './app/pages/4User/payment-failed';
@@ -37,11 +27,11 @@ import { ResetOtpComponent } from './app/pages/auth/reset-otp';
 import { EditCourseInstructorLayoutComponent } from './app/pages/4Instructor/layout/edit-course-instructor.layout';
 import { EditCourseCurriculumComponent } from './app/pages/4Instructor/curriculum';
 import { EditCourseIntendedLearnerComponent } from './app/pages/4Instructor/intended-learner';
-import { PerformanceLayoutComponent } from './app/pages/4Instructor/layout/performance.layout';
 import { EditCourseLandingPageComponent } from './app/pages/4Instructor/landing-page';
 import { EditCoursePriceComponent } from './app/pages/4Instructor/price';
 import { TestToastComponent } from './app/pages/4Instructor/component/test';
 import { VideoLearning1Component } from './app/pages/4User/video-learning1';
+import { EditCourseQuizComponent } from './app/pages/4Instructor/quiz';
 export const appRoutes: Routes = [
 
     {
@@ -87,6 +77,7 @@ export const appRoutes: Routes = [
                 {path:'curriculum',component:EditCourseCurriculumComponent},
                 {path:'landing-page',component:EditCourseLandingPageComponent},
                 {path:'price',component:EditCoursePriceComponent},
+                {path:'quiz',component:EditCourseQuizComponent},
             ] },
         ]
     },

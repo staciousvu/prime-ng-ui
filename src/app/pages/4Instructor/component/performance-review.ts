@@ -14,14 +14,10 @@ import FileSaver from 'file-saver';
             <header class="mb-4 flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <h1 class="text-5xl font-extrabold text-gray-900 inline-block">Reviews</h1>
-                    <select
-                        (change)="onCourseChange($event)"
-                        aria-label="All courses dropdown"
-                        class="text-purple-700 font-semibold text-xl bg-white px-3 py-2"
-                    >
+                    <select (change)="onCourseChange($event)" aria-label="All courses dropdown" class="text-purple-700 font-semibold text-xl bg-white px-3 py-2">
                         <option class="text-black font-extralight" selected value="0">All courses</option>
                         <option *ngFor="let course of instructor_courses" [value]="course.id" class="text-gray-800 font-extralight">
-                            {{ course.title }} 
+                            {{ course.title }}
                         </option>
                     </select>
                 </div>
@@ -31,14 +27,16 @@ import FileSaver from 'file-saver';
                     Export to Excel
                 </button>
             </header>
+            <input type="text" placeholder="Search by name or email"
+           class="mb-4 w-full md:w-1/3 px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
 
             <div class="relative overflow-x-auto">
-                <table class="w-full text-sm text-left text-gray-700 dark:text-gray-300 shadow-lg rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
-                    <caption class="p-6 text-2xl font-extrabold text-gray-900 bg-white dark:text-white dark:bg-gray-800">
+                <table class="divide-y divide-gray-200 w-full text-sm text-left text-gray-500 dark:text-gray-300 shadow-lg rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700">
+                    <!-- <caption class="p-6 text-2xl font-extrabold text-gray-900 bg-white dark:text-white dark:bg-gray-800">
                         Our Reviews
                         <p class="mt-2 text-base font-normal text-gray-500 dark:text-gray-400">Trusted feedback from our learners worldwide 🌍</p>
-                    </caption>
-                    <thead class="text-md uppercase bg-purple-500 dark:bg-gray-800 text-white dark:text-gray-200">
+                    </caption> -->
+                    <thead class="bg-purple-500 dark:bg-gray-800 text-white dark:text-gray-200 uppercase tracking-wider text-xs">
                         <tr>
                             <th class="px-6 py-4">Student</th>
                             <th class="px-6 py-4">Rating</th>
@@ -53,10 +51,14 @@ import FileSaver from 'file-saver';
                             class="transition hover:scale-[1.01] hover:shadow-md duration-300 ease-in-out"
                             [ngClass]="{ 'bg-white': i % 2 === 0, 'bg-gray-50': i % 2 !== 0, 'dark:bg-gray-800': true, 'dark:hover:bg-gray-700': true }"
                         >
-                            <!-- Student with avatar -->
-                            <td class="px-6 py-4 flex items-center space-x-3">
-                                <img [src]="review.reviewerAvatar || 'https://i.pravatar.cc/40?img=' + i" class="w-10 h-10 rounded-full shadow-sm" />
-                                <span class="font-medium">{{ review.reviewerName }}</span>
+                            <td class="px-6 py-4 flex items-center space-x-4">
+                                <img alt="Portrait of Hans Burger, 10x Developer" class="w-10 h-10 rounded-full object-cover" height="40" [src]="review.reviewerAvatar || 'https://i.pravatar.cc/40?img=' + i" width="40" />
+                                <div class="leading-tight">
+                                    <div class="font-semibold text-gray-900">
+                                        {{ review.reviewerName }}
+                                    </div>
+                                    <div class="text-xs text-gray-500">Student</div>
+                                </div>
                             </td>
 
                             <!-- Rating with stars -->
@@ -119,19 +121,21 @@ import FileSaver from 'file-saver';
 })
 export class PerformanceReviewComponent implements OnInit {
     exportToExcel(): void {
-        const worksheet = XLSX.utils.json_to_sheet(this.reviews.map(review => ({
-          'Học viên': review.reviewerName,
-          'Đánh giá': review.rating,
-          'Nhận xét': review.review,
-          'Ngày tạo': new Date(review.createdAt).toLocaleString()
-        })));
-    
+        const worksheet = XLSX.utils.json_to_sheet(
+            this.reviews.map((review) => ({
+                'Học viên': review.reviewerName,
+                'Đánh giá': review.rating,
+                'Nhận xét': review.review,
+                'Ngày tạo': new Date(review.createdAt).toLocaleString()
+            }))
+        );
+
         const workbook = { Sheets: { 'Đánh giá': worksheet }, SheetNames: ['Đánh giá'] };
         const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    
+
         const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
         FileSaver.saveAs(blob, 'reviews.xlsx');
-      }
+    }
     currentPage: number = 0;
     totalPages: number = 0;
     pageSize: number = 10;
@@ -144,10 +148,10 @@ export class PerformanceReviewComponent implements OnInit {
 
     ngOnInit(): void {
         let params = new HttpParams();
-            params = params.set('page', 0);
-            params = params.set('size', 100);
-            params = params.set('keyword','');
-        this.http.get<any>(`http://localhost:8080/instructor/my-courses`,{params}).subscribe((response) => {
+        params = params.set('page', 0);
+        params = params.set('size', 100);
+        params = params.set('keyword', '');
+        this.http.get<any>(`http://localhost:8080/instructor/my-courses`, { params }).subscribe((response) => {
             this.instructor_courses = response.data.content;
         });
 

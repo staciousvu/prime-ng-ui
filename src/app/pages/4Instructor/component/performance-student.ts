@@ -26,30 +26,59 @@ import { RouterModule, RouterOutlet } from '@angular/router';
       </option>
     </select>
   </header>
-
   <!-- Summary Statistics -->
-  <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-8">
-    <div class="bg-gradient-to-br from-indigo-500 to-purple-600 text-white rounded-2xl p-5 shadow-lg">
-      <p class="text-sm mb-1">Total Students</p>
-      <p class="text-3xl font-bold">{{ totalStudents }}</p>
+  <div class="w-full mx-auto flex gap-4 justify-center">
+  <div class="flex flex-col items-center gap-4 bg-white rounded-xl p-6 shadow-sm w-1/5">
+    <div class="flex items-center justify-center w-14 h-14 rounded-lg bg-[#FAD4BF] text-[#D87D4A]">
+      <i class="fas fa-users text-2xl"></i>
     </div>
-    <div class="bg-gradient-to-br from-green-400 to-emerald-600 text-white rounded-2xl p-5 shadow-lg">
-      <p class="text-sm mb-1">Avg Progress</p>
-      <p class="text-3xl font-bold">{{ avgProgress | number:'1.0-0' }}%</p>
-    </div>
-    <div class="bg-gradient-to-br from-yellow-400 to-orange-500 text-white rounded-2xl p-5 shadow-lg">
-      <p class="text-sm mb-1">Completion Rate</p>
-      <p class="text-3xl font-bold">{{ completionRate | number:'1.0-0' }}%</p>
-    </div>
-    <div class="bg-gradient-to-br from-pink-400 to-rose-500 text-white rounded-2xl p-5 shadow-lg">
-      <p class="text-sm mb-1">Avg Rating</p>
-      <p class="text-3xl font-bold">{{ avgRating | number:'1.1-1' }}</p>
-    </div>
-    <div class="bg-gradient-to-br from-blue-400 to-sky-600 text-white rounded-2xl p-5 shadow-lg">
-      <p class="text-sm mb-1">Questions Asked</p>
-      <p class="text-3xl font-bold">{{ totalQuestions }}</p>
+    <div class="text-center">
+      <p class="text-sm text-[#4B4B4B]">Total students</p>
+      <p class="font-semibold text-lg text-[#1E1E1E]">{{ totalStudents }}</p>
     </div>
   </div>
+
+  <div class="flex flex-col items-center gap-4 bg-white rounded-xl p-6 shadow-sm w-1/5">
+    <div class="flex items-center justify-center w-14 h-14 rounded-lg bg-[#C6E7D9] text-[#3B9B7A]">
+    <i class="fa-solid fa-percent text-2xl"></i>
+    </div>
+    <div class="text-center">
+      <p class="text-sm text-[#4B4B4B]">Average progress</p>
+      <p class="font-semibold text-lg text-[#1E1E1E]">{{ avgProgress | number:'1.0-0' }}%</p>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center gap-4 bg-white rounded-xl p-6 shadow-sm w-1/5">
+    <div class="flex items-center justify-center w-14 h-14 rounded-lg bg-[#B9D9FF] text-[#3B7AC9]">
+    <i class="fa-solid fa-list-ol text-2xl"></i>
+    </div>
+    <div class="text-center">
+      <p class="text-sm text-[#4B4B4B]">Completion rate</p>
+      <p class="font-semibold text-lg text-[#1E1E1E]">{{ completionRate | number:'1.0-0' }}% </p>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center gap-4 bg-white rounded-xl p-6 shadow-sm w-1/5">
+    <div class="flex items-center justify-center w-14 h-14 rounded-lg bg-[#B9E6E6] text-[#3B9B9B]">
+    <i class="fa-solid fa-star text-2xl"></i>
+    </div>
+    <div class="text-center">
+      <p class="text-sm text-[#4B4B4B]">Average rating</p>
+      <p class="font-semibold text-lg text-[#1E1E1E]">{{ avgRating | number:'1.1-1' }}</p>
+    </div>
+  </div>
+
+  <div class="flex flex-col items-center gap-4 bg-white rounded-xl p-6 shadow-sm w-1/5">
+    <div class="flex items-center justify-center w-14 h-14 rounded-lg bg-[#FFD6D6] text-[#D87D4A]">
+    <i class="fa-solid fa-question text-2xl"></i>
+    </div>
+    <div class="text-center">
+      <p class="text-sm text-[#4B4B4B]">Question asks</p>
+      <p class="font-semibold text-lg text-[#1E1E1E]">{{ totalQuestions }} </p>
+    </div>
+  </div>
+</div>
+
 
   <!-- Filter and Search -->
   <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
@@ -74,23 +103,24 @@ import { RouterModule, RouterOutlet } from '@angular/router';
       <th class="px-6 py-3 text-left">Progress</th>
       <th class="px-0 py-3 text-left">Lessons</th>
       <th class="px-6 py-3 text-left" *ngIf="selectedCourseId === null">Course</th> 
-      <th class="px-6 py-3 text-left">Completed</th>
       <th class="px-2 py-3 text-left">Rating</th>
       <th class="px-0 py-3 text-left">Questions</th>
-      <!-- <th class="px-6 py-3 text-left">👤 Student</th>
-      <th class="px-6 py-3 text-left">📧 Email</th>
-      <th class="px-6 py-3 text-left">📅 Enrolled On</th>
-      <th class="px-6 py-3 text-left">📈 Progress</th>
-      <th class="px-0 py-3 text-left">🎓 Lessons</th>
-      <th class="px-6 py-3 text-left" *ngIf="selectedCourseId === null">📚 Course</th> 
-      <th class="px-6 py-3 text-left">✅ Completed</th>
-      <th class="px-2 py-3 text-left">⭐ Rating</th>
-      <th class="px-0 py-3 text-left">❓ Questions</th> -->
+
     </tr>
   </thead>
   <tbody class="divide-y divide-gray-100 text-gray-700">
     <tr *ngFor="let student of students" class="hover:bg-gray-50 transition">
-      <td class="px-6 py-4 font-medium">{{ student.fullName }}</td>
+    <td class="px-6 py-4 flex items-center space-x-4">
+       <img alt="Portrait of Hans Burger, 10x Developer" class="w-10 h-10 rounded-full object-cover" height="40" [src]="student.thumbnail" width="40"/>
+       <div class="leading-tight">
+        <div class="font-semibold text-gray-900">
+         {{student.fullName}}
+        </div>
+        <div class="text-xs text-gray-500">
+         Student
+        </div>
+       </div>
+      </td>
       <td class="px-6 py-4">{{ student.email }}</td>
       <td class="px-6 py-4">{{ student.enrolledOn | date:'yyyy-MM-dd' }}</td>
       <td class="px-6 py-4">
@@ -100,13 +130,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
         <p class="text-xs mt-1 text-indigo-600">{{ student.progress | number:'1.0-0' }}%</p>
       </td>
       <td class="px-6 py-4">{{ student.lessonsCompleted }}/{{ student.totalLessons }}</td>
-      <td class="px-6 py-4" *ngIf="selectedCourseId === null">{{ student.courseTitle || 'N/A' }}</td> <!-- Hiển thị tên khóa học nếu selectedCourseId là null -->
-      <td class="px-6 py-4">
-        <span class="inline-block px-2 py-1 rounded-full text-xs font-semibold"
-              [ngClass]="{'bg-green-100 text-green-700': student.isCompleted, 'bg-red-100 text-red-700': !student.isCompleted}">
-          {{ student.isCompleted ? '✅ Yes' : '❌ No' }}
-        </span>
-      </td>
+      <td class="px-6 py-4" *ngIf="selectedCourseId === null">{{ student.courseTitle || 'N/A' }}</td> 
       <td class="px-6 py-4">{{ student.rating ? '⭐ ' + student.rating : 'N/A' }}</td>
       <td class="px-6 py-4">{{ student.questions }}</td>
     </tr>
