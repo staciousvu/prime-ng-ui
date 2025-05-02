@@ -17,12 +17,29 @@ import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ToastService } from '../service/toast.service';
+import { QuizVLComponent } from './video-learning/quiz';
 
 @Component({
     selector: 'app-video-learning1',
     standalone: true,
     encapsulation: ViewEncapsulation.None,
-    imports: [ToastModule, TextareaModule, InputTextModule, ButtonModule, DialogModule, RatingModule, VideoPlayerComponent, AccordionModule, CommonModule, FormsModule, TabsModule, OverviewVideoComponent, QAndAComponent, RatingVideoComponent],
+    imports: [
+        QuizVLComponent,
+        ToastModule,
+        TextareaModule,
+        InputTextModule,
+        ButtonModule,
+        DialogModule,
+        RatingModule,
+        VideoPlayerComponent,
+        AccordionModule,
+        CommonModule,
+        FormsModule,
+        TabsModule,
+        OverviewVideoComponent,
+        QAndAComponent,
+        RatingVideoComponent
+    ],
     template: `
         <div class="app">
             <header class="header-top">
@@ -62,6 +79,7 @@ import { ToastService } from '../service/toast.service';
                                             <app-overview-video *ngIf="i === 0" [courseId]="courseId"></app-overview-video>
                                             <app-qanda *ngIf="i === 1" [courseId]="courseId" [lectureId]="activeLecture"></app-qanda>
                                             <app-rating-video *ngIf="i === 2" [courseId]="courseId"></app-rating-video>
+                                            <app-vl-quiz *ngIf="i === 3" [courseId]="courseId" (playQuiz)="openQuizModal($event)"></app-vl-quiz>
                                         </ng-container>
                                     </div>
                                 </div>
@@ -153,6 +171,38 @@ import { ToastService } from '../service/toast.service';
             </div>
         </div>
         <p-toast></p-toast>
+        <!-- Modal -->
+        <div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
+            <div class="bg-white rounded-2xl p-6 w-[40%] shadow-xl overflow-auto">
+                <div class="mb-4">
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">Câu hỏi</h3>
+                    <!-- Hiển thị HTML câu hỏi -->
+                    <div class="text-gray-700" [innerHTML]="quiz.questions[currentQuestionIndex].content"></div>
+                </div>
+
+                <!-- Danh sách đáp án -->
+                <div class="space-y-3 mb-6">
+                    <label
+                        *ngFor="let answer of quiz.questions[currentQuestionIndex]?.answers"
+                        class="flex items-center gap-3 px-4 py-3 border rounded-xl transition cursor-pointer"
+                        [ngClass]="{
+                            'border-green-500 bg-green-100': answerChecked && selectedAnswer === answer.content && answer.isCorrect,
+                            'border-red-500 bg-red-100': answerChecked && selectedAnswer === answer.content && !answer.isCorrect,
+                            'border-gray-200 hover:bg-blue-50': !answerChecked
+                        }"
+                    >
+                        <input type="radio" name="answer" [value]="answer.content" class="form-radio text-blue-600" [disabled]="answerChecked" (change)="selectAnswer(answer)" />
+                        <span class="text-gray-800" [innerHTML]="answer.content"></span> 
+                    </label>
+                </div>
+
+                <!-- Nút -->
+                <div class="flex justify-end gap-4">
+                    <button (click)="closeModal()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">Huỷ làm bài</button>
+                    <button (click)="nextQuestion()" class="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700">Câu hỏi tiếp theo</button>
+                </div>
+            </div>
+        </div>
     `,
     styles: `
         .tabs {
@@ -279,14 +329,14 @@ import { ToastService } from '../service/toast.service';
 
         .lecture-item {
             display: flex;
-            flex-direction:column;
+            flex-direction: column;
             justify-content: space-between;
             align-items: start;
             padding: 12px 8px;
             border-radius: 6px;
             cursor: pointer;
             transition: background-color 0.2s;
-            gap:5px;
+            gap: 5px;
         }
 
         .lecture-item:hover {
@@ -452,11 +502,59 @@ import { ToastService } from '../service/toast.service';
     providers: [MessageService]
 })
 export class VideoLearning1Component implements OnInit {
+    quiz: any;
+    currentQuestionIndex = 0;
+    isModalOpen = false;
+    selectedAnswer: string | null = null;
+    answerChecked = false;
+
+    openQuizModal($event: any) {
+        this.quiz = $event;
+        this.currentQuestionIndex = 0;
+        this.isModalOpen = true;
+        this.selectedAnswer = null;
+        this.answerChecked = false;
+    }
+    selectAnswer(answer: any) {
+        this.selectedAnswer = answer.content;
+        this.answerChecked = true;
+        if (answer.isCorrect) {
+            this.playSound('correct');
+          } else {
+            this.playSound('wrong');
+          }
+      }
+      playSound(type: 'correct' | 'wrong') {
+        const audio = new Audio();
+        audio.src = `assets/sounds/${type}.mp3`;
+        audio.load();
+        audio.play();
+      }
+      
+      
+      nextQuestion() {
+        if (this.currentQuestionIndex < this.quiz.questions.length - 1) {
+          this.currentQuestionIndex++;
+          this.selectedAnswer = null;
+          this.answerChecked = false;
+        } else {
+          // Hết câu hỏi → có thể hiện kết quả
+          this.closeModal();
+        }
+      }
+      
+      closeModal() {
+        this.isModalOpen = false;
+        this.quiz = null;
+        this.selectedAnswer = null;
+        this.answerChecked = false;
+      }
     activeTab: number = 0;
     tabs = [
         { title: 'Overview', content: 'Content for Overview' },
         { title: 'Discussion', content: 'Content for Q & A' },
-        { title: 'Reviews', content: 'Content for Reviews' }
+        { title: 'Reviews', content: 'Content for Reviews' },
+        { title: 'Quiz', content: 'Quiz for Students' }
     ];
 
     setActiveTab(index: number) {

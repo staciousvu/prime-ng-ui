@@ -15,8 +15,8 @@ import { FormsModule } from '@angular/forms';
         <header class="border-b border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
                 <h1 class="text-2xl font-semibold text-[#1E293B] mb-0">Price</h1>
             </header>
-            <div class="px-10 pt-10 space-y-8 text-[#334155] text-base font-normal max-w-4xl">
-                <div class="max-w-xl">
+            <div class="px-10 pt-10 space-y-8 text-[#334155] text-lg font-normal w-full">
+                <div class="w-full">
                     <h2 class="font-semibold text-gray-900 text-base mb-2">Đặt giá cho khóa học của bạn</h2>
                     <p class="text-gray-900 text-base mb-6 leading-relaxed">
                         Vui lòng chọn loại tiền tệ và mức giá cho khóa học của bạn. Nếu bạn muốn cung cấp khóa học miễn phí, khóa học đó phải có tổng thời lượng video dưới 2 giờ. Ngoài ra, các khóa học có bài kiểm tra thực hành không được miễn phí.
@@ -31,14 +31,14 @@ import { FormsModule } from '@angular/forms';
                                 id="price"
                                 [(ngModel)]="course.price"
                                 name="price"
-                                class="bg-white border border-gray-300 text-gray-900 text-base rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="bg-white border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-3 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             >
                                 <option [ngValue]="null" disabled>Choose a pricetier</option>
                                 <option *ngFor="let lvl of priceTiers" [ngValue]="lvl.value">{{ lvl.name }}</option>
                             </select>
 
                         </div>
-                        <button (click)="save()" type="submit" class="bg-purple-700 text-white font-semibold rounded-md px-5 py-2 text-sm hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-600">Save</button>
+                        <button (click)="save()" type="submit" class="bg-purple-700 text-white font-semibold rounded-md px-5 py-2.5 text-lg hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-600">Save</button>
                     </form>
                 </div>
             </div>

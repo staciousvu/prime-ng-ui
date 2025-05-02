@@ -20,7 +20,7 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
     <header class="border-b border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
                 <h1 class="text-2xl font-semibold text-[#1E293B] mb-0">Curriculum</h1>
             </header>
-    <div class="px-10 pt-10 space-y-8 text-[#334155] text-base font-normal max-w-4xl">
+    <div class="px-10 pt-10 space-y-8 text-[#334155] text-lg font-normal w-full">
     <div class=" min-h-screen">
             <!-- Sections -->
             <div *ngFor="let section of sections; let sectionIndex = index" class="mb-4 p-4 bg-white shadow rounded-lg border border-gray-200">

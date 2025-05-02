@@ -11,16 +11,16 @@ import { CourseHeaderComponent } from '../component/course-header';
         <!-- Top nav -->
         <app-course-header [courseName]="courseName" [status]="status"/>
 
-        <main class="flex mx-auto py-10 px-6 sm:px-8 lg:px-10 max-w-7xl" style="margin-top:20px;">
+        <main class="flex mx-auto py-10 px-6 sm:px-8 lg:px-10 max-w-[80%]" style="margin-top:0px;">
             <!-- Sidebar -->
             <aside class="w-72 flex-shrink-0 pr-10 mt-10">
                 <!-- PLAN YOUR COURSE -->
                 <nav aria-label="Plan your course" class="mb-12">
                     <p class="font-semibold text-base text-[#1E293B] mb-5">Plan your course</p>
                     <ul class="space-y-2 text-base font-normal">
-                        <li [routerLink]="['/edit-course', courseId, 'goals']" routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold"  class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200">
-                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100"> </span>
-                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Intended learners </label>
+                        <li [routerLink]="['/edit-course', courseId, 'goals']" routerLinkActive="border-l-4 border-blue-500 text-blue-500 font-semibold"  class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200">
+                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-blue-500"> </span>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-blue-600 transition duration-200"> Intended learners </label>
                         </li>
                     </ul>
                 </nav>
@@ -31,19 +31,19 @@ import { CourseHeaderComponent } from '../component/course-header';
                     <ul class="space-y-2 text-base font-normal">
                         <li
                             [routerLink]="['/edit-course', courseId, 'curriculum']"
-                            routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold" 
+                            routerLinkActive="border-l-4 border-blue-500 text-blue-500 font-semibold" 
                             class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200"
                         >
-                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100"> </span>
-                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Curriculum </label>
+                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-blue-500"> </span>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-blue-600 transition duration-200"> Curriculum </label>
                         </li>
                         <li
                             [routerLink]="['/edit-course', courseId, 'quiz']"
-                            routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold" 
+                            routerLinkActive="border-l-4 border-blue-500 text-blue-500 font-semibold" 
                             class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200"
                         >
-                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100"> </span>
-                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Quiz </label>
+                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-blue-500"> </span>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-blue-600 transition duration-200"> Quiz </label>
                         </li>
                     </ul>
                 </nav>
@@ -55,30 +55,29 @@ import { CourseHeaderComponent } from '../component/course-header';
                         <!-- ACTIVE ITEM -->
                         <li
                             [routerLink]="['/edit-course', courseId, 'landing-page']"
-                            routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold" 
+                            routerLinkActive="border-l-4 border-blue-500 text-blue-500 font-semibold" 
                             class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200"
                         >
-                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100">
+                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-blue-500">
                                 <!-- <i class="fas fa-check text-xs"></i> -->
                             </span>
-                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Course landing page </label>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-blue-600 transition duration-200"> Course landing page </label>
                         </li>
 
                         <!-- OTHER ITEMS -->
-                        <li [routerLink]="['/edit-course', courseId, 'price']" routerLinkActive="border-l-4 border-purple-500 text-purple-500 font-semibold"  class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200">
-                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-purple-500 group-hover:bg-purple-100"> </span>
-                            <label class="text-lg select-none text-[#334155] group-hover:text-purple-600 transition duration-200"> Pricing </label>
+                        <li [routerLink]="['/edit-course', courseId, 'price']" routerLinkActive="border-l-4 border-blue-500 text-blue-500 font-semibold"  class="flex items-center space-x-3 cursor-pointer group hover:bg-gray-100 px-3 py-2 transition duration-200">
+                            <span class="w-6 h-6 rounded-full border border-[#334155] flex items-center justify-center transition duration-200 group-hover:border-blue-500"> </span>
+                            <label class="text-lg select-none text-[#334155] group-hover:text-blue-600 transition duration-200"> Pricing </label>
                         </li>
                     </ul>
                 </nav>
-                <button class="w-full mt-5 bg-purple-600 hover:bg-purple-700 text-white font-semibold px-6 py-3 rounded-md transition duration-200">Submit for Review</button>
+                <button class="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md transition duration-200">Submit for Review</button>
             </aside>
 
             <!-- Main content -->
             <div class="w-full">
                 <router-outlet />
             </div>
-            <!-- <router-outlet/> -->
         </main>
     `,
     styles: `

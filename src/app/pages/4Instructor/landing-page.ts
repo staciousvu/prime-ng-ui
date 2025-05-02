@@ -18,11 +18,11 @@ import { SelectModule } from 'primeng/select';
         <header class="border-b border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
                 <h1 class="text-2xl font-semibold text-[#1E293B] mb-0">Course landing page</h1>
             </header>
-            <div class="px-10 pt-10 space-y-8 text-[#334155] text-base font-normal max-w-4xl">
-                <p>
-                    Trang đích khóa học của bạn đóng vai trò quan trọng đối với thành công của bạn trên Udemy. Nếu thực hiện đúng, nó cũng có thể giúp bạn tăng khả năng hiển thị trên các công cụ tìm kiếm như Google. Khi bạn hoàn thành phần này, hãy
+            <div class="px-10 pt-10 space-y-8 text-[#334155] text-lg font-normal w-full">
+                <!-- <p>
+                    Trang đích khóa học của bạn đóng vai trò quan trọng đối với thành công của bạn trên Eduflow. Nếu thực hiện đúng, nó cũng có thể giúp bạn tăng khả năng hiển thị trên các công cụ tìm kiếm như Google. Khi bạn hoàn thành phần này, hãy
                     nghĩ đến việc tạo Trang đích khóa học hấp dẫn để chứng minh lý do tại sao ai đó muốn đăng ký khóa học của bạn. Tìm hiểu thêm về cách tạo <a href="#" class="text-purple-700 underline hover:text-purple-800">landing page</a>.
-                </p>
+                </p> -->
                 <form class="space-y-6">
                     <!-- Course title -->
                     <div>
@@ -56,7 +56,7 @@ import { SelectModule } from 'primeng/select';
                     <div>
                         <label for="course-description" class="block font-semibold text-gray-900 mb-1"> Course description </label>
                         <!-- <p-editor class="" [(ngModel)]="course.description" name="description" [style]="{ height: '250px' }" /> -->
-                        <p-editor [(ngModel)]="course.description" name="description" [style]="{ height: '250px' }">
+                        <p-editor [(ngModel)]="course.description" name="description" [style]="{ height: '250px' , fontSize: '16px' }">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <button type="button" class="ql-bold" aria-label="Bold"></button>
@@ -69,7 +69,7 @@ import { SelectModule } from 'primeng/select';
                     </div>
 
                     <div class="flex space-x-4">
-                        <div class="max-w-sm flex-1">
+                        <div class="max-w-lg flex-1">
                             <label for="language" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Select language</label>
                             <select
                                 id="language"
@@ -81,7 +81,7 @@ import { SelectModule } from 'primeng/select';
                                 <option *ngFor="let lang of languages" [ngValue]="lang.name">{{ lang.name }}</option>
                             </select>
                         </div>
-                        <div class="max-w-sm flex-1">
+                        <div class="max-w-lg flex-1">
                             <label for="level" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Select level</label>
                             <select
                                 id="level"

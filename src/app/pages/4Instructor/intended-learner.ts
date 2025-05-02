@@ -11,16 +11,12 @@ import { ToastService } from '../service/toast.service';
     // standalone:true,
     imports: [RouterModule, CommonModule, FormsModule],
     template: `
-        <section class="bg-white rounded-md shadow-sm flex-grow max-w-6xl min-w-0 border border-[#E2E8F0] pb-14" aria-label="Intended learners">
+        <section class="bg-white rounded-md shadow-sm flex-grow w-full min-w-0 border border-[#E2E8F0] pb-14" aria-label="Intended learners">
         <header class="border-b border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
                 <h1 class="text-2xl font-semibold text-[#1E293B] mb-0">Intended learner</h1>
             </header>
-            <div class="px-10 pt-10 space-y-8 text-[#334155] text-base font-normal max-w-4xl">
-                <p>
-                    Các mô tả sau đây sẽ hiển thị công khai trên trang
-                    <a href="#" class="text-purple-700 underline hover:text-purple-800">chi tiết khóa học</a>
-                    của bạn và sẽ có tác động trực tiếp đến hiệu suất khóa học của bạn. Các mô tả này sẽ giúp người học quyết định xem khóa học của bạn có phù hợp với họ không.
-                </p>
+            <div class="px-10 pt-10 space-y-8 text-[#334155] text-lg font-normal w-full">
+
 
                 <div class="mt-6">
                     <p class="font-bold text-xl text-[#1E293B] mb-3">Học sinh sẽ học được gì trong khóa học của bạn?</p>
