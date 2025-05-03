@@ -12,6 +12,12 @@ export class CartService {
       removeFromCart(courseId: number): Observable<any> {
         return this.http.delete(`http://localhost:8080/cart/remove/${courseId}`);
       }
+      moveToCart(courseId: number): Observable<any> {
+        return this.http.put<any>(`http://localhost:8080/cart/to-cart/${courseId}`,{});
+      }
+      moveToFavorite(courseId: number): Observable<any> {
+        return this.http.put<any>(`http://localhost:8080/cart/to-favorite/${courseId}`,{});
+      }
       
       
   private cartsSubject = new BehaviorSubject<any[]>([]);
@@ -22,15 +28,16 @@ export class CartService {
   }
 
   loadCart() {
-    this.http.get<any>(`http://localhost:8080/cart`).subscribe(
-      (response) => {
+    this.http.get<any>(`http://localhost:8080/cart`).subscribe({
+      next: (response) => {
         this.cartsSubject.next(response.data.cartItemResponses);
       },
-      (error) => {
-        this.cartsSubject.next([]); // tránh null
+      error: (error) => {
+        this.cartsSubject.next([]); 
       }
-    );
+    });
   }
+  
   totalMoney$: Observable<number> = this.carts$.pipe(
     map((cart) => cart.reduce((sum, item) => sum + item.courseResponse.discount_price, 0))
   );

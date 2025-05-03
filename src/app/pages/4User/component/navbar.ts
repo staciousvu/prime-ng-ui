@@ -55,7 +55,7 @@ import { FormsModule } from '@angular/forms';
                                 </div>
                             </div>
                         </li>
-                        <li class="nav-link-item">
+                        <li [routerLink]="'/favorite'" class="nav-link-item">
                             <i class="bi bi-heart"></i>
                         </li>
                         <li [routerLink]="'/cart'" class="nav-link-item cart" style="position: relative;">
@@ -101,6 +101,7 @@ import { FormsModule } from '@angular/forms';
                             <ul class="dropdown">
                                 <li class="dropdown-item" [routerLink]="'/instructor/profiles/basic-information'"><a>Profile</a></li>
                                 <li class="dropdown-item" [routerLink]="'/my-learning'"><a>My Learning</a></li>
+                                <li class="dropdown-item" [routerLink]="'/favorite'"><a>Favorite</a></li>
                                 <li class="dropdown-item" [routerLink]="'/cart'"><a>My Cart</a></li>
                                 <li class="dropdown-item" [routerLink]="'/message'"><a>Message</a></li>
                                 <li class="dropdown-item"><a href="#">Settings</a></li>

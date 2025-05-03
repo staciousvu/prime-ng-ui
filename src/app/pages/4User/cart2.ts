@@ -6,69 +6,18 @@ import { forkJoin, timer } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { AuthService } from '../service/auth.service';
+import { ToastService } from '../service/toast.service';
+import { StarRatingComponent } from './star-rating';
 
 @Component({
     selector: 'app-cart2',
     standalone: true,
-    imports: [CommonModule],
+    imports: [CommonModule,StarRatingComponent],
     template: `
-        <!-- <div class="max-w-6xl mx-auto p-6">
-  <h1 class="text-4xl font-bold mb-6">Shopping Cart</h1>
-  <p class="text-lg font-semibold mb-4">3 Courses in Cart</p>
-
-  <div class="space-y-6">
-    <div class="flex items-start justify-between border-b pb-4">
-      <div class="flex gap-4">
-        <img src="course1.jpg" alt="Course 1" class="w-36 h-24 object-cover rounded" />
-        <div>
-          <h2 class="font-bold text-lg">Java Spring Boot: Professional eCommerce Project Masterclass</h2>
-          <p class="text-gray-600 text-sm">By Faisal Memon (EmbarkX) and 1 other</p>
-          <div class="mt-1 flex items-center gap-2">
-            <span class="bg-green-200 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">Bestseller</span>
-            <span class="text-yellow-500 font-semibold">4.6</span>
-            <span class="text-gray-500 text-sm">(1,436 ratings)</span>
-          </div>
-          <p class="text-sm text-gray-500 mt-1">89.5 total hours • 638 lectures • All Levels</p>
-          <div class="mt-2 text-purple-600 text-sm space-x-4">
-            <button>Remove</button>
-            <button>Save for Later</button>
-            <button>Move to Wishlist</button>
-          </div>
-        </div>
-      </div>
-      <div class="text-right font-semibold text-lg">₫1,099,000</div>
-    </div>
-
-  </div>
-
-  <div class="mt-8 border-t pt-6 flex justify-between items-start">
-    <div>
-      <p class="text-2xl font-bold">Total: <span class="text-purple-700">₫3,617,000</span></p>
-      <p class="text-sm text-gray-500 mt-1">You won't be charged yet</p>
-    </div>
-    <div class="space-y-4">
-      <button class="bg-purple-600 text-white px-6 py-3 rounded-md hover:bg-purple-700 w-full text-lg font-semibold">
-        Proceed to Checkout →
-      </button>
-      <div>
-        <p class="font-semibold mb-1">Promotions</p>
-        <div class="flex items-center border rounded p-2 gap-2 bg-gray-50">
-          <input type="text" value="KEEPLEARNING" class="flex-1 bg-transparent outline-none text-sm text-gray-700" readonly />
-          <button class="text-gray-500 text-xl">✕</button>
-        </div>
-        <div class="mt-2 flex gap-2">
-          <input type="text" placeholder="Enter Coupon" class="border px-3 py-2 rounded w-full text-sm" />
-          <button class="bg-purple-600 text-white px-4 py-2 rounded text-sm font-semibold hover:bg-purple-700">Apply</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div> -->
-
         <div class="app">
             <div class="grid wrapper">
                 <h1 class="myshoppingcart_title text-4xl">Shopping Cart</h1>
-                <div class="myshoppingcart_content">
+                <div *ngIf="myCarts.length>0" class="myshoppingcart_content">
                     <div class="myshoppingcart_content-left">
                         <p class="total_course text-lg font-semibold mb-4">{{ myCarts.length }} Courses in Cart</p>
                         <ul class="myshoppingcart_content__list">
@@ -79,7 +28,7 @@ import { AuthService } from '../service/auth.service';
                                     <p class="course_author text-gray-600 text-sm">{{ item.courseResponse.authorName }}</p>
                                     <div class="tag-rating">
                                         <span class="bg-green-200 text-green-800 text-xs font-semibold px-2 py-0.5 rounded">{{ item.courseResponse.label }}</span>
-                                        <span class="text-yellow-500 font-semibold">{{ item.courseResponse.avgRating }}</span>
+                                        <app-star-rating [rating]="item.courseResponse.avgRating" />
                                         <span class="text-gray-500 text-sm">({{ item.courseResponse.countRating }} ratings)</span>
                                     </div>
                                     <p class="text-sm text-gray-500 mt-1">{{ item.totalHour.toFixed(1) }} total hours • {{ item.totalLectures }} lectures • {{ item.courseResponse.level }}</p>
@@ -92,7 +41,7 @@ import { AuthService } from '../service/auth.service';
                                         <ng-template #showText> Remove </ng-template>
                                     </p>
                                     <p class="save padding-action">Save for Later</p>
-                                    <p class="move_to_with_list padding-action">Move to Withlist</p>
+                                    <p (click)="moveToFavorite(item.courseResponse.id)" class="move_to_with_list padding-action">Move to Withlist</p>
                                 </div>
                                 <div class="myshoppingcart_content__item-course-price">
                                     <p class="discount-price">đ{{ item.courseResponse.discount_price | number: '1.0-1' }} <i class="fa-solid fa-tag" style="color: #6c28d2;"></i></p>
@@ -101,7 +50,7 @@ import { AuthService } from '../service/auth.service';
                             </li>
                         </ul>
                     </div>
-                    <div class="myshoppingcart_content-right">
+                    <div *ngIf="myCarts.length>0" class="myshoppingcart_content-right">
                         <div class="p-6 w-full max-w-md">
                             <p class="text-lg font-semibold text-gray-700 mb-2">Total:</p>
                             <p class="text-2xl font-bold text-dark-500 mb-2">đ{{ totalMoney | number: '1.0-1' }}</p>
@@ -135,6 +84,7 @@ import { AuthService } from '../service/auth.service';
                         </div>
                     </div>
                 </div>
+                <p *ngIf="myCarts.length === 0" class="text-center mt-4 text-gray-600">No courses in cart.</p>
             </div>
         </div>
     `,
@@ -435,7 +385,8 @@ export class Cart2Component implements OnInit {
         private cartService: CartService,
         private http: HttpClient,
         private router: Router,
-        private authService:AuthService
+        private authService:AuthService,
+        private toastService:ToastService
     ) {}
     ngOnInit(): void {
         this.cartService.carts$.subscribe((carts) => {
@@ -450,5 +401,12 @@ export class Cart2Component implements OnInit {
         this.cartService.saleOff$.subscribe((saleOff) => {
             this.saleOff = saleOff;
         });
+    }
+    moveToFavorite(courseId: any): void {
+        this.cartService.moveToFavorite(courseId).subscribe(() => {
+            this.cartService.loadCart();
+            this.toastService.addToast("success","Di chuyển sang yêu thích thành công")
+        }
+        )
     }
 }

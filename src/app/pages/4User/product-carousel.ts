@@ -76,7 +76,6 @@ import { ToastService } from '../service/toast.service';
                 </div>
             </div>
         </div>
-        <p-toast></p-toast>
     `,
     styles: `
         .spinner {
@@ -378,7 +377,6 @@ import { ToastService } from '../service/toast.service';
             font-size: 14px;
         }
     `,
-    providers:[MessageService]
 })
 export class ProductCarouselComponent implements OnInit{
 
@@ -390,7 +388,6 @@ export class ProductCarouselComponent implements OnInit{
     constructor(
         private cartService: CartService,
         private route: Router,
-        private messageService:MessageService,
         private toastService:ToastService
     ) {}
     ngOnInit(): void {
@@ -414,7 +411,7 @@ export class ProductCarouselComponent implements OnInit{
                     this.loadingMap[courseId] = false;
                     this.isInCartMap[courseId] = true;
                     this.toastService.addToast("success","Thêm vào giỏ hàng thành công")
-                }, 1000);
+                }, 2000);
             });
         }
     }

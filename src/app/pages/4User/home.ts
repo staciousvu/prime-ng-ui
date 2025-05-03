@@ -15,7 +15,7 @@ import { AuthService } from '../service/auth.service';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-navbar',
+    selector: 'app-home',
     standalone: true,
     // encapsulation: ViewEncapsulation.None,
     imports: [RouterLink,ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],

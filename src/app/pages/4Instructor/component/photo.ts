@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ImageCroppedEvent, ImageCropperComponent } from 'ngx-image-cropper';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ToastService } from '../../service/toast.service';
 
 @Component({
     selector: 'app-profile-photo',
@@ -59,7 +60,10 @@ export class ProfilePhotoComponent implements OnInit {
   croppedImage: string = '';            // Ảnh sau khi crop hoặc ban đầu
   imageChangedEvent: any = '';          // Sự kiện thay đổi ảnh
 
-  constructor(private http: HttpClient,private messageService:MessageService) {}
+  constructor(private http: HttpClient,
+    private messageService:MessageService,
+    private toastService:ToastService
+  ) {}
 
   ngOnInit(): void {
     this.http.get<any>('http://localhost:8080/profile').subscribe((response) => {
@@ -132,17 +136,9 @@ export class ProfilePhotoComponent implements OnInit {
     // Gửi ảnh lên server (viết theo backend của bạn)
     // Ví dụ:
     this.http.post('http://localhost:8080/user/upload-avatar', formData).subscribe(response => {
-      this.messageService.add({
-        severity: 'success',
-        summary: 'Success',
-        detail: 'Avatar updated successfully'
-    });
+      this.toastService.addToast("success","Cập nhật ảnh đại diện thành công");
     }, error => {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Failed to update avatar'
-    });
+      this.toastService.addToast("error","Hệ thống đang bị lỗi vui lòng thử lại");
     });
   }
   base64ToFile(dataurl: string, filename: string): File {

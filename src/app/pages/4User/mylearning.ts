@@ -3,6 +3,7 @@ import { NavBarComponent } from './component/navbar';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { CartService } from '../service/cart.service';
 
 @Component({
     selector: 'app-my-learning',
@@ -42,7 +43,7 @@ import { RouterLink } from '@angular/router';
                 </div>
 
                 <!-- Nếu không có khóa học -->
-                <p *ngIf="courses.length === 0">No courses found.</p>
+                <p *ngIf="courses.length === 0" class="text-center mt-4 text-gray-600">No courses in my learning.</p>
             </div>
         </div>
     `,
@@ -248,7 +249,8 @@ export class MyLearningComponent implements OnInit {
     pageSize = 8;
     totalPages = 0;
 
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient,
+    ) {}
 
     ngOnInit(): void {
         this.fetchCourses();
@@ -274,4 +276,5 @@ export class MyLearningComponent implements OnInit {
             this.fetchCourses();
         }
     }
+
 }

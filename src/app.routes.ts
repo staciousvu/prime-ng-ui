@@ -32,6 +32,7 @@ import { EditCoursePriceComponent } from './app/pages/4Instructor/price';
 import { TestToastComponent } from './app/pages/4Instructor/component/test';
 import { VideoLearning1Component } from './app/pages/4User/video-learning1';
 import { EditCourseQuizComponent } from './app/pages/4Instructor/quiz';
+import { FavoriteComponent } from './app/pages/4User/favorite';
 export const appRoutes: Routes = [
 
     {
@@ -43,6 +44,7 @@ export const appRoutes: Routes = [
             {path:'home',component:HomeComponent},
             {path:'cart',component:Cart2Component},
             {path:'my-learning',component:MyLearningComponent},
+            {path:'favorite',component:FavoriteComponent},
             {path:'course-detail/:id',component:CourseDetail2Component},
             {path:'payment-success',component:PaymentSuccessComponent},
             {path:'payment-failed',component:PaymentFailedComponent},
