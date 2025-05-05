@@ -38,7 +38,7 @@ import { FormsModule } from '@angular/forms';
                             </select>
 
                         </div>
-                        <button (click)="save()" type="submit" class="bg-purple-700 text-white font-semibold rounded-md px-5 py-2.5 text-lg hover:bg-purple-800 focus:outline-none focus:ring-2 focus:ring-purple-600">Save</button>
+                        <button (click)="save()" type="submit" class="bg-blue-700 text-white font-semibold rounded-md px-5 py-2.5 text-lg hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-600">Save</button>
                     </form>
                 </div>
             </div>

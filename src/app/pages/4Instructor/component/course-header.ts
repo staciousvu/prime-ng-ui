@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
     selector: 'app-course-header',
@@ -17,15 +18,15 @@ import { RouterLink } from '@angular/router';
                     <i class="fas fa-arrow-left text-white text-xl"></i>
                     <span class="text-base">Back to courses</span>
                 </button>
-                <span class="ml-10 font-bold text-base">{{ courseName }}</span>
+                <span class="ml-10 font-bold text-base">{{ course.title }}</span>
                 <span [ngClass]="{
-                        'bg-gray-500 text-white': status === 'DRAFT',
-                        'bg-yellow-500 text-white': status === 'PENDING',
-                        'bg-green-500 text-white':status === 'ACCEPTED',
-                        'bg-red-500 text-white':status === 'REJECTED'
+                        'bg-gray-500 text-white': courseStatus === 'DRAFT',
+                        'bg-yellow-500 text-white': courseStatus === 'PENDING',
+                        'bg-green-500 text-white':courseStatus === 'ACCEPTED',
+                        'bg-red-500 text-white':courseStatus === 'REJECTED'
                     }"
                     class="ml-3 rounded px-2 py-[2px] text-xs font-semibold uppercase select-none">
-                {{status }}
+                {{courseStatus }}
                 </span>
 
             </div>
@@ -64,14 +65,22 @@ import { RouterLink } from '@angular/router';
     styles: ``
 })
 export class CourseHeaderComponent implements OnInit {
-    @Input() status:string='';
-    @Input() courseName: string = '';
+    @Input() courseId:number=0;
+    @Input() courseStatus='';
+    course:any;
     controls$!: Observable<HeaderControl[]>;
 
-    constructor(private headerService: HeaderControlService) {}
+    constructor(private headerService: HeaderControlService,
+        private http:HttpClient
+    ) {}
 
     ngOnInit(): void {
         this.controls$ = this.headerService.controls$;
+        this.http.get<any>(`http://localhost:8080/course/basicinfo/${this.courseId}`).subscribe(
+            (res)=>{
+                this.course=res.data
+            }
+        )
     }
 
     onSelectChange(control: HeaderControl, value: any) {

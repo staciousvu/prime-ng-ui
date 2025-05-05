@@ -2,14 +2,16 @@ import { Component, OnInit } from '@angular/core';
 
 import { ActivatedRoute, RouterLink, RouterModule, RouterOutlet } from '@angular/router';
 import { CourseHeaderComponent } from '../component/course-header';
-
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import Swal from 'sweetalert2';
 @Component({
     selector: 'app-edit-course-instructor-layout',
     standalone: true,
-    imports: [RouterModule, RouterOutlet, CourseHeaderComponent, RouterLink],
+    imports: [RouterModule, RouterOutlet, CourseHeaderComponent, RouterLink,CommonModule],
     template: `
         <!-- Top nav -->
-        <app-course-header [courseName]="courseName" [status]="status"/>
+        <app-course-header [courseId]="courseId" [courseStatus]="course.status"/>
 
         <main class="flex mx-auto py-10 px-6 sm:px-8 lg:px-10 max-w-[80%]" style="margin-top:0px;">
             <!-- Sidebar -->
@@ -71,7 +73,7 @@ import { CourseHeaderComponent } from '../component/course-header';
                         </li>
                     </ul>
                 </nav>
-                <button class="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md transition duration-200">Submit for Review</button>
+                <button (click)="submitForPreview()" *ngIf="course.status=='DRAFT'" class="w-full mt-5 bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-3 rounded-md transition duration-200">Submit for Review</button>
             </aside>
 
             <!-- Main content -->
@@ -79,6 +81,8 @@ import { CourseHeaderComponent } from '../component/course-header';
                 <router-outlet />
             </div>
         </main>
+        <!-- Modal -->
+
     `,
     styles: `
         .router-link-active {
@@ -88,17 +92,44 @@ import { CourseHeaderComponent } from '../component/course-header';
     `
 })
 export class EditCourseInstructorLayoutComponent implements OnInit {
+submitForPreview() {
+    Swal.fire({
+        title: 'Xác nhận?',
+        text: 'Bạn sẽ không thể thay đổi sau khi submit khóa học!',
+        icon: 'question',
+        showCancelButton: true,
+        cancelButtonText: 'Hủy',
+        confirmButtonText: 'Submit',
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33'
+      }).then((result) => {
+        if (result.isConfirmed) {
+        //   this.submitCourse();
+        this.http.post<any>(`http://localhost:8080/course/${this.courseId}/submit`,{}).subscribe(
+            (res)=>{
+                this.loadCourse();
+                Swal.fire('Đã đăng ký!', 'Bạn đã submit thành công.', 'success');
+            }
+        )
+        }
+      });
+}
     courseId: number = 0;
-    courseName:string='';
-    status:string='';
-    constructor(private activatedRoute: ActivatedRoute) {}
+    course:any;
+    constructor(private activatedRoute: ActivatedRoute,
+        private http:HttpClient
+    ) {}
     ngOnInit(): void {
         this.activatedRoute.paramMap.subscribe((params) => {
             this.courseId = +params.get('id')!;
         });
-        this.activatedRoute.queryParams.subscribe(params => {
-          this.courseName = params['courseName'];
-          this.status = params['status'];
-        });
+        this.loadCourse();
+    }
+    loadCourse(){
+        this.http.get<any>(`http://localhost:8080/course/basicinfo/${this.courseId}`).subscribe(
+            (res)=>{
+                this.course=res.data
+            }
+        )
     }
 }

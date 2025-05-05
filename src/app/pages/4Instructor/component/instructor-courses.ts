@@ -3,7 +3,8 @@ import { StarRatingComponent } from '../../4User/star-rating';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Route, Router, RouterLink } from '@angular/router';
+import { ToastService } from '../../service/toast.service';
 
 @Component({
     selector: 'app-instructor-courses',
@@ -24,7 +25,7 @@ import { RouterLink } from '@angular/router';
                         </button>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button class="bg-purple-600 text-white px-4 py-3 rounded">New course</button>
+                        <button (click)="openModal()" class="bg-purple-600 text-white px-4 py-3 rounded">New course</button>
                     </div>
                 </div>
                 <!-- Course List -->
@@ -66,21 +67,56 @@ import { RouterLink } from '@angular/router';
                                 {{ course.status }}
                             </span>
 
-                            <p class="text-gray-500">
+                            <p  class="text-gray-500">
                                 {{ course.subtitle }}
                             </p>
-                            <p class="text-gray-500 flex items-center space-x-2">
+                            <p *ngIf="course.status=='ACCEPTED'" class="text-gray-500 flex items-center space-x-2">
                                 <span>{{ course.avgRating | number: '1.0-1' }}</span>
                                 <app-star-rating [rating]="course.avgRating"></app-star-rating>
                                 <span>{{ course.countRating }} Reviews</span>
                             </p>
 
-                            <p class="text-gray-500">đ{{ course.price }}</p>
+                            <p *ngIf="course.status=='ACCEPTED'" class="text-gray-500">đ{{ course.price }}</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Overlay -->
+<div *ngIf="isOpen" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <!-- Modal box -->
+  <div class="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-semibold">Tạo khóa học mới</h2>
+      <button (click)="closeModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+    </div>
+
+    <!-- Form -->
+    <form (ngSubmit)="saveCourse()" #courseForm="ngForm">
+      <div class="mb-4">
+        <label for="title" class="block text-sm font-medium text-gray-700 mb-1">Tên khóa học</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          [(ngModel)]="courseTitle"
+          required
+          class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-purple-500"
+          placeholder="Nhập tên khóa học"
+        />
+      </div>
+
+      <div class="flex justify-end space-x-2">
+        <button type="button" (click)="closeModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
+          Hủy
+        </button>
+        <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+          Lưu
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
     `,
     styles: ``
 })
@@ -89,7 +125,10 @@ export class InstructorCoursesComponent implements OnInit {
     keyword: string = '';
     page: any = 0;
     size: any = 100;
-    constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient,
+        private toastService:ToastService,
+        private route:Router
+    ) {}
     ngOnInit(): void {
         this.load();
     }
@@ -103,4 +142,31 @@ export class InstructorCoursesComponent implements OnInit {
             this.courses = res.data.content;
         });
     }
+    isOpen = false;
+  courseTitle = '';
+
+  openModal() {
+    this.isOpen = true;
+  }
+
+  closeModal() {
+    this.isOpen = false;
+    this.courseTitle = '';
+  }
+
+  saveCourse() {
+    if (!this.courseTitle.trim()) {
+      alert('Vui lòng nhập tên khóa học');
+      return;
+    }
+    this.http.post<any>(`http://localhost:8080/course/draft?title=${this.courseTitle}`,{}).subscribe(
+        (res)=>{
+            this.toastService.addToast("success","Tạo khóa học mới thành công");
+            this.route.navigate(['/edit-course', res.data, 'landing-page']);
+        }
+    )
+    console.log('Đã lưu khóa học:', this.courseTitle);
+
+    this.closeModal();
+  }
 }

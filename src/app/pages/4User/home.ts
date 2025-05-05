@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, model, OnInit, ViewEncapsulation } from '@angular/core';
 import { NavBarComponent } from './component/navbar';
 import { ProductService } from '../service/product.service';
 import { ButtonModule } from 'primeng/button';
@@ -13,12 +13,13 @@ import { CategoryNavComponent } from './component/category-list';
 import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../service/auth.service';
 import { RouterLink } from '@angular/router';
+import { GalleriaModule } from 'primeng/galleria';
 
 @Component({
     selector: 'app-home',
     standalone: true,
     // encapsulation: ViewEncapsulation.None,
-    imports: [RouterLink,ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],
+    imports: [GalleriaModule,RouterLink,ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],
     template: `
         <app-category-list />
         <div class="welcome">
@@ -39,39 +40,15 @@ import { RouterLink } from '@angular/router';
         </div>
 
         <div class="banner">
-            <img src="https://unisallevirtual.lasalle.edu.co/pluginfile.php/4049002/course/overviewfiles/6aa96182-b121-4e69-9427-f6450794018b.png" alt="" />
+
+        <p-galleria [value]="images" [numVisible]="5" [circular]="true" [showItemNavigators]="true" [autoPlay]="true" [showThumbnails]="false" [responsiveOptions]="responsiveOptions" [containerStyle]="{ 'max-width': '100%' }">
+            <ng-template #item let-item>
+                <img [src]="item.itemImageSrc" style="width: 100%; height:350px;object-fit:cover; display: block;" />
+            </ng-template>
+        </p-galleria>
 
         </div>
-        <!-- let start -->
-        <!-- <div class="let-start">
-            <div class="p-link">
-                <span class="title1">Bắt đầu ngay thôi</span>
-                <a href="#" class="link">My learning</a>
-            </div>
-            <div class="past-video">
-                <div class="video-info">
-                    <img src="https://s1.ivolunteer.vn/wp-content/uploads/2024/12/bc275b4ebf1523090460fb6b1ac68747.png" alt="" />
-                    <div class="infomation">
-                        <p class="title">Angular - The completed Guid 2024</p>
-                        <p class="lecture-name">10. A new Starting Project & Analyzing The Project Structure</p>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <img src="https://s1.ivolunteer.vn/wp-content/uploads/2024/12/bc275b4ebf1523090460fb6b1ac68747.png" alt="" />
-                    <div class="infomation">
-                        <p class="title">Angular - The completed Guid 2024</p>
-                        <p class="lecture-name">10. A new Starting Project & Analyzing The Project Structure</p>
-                    </div>
-                </div>
-                <div class="video-info">
-                    <img src="https://s1.ivolunteer.vn/wp-content/uploads/2024/12/bc275b4ebf1523090460fb6b1ac68747.png" alt="" />
-                    <div class="infomation">
-                        <p class="title">Angular - The completed Guid 2024</p>
-                        <p class="lecture-name">10. A new Starting Project & Analyzing The Project Structure</p>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+
         <div class="what-will-you-learn" style="position: relative;">
             <app-product-carousel *ngIf="(courses_preference_root != null) && courses_preference_root.courses.length > 0" [title]="'Vì bạn đã chọn danh mục yêu thích'" [keyword]="courses_preference_root.categoryRoot" [courses]="courses_preference_root.courses"> </app-product-carousel>
             <app-product-carousel *ngIf="(courses_preference_topic != null) && (courses_preference_topic?.[0]?.courses?.length > 0)" [title]="'Vì bạn đã chọn chủ đề'" [keyword]="courses_preference_topic[0].categoryName" [courses]="courses_preference_topic[0].courses">
@@ -157,7 +134,7 @@ import { RouterLink } from '@angular/router';
         }
 
         .banner {
-            max-width: 75%;
+            max-width: 80%;
             margin: 0 auto;
             position: relative;
         }
@@ -314,4 +291,32 @@ export class HomeComponent implements OnInit {
             console.log('related-enrolled:'+this.courses_related_enrolled)
         });
     }
+    images: any[] = [
+        {
+          itemImageSrc: 'https://unisallevirtual.lasalle.edu.co/pluginfile.php/4049002/course/overviewfiles/6aa96182-b121-4e69-9427-f6450794018b.png',
+          alt: 'Image 1',
+          title: 'Title 1'
+        },
+        {
+          itemImageSrc: 'https://img-c.udemycdn.com/notices/web_carousel_slide/image/10ca89f6-811b-400e-983b-32c5cd76725a.jpg',
+          alt: 'Image 2',
+          title: 'Title 2'
+        },
+        {
+            itemImageSrc: 'https://img-c.udemycdn.com/notices/web_carousel_slide/image/e6cc1a30-2dec-4dc5-b0f2-c5b656909d5b.jpg',
+            alt: 'Image 3',
+            title: 'Title 3'
+          }
+      ];
+      
+    responsiveOptions: any[] = [
+        {
+            breakpoint: '1300px',
+            numVisible: 4
+        },
+        {
+            breakpoint: '575px',
+            numVisible: 1
+        }
+    ];
 }

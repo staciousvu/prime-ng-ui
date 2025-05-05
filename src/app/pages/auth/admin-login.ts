@@ -69,7 +69,7 @@ import { CommonModule } from '@angular/common';
     `
 })
 export class AdminLoginComponent {
-    email: string = 'vunguyenba310703@gmail.com';
+    email: string = 'vunguyen123@gmail.com';
     password: string = '12345678';
     errorMessage: string | null = null; // Thêm biến để lưu thông báo lỗi
   
@@ -90,6 +90,7 @@ export class AdminLoginComponent {
           if (response.success) {
             // Kiểm tra vai trò ADMIN
             if (response.data.roles.includes('ADMIN')) {
+              console.log('hello enter')
               this.router.navigate(['/admin']);
             } else {
               this.errorMessage = 'Tài khoản không có quyền truy cập trang Admin!';

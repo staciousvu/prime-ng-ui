@@ -11,6 +11,7 @@ export class AdminGuard implements CanActivate {
 
     canActivate(): boolean {
         if (!this.authService.isAdmin()) {
+            console.log('not adminnnnnnnnnnnnn')
             this.router.navigate(['/admin/login']);
             return false;
         }
