@@ -37,7 +37,7 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
                     <!-- Announcements -->
                     <li>
                         <div routerLink="/instructor/communications/announcements" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
-                            Announcements
+                            Notifications
                         </div>
                     </li>
                 </ul>

@@ -6,12 +6,15 @@ import { AppTopbar } from './app.topbar';
 import { AppSidebar } from './app.sidebar';
 import { AppFooter } from './app.footer';
 import { LayoutService } from '../service/layout.service';
+import { ToastContainerComponent } from '../../pages/SharedComponent/toast-container-components';
 
 @Component({
     selector: 'app-layout',
     standalone: true,
-    imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter],
-    template: `<div class="layout-wrapper" [ngClass]="containerClass">
+    imports: [CommonModule, AppTopbar, AppSidebar, RouterModule, AppFooter,ToastContainerComponent],
+    template: `
+    <app-toast-container></app-toast-container>
+    <div class="layout-wrapper" [ngClass]="containerClass">
         <app-topbar></app-topbar>
         <app-sidebar></app-sidebar>
         <div class="layout-main-container">

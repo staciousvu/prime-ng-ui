@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { CartService } from '../../service/cart.service';
 import { FormsModule } from '@angular/forms';
+import { NotificationService } from '../../service/notification.service';
 
 @Component({
     selector: 'app-navbar-home',
@@ -19,7 +20,21 @@ import { FormsModule } from '@angular/forms';
                         <a href="#">Edu<span>Flow</span></a>
                     </div>
                     <span class="explore">Explore</span>
-                    <input type="text" placeholder="Search course for you" class="search-box" (input)="onSearchInput()" [(ngModel)]="searchKeyword" (keydown.enter)="onSearch()" />
+                    <div class="flex-1 relative w-full">
+                        <input
+                            type="text"
+                            placeholder="Search courses for you..."
+                            [(ngModel)]="searchKeyword"
+                            (input)="onSearchInput()"
+                            (keydown.enter)="onSearch()"
+                            class=" w-full pl-10 pr-4 py-2 rounded-2xl bg-white shadow-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition duration-300"
+                        />
+                        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1110.5 3a7.5 7.5 0 016.15 13.65z" />
+                        </svg>
+                    </div>
+
+                    <!-- <input type="text" placeholder="Search course for you" class="search-box" (input)="onSearchInput()" [(ngModel)]="searchKeyword" (keydown.enter)="onSearch()" /> -->
                     <ul class="search-result" *ngIf="coursesInput.length > 0">
                         <li *ngFor="let course of coursesInput" [routerLink]="['/course-detail', course.id]" (click)="clearSuggestions()">
                             <img [src]="course.thumbnail" alt="Course image" class="course-image" />
@@ -32,7 +47,7 @@ import { FormsModule } from '@angular/forms';
                 </div>
                 <div class="navbar-right">
                     <ul class="nav-links" *ngIf="isLoggedIn">
-                        <li class="nav-link-item">Blog</li>
+                        <li (click)="blogClick()" class="nav-link-item">Blog</li>
                         <li class="nav-link-item" [routerLink]="['/instructor/courses']">Teacher</li>
                         <li [routerLink]="'/my-learning'" class="nav-link-item mylearning" style="position: relative;">
                             My learning
@@ -82,17 +97,27 @@ import { FormsModule } from '@angular/forms';
                             <i class="bi bi-bell"></i>
                             <span *ngIf="notifications.length > 0" class="badge">{{ notifications.length }}</span>
                             <div class="notification_dropdown" *ngIf="notifications.length > 0">
-                                <div class="notification_dropdown-header">
-                                    <p>Notification</p>
-                                </div>
-                                <ul class="notification_dropdown__list">
-                                    <li class="notification_dropdown__list-item" *ngFor="let item of notifications">
-                                        <img src="https://cdn1.iconfinder.com/data/icons/man-user-human-profile-avatar-business-person/100/09-1User_3-4-1024.png" alt="Admin" />
-                                        <a href="#">{{ item.message }}</a>
-                                    </li>
-                                </ul>
-                                <div class="mask">
-                                    <p (click)="maskAllAsRead()">Mask all as read</p>
+                                <div class="bg-white rounded-xl shadow-md w-full border border-gray-200">
+                                    <div class="px-4 py-3 border-b border-gray-200">
+                                        <p class="text-lg font-semibold text-gray-800">Notifications</p>
+                                    </div>
+                                    <ul class="max-h-96 overflow-y-auto divide-y divide-gray-100">
+                                        <li class="flex items-start gap-4 px-4 py-3 hover:bg-gray-50 transition" *ngFor="let item of notifications">
+                                            <div class="mr-3">
+                                                <img class="rounded-full w-10 h-10" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" />
+                                            </div>
+                                            <div class="font-semibold mr-3 flex-1">
+                                                <div class="truncate">{{ item.title || 'Notification Title' }}</div>
+                                                <div class="text-gray-600" style="font-size: 13px;font-weight:400">{{ item.message }}</div>
+                                            </div>
+                                            <div class="ml-auto text-right text-sm text-gray-500">
+                                                <div class="pt-1">3d</div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <div class="px-4 py-2 text-center border-t border-gray-200">
+                                        <button class="text-sm font-medium text-blue-600 hover:underline" (click)="maskAllAsRead()">Mark all as read</button>
+                                    </div>
                                 </div>
                             </div>
                         </li>
@@ -339,7 +364,7 @@ import { FormsModule } from '@angular/forms';
             position: absolute;
             top: 147%;
             right: 0;
-            width: 330px;
+            width: 400px;
             background-color: white;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -355,8 +380,8 @@ import { FormsModule } from '@angular/forms';
             padding-left: 0;
         }
         .notification_dropdown-header p {
-            font-size: 20px;
-            font-weight: 600;
+            // font-size: 20px;
+            // font-weight: 600;
             margin: 15px;
         }
         .notification:hover .notification_dropdown {
@@ -374,10 +399,10 @@ import { FormsModule } from '@angular/forms';
             align-items: center;
         }
 
-        .notification_dropdown__list-item a {
-            font-size: 20px;
-            font-weight: 500;
-        }
+        // .notification_dropdown__list-item a {
+        //     font-size: 20px;
+        //     font-weight: 500;
+        // }
 
         .notification_dropdown img {
             width: 40px;
@@ -385,11 +410,11 @@ import { FormsModule } from '@angular/forms';
             border-radius: 50%;
             margin-right: 10px;
         }
-        .notification_dropdown a {
-            font-size: 14px;
-            color: #333;
-            text-decoration: none;
-        }
+        // .notification_dropdown a {
+        //     font-size: 14px;
+        //     color: #333;
+        //     text-decoration: none;
+        // }
         .notification_dropdown a:hover {
             color: #007bff;
         }
@@ -716,28 +741,26 @@ import { FormsModule } from '@angular/forms';
     `
 })
 export class NavBarComponent implements OnInit {
+    blogClick() {
+        this.notificationService.addNotification('https://th.bing.com/th/id/OIP.CRJqLVAgLwQL-3KdP8Cz6AHaHa?rs=1&pid=ImgDetMain', 'Bảo trì', 'Hệ thông sẽ tiến hành bảo trì vào 23/05/2025, mong quý học sinh thông cảm ', 3000);
+    }
     currentPage = 0;
     pageSize = 8;
-    coursesInput:any[]=[]
+    coursesInput: any[] = [];
     onSearchInput() {
-    
-        if(this.searchKeyword.trim() != ''){
-            const params = new HttpParams().set('page', this.currentPage.toString()).set('size', this.pageSize.toString())
-            .set('keyword', this.searchKeyword.trim());
+        if (this.searchKeyword.trim() != '') {
+            const params = new HttpParams().set('page', this.currentPage.toString()).set('size', this.pageSize.toString()).set('keyword', this.searchKeyword.trim());
 
-            this.http.get<any>(`http://localhost:8080/course/search/basic`,{ params }).subscribe(
-                (response) => {
-                    this.coursesInput=response.data.content;
-                }
-            )
-        }else {
+            this.http.get<any>(`http://localhost:8080/course/search/basic`, { params }).subscribe((response) => {
+                this.coursesInput = response.data.content;
+            });
+        } else {
             this.coursesInput = [];
-          }
+        }
     }
     clearSuggestions() {
         this.coursesInput = [];
-      }
-      
+    }
 
     onSearch(): void {
         if (this.searchKeyword.trim()) {
@@ -772,7 +795,8 @@ export class NavBarComponent implements OnInit {
         private authService: AuthService,
         private router: Router,
         private http: HttpClient,
-        private cartService: CartService
+        private cartService: CartService,
+        private notificationService: NotificationService
     ) {}
     loadNotifications() {
         this.http.get<any>(`http://localhost:8080/notification/unread`).subscribe((response) => {
@@ -792,22 +816,22 @@ export class NavBarComponent implements OnInit {
         this.cartService.loadCart();
         this.loadNotifications();
         this.avatarUrl = this.authService.getAvatar();
-      
+
         this.http.get<any>(`http://localhost:8080/course/my-courses/learner?page=0&size=10`).subscribe((response) => {
-          this.mycourses = response.data.content;
+            this.mycourses = response.data.content;
         });
-      
+
         this.cartService.carts$.subscribe((carts) => {
-          this.mycarts = carts;
-          this.calculateTotalInCart();
+            this.mycarts = carts;
+            this.calculateTotalInCart();
         });
-      }
-      
+    }
+
     ngOnInit(): void {
         this.authService.getAuthStatus().subscribe((status) => {
             this.isLoggedIn = status;
             if (status) {
-                this.loadUserData()
+                this.loadUserData();
             }
         });
     }

@@ -18,6 +18,8 @@ import { ToastModule } from 'primeng/toast';
 import { MessageService } from 'primeng/api';
 import { ToastService } from '../service/toast.service';
 import { QuizVLComponent } from './video-learning/quiz';
+import { ToastContainerComponent } from '../SharedComponent/toast-container-components';
+import { OnlyNotificationContainerComponent } from '../SharedComponent/only-notification-container';
 
 @Component({
     selector: 'app-video-learning1',
@@ -25,7 +27,6 @@ import { QuizVLComponent } from './video-learning/quiz';
     encapsulation: ViewEncapsulation.None,
     imports: [
         QuizVLComponent,
-        ToastModule,
         TextareaModule,
         InputTextModule,
         ButtonModule,
@@ -38,9 +39,11 @@ import { QuizVLComponent } from './video-learning/quiz';
         TabsModule,
         OverviewVideoComponent,
         QAndAComponent,
-        RatingVideoComponent
-    ],
+        RatingVideoComponent,OnlyNotificationContainerComponent,ToastContainerComponent],
     template: `
+            
+    <app-only-notification-container/>
+    <app-toast-container></app-toast-container>
         <div class="app">
             <header class="header-top">
                 <div class="header-top-left">
@@ -53,6 +56,10 @@ import { QuizVLComponent } from './video-learning/quiz';
                     <button class="btn-rating" (click)="showReviewDialog()">
                         <i class="fa-solid fa-star btn-rating-icon" style="color: #ffffff;"></i>
                         <span class="btn-rating-title">Leave a rating</span>
+                    </button>
+                    <button class="btn-rating" (click)="showReportDialog()">
+                    <i class="fa-solid fa-flag" style="color: #ffffff;"></i>
+                        <span class="btn-rating-title">Report</span>
                     </button>
                     <button class="btn-progress">
                         <span class="btn-progress-title">Your progress</span>
@@ -170,7 +177,51 @@ import { QuizVLComponent } from './video-learning/quiz';
                 </div>
             </div>
         </div>
-        <p-toast></p-toast>
+        <!-- report -->
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" *ngIf="reportDialogVisible">
+  <!-- Modal content -->
+  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-6">
+      <h2 class="text-2xl font-bold">Báo cáo khóa học</h2>
+      <button (click)="reportDialogVisible = false" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+    </div>
+
+    <!-- Course Name (readonly) -->
+    <div class="mb-4">
+      <label class="block font-semibold mb-2 text-lg">Tên khóa học</label>
+      <input type="text" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-700" [value]="specialObject.courseName" disabled>
+    </div>
+
+    <!-- Reason Select -->
+    <div class="mb-4">
+      <label class="block font-semibold mb-2 text-lg">Lý do báo cáo</label>
+      <select [(ngModel)]="reportReason" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600">
+        <option value="" disabled selected>Chọn lý do</option>
+        <option *ngFor="let reason of reportReasons" [value]="reason">{{ reason }}</option>
+      </select>
+    </div>
+
+    <!-- Description -->
+    <div class="mb-4">
+      <label class="block font-semibold mb-2 text-lg">Mô tả chi tiết</label>
+      <textarea [(ngModel)]="reportDescription" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" placeholder="Nhập chi tiết lý do bạn muốn báo cáo..."></textarea>
+    </div>
+
+    <!-- Upload Image -->
+    <div class="mb-6">
+      <label class="block font-semibold mb-2 text-lg">Hình ảnh bằng chứng (nếu có)</label>
+      <input type="file" (change)="onImageSelected($event)" accept="image/*" class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
+    </div>
+
+    <!-- Buttons -->
+    <div class="flex justify-end gap-2">
+      <button (click)="reportDialogVisible = false" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Hủy</button>
+      <button (click)="submitReport()" class="px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700">Gửi báo cáo</button>
+    </div>
+  </div>
+</div>
+
         <!-- Modal -->
         <div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
             <div class="bg-white rounded-2xl p-6 w-[40%] shadow-xl overflow-auto">
@@ -499,7 +550,6 @@ import { QuizVLComponent } from './video-learning/quiz';
             box-sizing: border-box;
         }
     `,
-    providers: [MessageService]
 })
 export class VideoLearning1Component implements OnInit {
     quiz: any;
@@ -587,7 +637,6 @@ export class VideoLearning1Component implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private http: HttpClient,
-        private messageService: MessageService,
         private toastService: ToastService
     ) {}
 
@@ -686,4 +735,63 @@ export class VideoLearning1Component implements OnInit {
     hoverRating(rating: number) {
         this.hoveredRating = rating;
     }
+    showReportDialog() {
+        this.reportDialogVisible = true;
+    }
+    reportDialogVisible = false;
+
+selectedCourseName = 'Tên khóa học mẫu'; // để hiển thị readonly
+reportReason = '';
+reportDescription = '';
+reportImage: File | null = null;
+
+reportReasons: string[] = [
+  'Nội dung không phù hợp',
+  'Thông tin sai lệch',
+  'Vi phạm bản quyền',
+  'Hành vi lừa đảo',
+  'Khác'
+];
+
+onImageSelected(event: Event) {
+  const fileInput = event.target as HTMLInputElement;
+  if (fileInput.files && fileInput.files.length > 0) {
+    this.reportImage = fileInput.files[0];
+  }
+}
+
+submitReport() {
+  if (!this.courseId || !this.reportReason) {
+    alert('Vui lòng chọn lý do và đảm bảo có ID khóa học!');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('courseId', this.courseId.toString());
+  formData.append('reason', this.reportReason);
+  formData.append('description', this.reportDescription || '');
+  if (this.reportImage) {
+    formData.append('image', this.reportImage);
+  }
+
+  this.http.post('http://localhost:8080/report', formData).subscribe({
+    next: (res) => {
+    this.toastService.addToast('success', 'Báo cáo khóa học thành công');
+      this.resetReportForm();
+    },
+    error: (err) => {
+      console.error(err);
+      this.toastService.addToast('error', 'Báo cáo khóa học thất bại');
+    }
+  });
+}
+
+resetReportForm() {
+  this.reportReason = '';
+  this.reportDescription = '';
+  this.reportImage = null;
+  this.reportDialogVisible = false;
+}
+
+
 }

@@ -1,26 +1,16 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Product, ProductService } from '../service/product.service';
-import { Customer, CustomerService } from '../service/customer.service';
+import { Component } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
-import { CourseService } from '../service/course.service';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
-import { SpeedDial } from 'primeng/speeddial';
 import { ButtonModule } from 'primeng/button';
-import { Toolbar, ToolbarModule } from 'primeng/toolbar';
-import { InputGroup } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { IconField, IconFieldModule } from 'primeng/iconfield';
-import { InputIcon, InputIconModule } from 'primeng/inputicon';
-import { Select } from 'primeng/select';
-import { Router, RouterModule } from '@angular/router';
-import { Dialog, DialogModule } from 'primeng/dialog';
-import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { RouterModule } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CourseData } from '../service/data.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { BreadcrumpComponent } from './breadcrump';
@@ -29,15 +19,12 @@ import { CoursePendingComponent } from './course-pending';
 import { CourseAcceptComponent } from './accept-course';
 import { CourseRejectComponent } from "./reject-course";
 import { CourseDraftComponent } from './draft-courses';
-interface City {
-    name: string;
-    code: string;
-}
+
 @Component({
     selector: 'app-approve',
     standalone: true,
     imports: [
-        CourseDraftComponent,
+    CourseDraftComponent,
     CourseAcceptComponent,
     CoursePendingComponent,
     TabsModule,

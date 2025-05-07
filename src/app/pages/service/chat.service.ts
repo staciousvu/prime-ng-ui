@@ -70,6 +70,28 @@ export class ChatService {
       body: JSON.stringify(chatMessage),
     });
   }
+  sendNotification(title:string,message:string):void{
+    const notification={
+      title,
+      message
+    }
+    console.log("sendddddddd noti..........")
+    this.client.publish({
+      destination:'/app/notification.sendNotification',
+      body:JSON.stringify(notification)
+    })
+  }
+  subscribeToNotification(callback: (message: any) => void): void {
+    console.log('subcribe to notification enter....')
+    if (this.client.connected) {
+      console.log('subcribe to conversation enter....connected')
+      this.subscription = this.client.subscribe(`/topic/notification`, (message) => {
+        callback(JSON.parse(message.body));
+      });
+    }else{
+      console.log('cannot connect websocket')
+    }
+  }
 
   // Lấy danh sách hội thoại của student
   getConversationsForStudent(email: string): Observable<any> {

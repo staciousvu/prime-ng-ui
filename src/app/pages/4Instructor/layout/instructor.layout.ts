@@ -1,12 +1,16 @@
 import { Component } from '@angular/core';
 
 import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
+import { OnlyNotificationContainerComponent } from '../../SharedComponent/only-notification-container';
+import { ToastContainerComponent } from '../../SharedComponent/toast-container-components';
 
 @Component({
     selector: 'app-instructor-layout',
     standalone: true,
-    imports: [RouterOutlet,RouterLink,RouterModule],
-    template: `
+    imports: [RouterOutlet,RouterLink,RouterModule,OnlyNotificationContainerComponent,ToastContainerComponent],
+    template: `        
+        <app-only-notification-container/>
+        <app-toast-container></app-toast-container>
         <div class="relative h-screen">
             <!-- Sidebar -->
             <div

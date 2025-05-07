@@ -5,11 +5,16 @@ import { CourseHeaderComponent } from '../component/course-header';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import Swal from 'sweetalert2';
+import { OnlyNotificationContainerComponent } from '../../SharedComponent/only-notification-container';
+import { ToastContainerComponent } from '../../SharedComponent/toast-container-components';
 @Component({
     selector: 'app-edit-course-instructor-layout',
     standalone: true,
-    imports: [RouterModule, RouterOutlet, CourseHeaderComponent, RouterLink,CommonModule],
+    imports: [RouterModule, RouterOutlet, CourseHeaderComponent, RouterLink,CommonModule,OnlyNotificationContainerComponent,ToastContainerComponent],
     template: `
+                
+        <app-only-notification-container/>
+        <app-toast-container></app-toast-container>
         <!-- Top nav -->
         <app-course-header [courseId]="courseId" [courseStatus]="course.status"/>
 
