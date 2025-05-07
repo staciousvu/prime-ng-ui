@@ -20,6 +20,7 @@ import { ToastService } from '../service/toast.service';
 import { QuizVLComponent } from './video-learning/quiz';
 import { ToastContainerComponent } from '../SharedComponent/toast-container-components';
 import { OnlyNotificationContainerComponent } from '../SharedComponent/only-notification-container';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @Component({
     selector: 'app-video-learning1',
@@ -39,9 +40,8 @@ import { OnlyNotificationContainerComponent } from '../SharedComponent/only-noti
         TabsModule,
         OverviewVideoComponent,
         QAndAComponent,
-        RatingVideoComponent,OnlyNotificationContainerComponent,ToastContainerComponent],
+        RatingVideoComponent,OnlyNotificationContainerComponent,ToastContainerComponent,ProgressSpinnerModule],
     template: `
-            
     <app-only-notification-container/>
     <app-toast-container></app-toast-container>
         <div class="app">
@@ -217,7 +217,10 @@ import { OnlyNotificationContainerComponent } from '../SharedComponent/only-noti
     <!-- Buttons -->
     <div class="flex justify-end gap-2">
       <button (click)="reportDialogVisible = false" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Hủy</button>
-      <button (click)="submitReport()" class="px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700">Gửi báo cáo</button>
+      <button *ngIf="!isBooleanReport" (click)="submitReport()" class="px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700">
+        Gửi báo cáo
+    </button>
+    <p-progress-spinner class="p-4" *ngIf="isBooleanReport" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
     </div>
   </div>
 </div>
@@ -552,6 +555,7 @@ import { OnlyNotificationContainerComponent } from '../SharedComponent/only-noti
     `,
 })
 export class VideoLearning1Component implements OnInit {
+    isBooleanReport=false;
     quiz: any;
     currentQuestionIndex = 0;
     isModalOpen = false;
@@ -773,14 +777,17 @@ submitReport() {
   if (this.reportImage) {
     formData.append('image', this.reportImage);
   }
+  this.isBooleanReport=true;
 
   this.http.post('http://localhost:8080/report', formData).subscribe({
     next: (res) => {
+        this.isBooleanReport=false;
     this.toastService.addToast('success', 'Báo cáo khóa học thành công');
       this.resetReportForm();
     },
     error: (err) => {
       console.error(err);
+      this.isBooleanReport=false;
       this.toastService.addToast('error', 'Báo cáo khóa học thất bại');
     }
   });

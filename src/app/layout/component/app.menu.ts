@@ -45,6 +45,13 @@ export class AppMenu {
                 ]
             },
             {
+                label: 'Quản lý báo cáo & khiếu nại',
+                items: [
+                    { label: 'List reports', icon: 'pi pi-fw pi-flag', routerLink: ['/admin/report/list'] },
+
+                ]
+            },
+            {
                 label: 'Quản lý đánh giá',
                 items: [
                     { label: 'List reviews', icon: 'pi pi-fw pi-ticket', routerLink: ['/admin/reviews/list'] },

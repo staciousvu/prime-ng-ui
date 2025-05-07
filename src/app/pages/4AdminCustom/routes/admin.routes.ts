@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { Dashboard } from '../../dashboard/dashboard';
 import { OrderComponent } from '../order/order';
 import { SlideComponent } from '../slide/slide';
+import { ReportComponent } from '../report/report';
 
 export const AdminRoutes: Routes = [
     {
@@ -37,6 +38,10 @@ export const AdminRoutes: Routes = [
                 path: 'slide/list', 
                 component :SlideComponent
             },
+            { 
+                path: 'report/list', 
+                component :ReportComponent
+            }
         ]
     }
 ];
