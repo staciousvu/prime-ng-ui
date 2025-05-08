@@ -1,8 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Product, ProductService } from '../service/product.service';
-import { Customer, CustomerService } from '../service/customer.service';
+import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
@@ -10,17 +6,13 @@ import { CourseService } from '../service/course.service';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
-import { SpeedDial } from 'primeng/speeddial';
 import { ButtonModule } from 'primeng/button';
-import { Toolbar, ToolbarModule } from 'primeng/toolbar';
-import { InputGroup } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { IconField, IconFieldModule } from 'primeng/iconfield';
-import { InputIcon, InputIconModule } from 'primeng/inputicon';
-import { Select, SelectModule } from 'primeng/select';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
+import { SelectModule } from 'primeng/select';
 import { Router, RouterModule } from '@angular/router';
-import { Dialog, DialogModule } from 'primeng/dialog';
-import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CourseData } from '../service/data.service';
 import { InputTextModule } from 'primeng/inputtext';
 import { BreadcrumpComponent } from './breadcrump';
@@ -106,10 +98,16 @@ import { BreadcrumpComponent } from './breadcrump';
                     </td>
                     <td>{{ course.title }}</td>
                     <td>
-                        <div class="flex items-center gap-2">
-                            <img src="https://www.aceshowbiz.com/images/still/avatar09.jpg" width="50" style="vertical-align: middle" />
-                            <span class="font-bold ml-2">{{ course.authorName }}</span>
-                        </div>
+                    <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                                    <img *ngIf="course.authorAvatar" [src]="course.authorAvatar" alt="user avatar" class="object-cover w-full h-full" />
+                                    <div *ngIf="!course.authorAvatar" class="flex items-center justify-center w-full h-full text-gray-500">No Image</div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <div class="font-semibold text-gray-800">{{ course.authorName }}</div>
+                                    <a [href]="'mailto:' + course.authorEmail" class="text-blue-600 text-sm hover:underline">{{ course.authorEmail }}</a>
+                                </div>
+                            </div>
                     </td>
                     <td>{{ course.countEnrolled }}</td>
                     <td><p-rating [(ngModel)]="course.avgRating" [readonly]="true" /></td>

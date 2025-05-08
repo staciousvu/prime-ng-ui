@@ -25,6 +25,7 @@ import { CourseDraftComponent } from './draft-courses';
     standalone: true,
     imports: [
     CourseDraftComponent,
+    CourseRejectComponent, 
     CourseAcceptComponent,
     CoursePendingComponent,
     TabsModule,
@@ -41,13 +42,11 @@ import { CourseDraftComponent } from './draft-courses';
     BadgeModule,
     RatingModule,
     FormsModule,
-    TagModule,
-    CourseRejectComponent
+    TagModule
 ],
     template: `
         <app-breadcrump [apr]="'Approve course'" [manager]="'Manage course'"></app-breadcrump>
         <div class="font-semibold text-xl mb-4">Approve Course</div>
-        <div class="card">
             <p-tabs value="0">
                 <p-tablist>
                     <p-tab value="0">Chờ duyệt</p-tab>
@@ -70,7 +69,6 @@ import { CourseDraftComponent } from './draft-courses';
                     </p-tabpanel>
                 </p-tabpanels>
             </p-tabs>
-        </div>
     `,
     styles: [``],
     providers: [CourseData]

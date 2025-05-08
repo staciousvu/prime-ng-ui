@@ -70,6 +70,12 @@ export class AppMenu {
                 ]
             },
             {
+                label: 'Quản lý đơn hàng',
+                items: [
+                    { label: 'Đơn hàng', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/admin/order/list'] },
+                ]
+            },
+            {
                 label: 'Quản lý tài khoản',
                 items: [
                     { label: 'Admin', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-admin'] },
@@ -77,13 +83,7 @@ export class AppMenu {
                     { label: 'Learner', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-student'] }
                 ]
             },
-            {
-                label: 'Quản lý đơn hàng & thanh toán',
-                items: [
-                    { label: 'Đơn hàng', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/admin/order/list'] },
-                    { label: 'Giao dịch thanh toán', icon: 'pi pi-fw pi-credit-card', routerLink: ['/payments'] }
-                ]
-            },
+            
             
             {
                 label: 'Hệ thống',

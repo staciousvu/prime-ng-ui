@@ -48,11 +48,11 @@ import { BreadcrumpComponent } from "../breadcrump";
   </thead>
   <tbody>
     <tr *ngFor="let noti of notifications" class="hover:bg-gray-50 transition-all ease-in-out duration-300">
-      <td class="py-3 px-6 border-b text-sm text-gray-700">{{ noti.title }}</td>
-      <td class="py-3 px-6 border-b text-sm text-gray-700">{{ noti.message }}</td>
-      <td class="py-3 px-6 border-b text-sm text-gray-700">{{ noti.startTime | date:'dd/MM/yyyy HH:mm' }}</td>
-      <td class="py-3 px-6 border-b text-sm text-gray-700">{{ noti.endTime | date:'dd/MM/yyyy HH:mm' }}</td>
-      <td class="py-3 px-6 border-b text-sm text-gray-700 space-x-2">
+      <td class="py-3 px-6 border-b text-gray-700">{{ noti.title }}</td>
+      <td class="py-3 px-6 border-b text-gray-700">{{ noti.message }}</td>
+      <td class="py-3 px-6 border-b text-gray-700">{{ noti.startTime | date:'dd/MM/yyyy HH:mm' }}</td>
+      <td class="py-3 px-6 border-b text-gray-700">{{ noti.endTime | date:'dd/MM/yyyy HH:mm' }}</td>
+      <td class="py-3 px-6 border-b text-gray-700 space-x-2">
       <button class="bg-red-600 text-white hover:bg-red-700 hover:text-white font-semibold py-2 px-4 rounded-lg transition-all ease-in-out duration-300" (click)="deleteNotification(noti)">
   Xóa
 </button>

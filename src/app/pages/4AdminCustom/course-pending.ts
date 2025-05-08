@@ -1,8 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Product, ProductService } from '../service/product.service';
-import { Customer, CustomerService } from '../service/customer.service';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
@@ -10,208 +6,167 @@ import { CourseService } from '../service/course.service';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
-import { SpeedDial } from 'primeng/speeddial';
 import { ButtonModule } from 'primeng/button';
-import { Toolbar, ToolbarModule } from 'primeng/toolbar';
-import { InputGroup } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { IconField, IconFieldModule } from 'primeng/iconfield';
-import { InputIcon, InputIconModule } from 'primeng/inputicon';
-import { Select } from 'primeng/select';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterModule } from '@angular/router';
 import { Dialog, DialogModule } from 'primeng/dialog';
-import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CourseData } from '../service/data.service';
 import { InputTextModule } from 'primeng/inputtext';
-import { BreadcrumpComponent } from './breadcrump';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { ToastModule } from 'primeng/toast';
-interface City {
-    name: string;
-    code: string;
-}
+import { ImageModule } from 'primeng/image';
+import Swal from 'sweetalert2';
+import { ToastService } from '../service/toast.service';
+import { CourseReloadService } from '../service/course-reload.service';
 @Component({
     selector: 'app-course-pending',
     standalone: true,
-    imports: [ToastModule, RouterModule, Dialog, DialogModule, ConfirmDialogModule, InputTextModule, InputIconModule, IconFieldModule, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule],
+    imports: [ImageModule, ToastModule, RouterModule, Dialog, DialogModule, ConfirmDialogModule, InputTextModule, InputIconModule, IconFieldModule, ButtonModule, TableModule, CommonModule, BadgeModule, RatingModule, FormsModule, TagModule],
     template: `
-        <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-800 p-4 rounded-lg shadow-md mb-4">
-            <p class="font-bold text-xl flex items-center">
-                <svg class="w-6 h-6 mr-2 text-yellow-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M13 16h-1v-4h-1m1-4h.01M12 22a10 10 0 100-20 10 10 0 000 20z" />
-                </svg>
-                Có {{ totalRecords }} khóa học mới đang chờ phê duyệt
-            </p>
+        <div class="flex justify-end mb-4">
+            <div class="relative">
+                <input (input)="loadCourses()"  type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm khóa học..." class="border border-gray-400 rounded-md px-3 py-2 text-base w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
+                <button (click)="loadCourses()" class="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <style>
-            .search-input {
-                width: 100%;
-                max-width: 300px;
-                padding: 0.5rem;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                transition: border-color 0.3s ease;
-            }
 
-            .search-input:focus {
-                border-color: #007bff;
-                outline: none;
-            }
-        </style>
+        <div class="overflow-x-auto w-full">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                <thead class="bg-gray-100 text-gray-700 text-left">
+                    <tr>
+                        <th class="p-3">ID</th>
+                        <th class="p-3">Hình ảnh</th>
+                        <th class="p-3">Tiêu đề</th>
+                        <th class="p-3">Tác giả</th>
+                        <th class="p-3">Giá</th>
+                        <th class="p-3">Trình độ</th>
+                        <th class="p-3 min-w-[250px]">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let course of courses" class="border-t hover:bg-gray-50">
+                        <td class="p-3">{{ course.id }}</td>
 
-        <p-table [value]="courses" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '70rem' }" [rowsPerPageOptions]="[10, 15, 20]" [(selection)]="selectedCourses" [scrollable]="true">
-            <ng-template #header>
-                <tr>
-                    <th style="min-width: 10rem">Hình ảnh</th>
-                    <th style="min-width: 10rem">Tiêu đề</th>
-                    <th style="min-width: 8rem">Tác giả</th>
-                    <th>Giá</th>
-                    <th>Thời lượng</th>
-                    <th>Trình độ</th>
-                    <th>Trạng thái</th>
-                    <th style="min-width: 8rem">Phê duyệt</th>
-                    <th style="min-width: 6rem">Thao tác</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-course>
-                <tr>
-                    <td>
-                        <img [src]="course.thumbnail" alt="thumbnail" class="w-50 rounded" />
-                    </td>
-                    <td>{{ course.title }}</td>
-                    <td>
-                        <div class="flex items-center gap-2">
-                            <!-- <img [src]="course.authorAvatar" width="50" style="vertical-align: middle"/> -->
-                            <span class="font-bold ml-2">{{ course.authorName }}</span>
-                        </div>
-                    </td>
-                    <td>{{ course.price | currency: 'USD' }}</td>
-                    <td>{{ course.duration }} giờ</td>
-                    <!-- <td>{{ course.language }}</td> -->
-                    <td>
-                        <p-tag [value]="course.level" [severity]="getSeverity(course.level)" />
-                    </td>
-                    <td>
-                        <p-tag [value]="'PENDING'" [severity]="'warn'" />
-                    </td>
-                    <td>
-                        <p-button icon="pi pi-check" class="mr-2" [rounded]="true" [outlined]="true" (click)="openConfirmation(course.id)" />
-                        <p-button icon="pi pi-times-circle" severity="danger" [rounded]="true" [outlined]="true" (click)="openReject(course.id)" />
-                    </td>
-                    <td>
-                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" (click)="view(course.id)" />
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-        <p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
-            <div class="flex items-center justify-center">
-                <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
-                <span>Bạn có chắc muốn phê duyệt khóa học này?</span>
-            </div>
-            <ng-template #footer>
-                <p-button label="Không" icon="pi pi-times" (click)="closeConfirmation()" text severity="secondary" />
-                <p-button label="Có" icon="pi pi-check" (click)="confirmApproval()" severity="danger" outlined autofocus />
-            </ng-template>
-        </p-dialog>
+                        <td class="p-3">
+                            <p-image *ngIf="course.thumbnail" [src]="course.thumbnail" [preview]="true" alt="Image" styleClass="w-24 h-16 object-cover">
+                                <ng-template #indicator><i class="pi pi-search"></i></ng-template>
+                                <ng-template #image><img [src]="course.thumbnail" alt="image" width="250" /></ng-template>
+                                <ng-template #preview let-style="style" let-previewCallback="previewCallback">
+                                    <img [src]="course.thumbnail" alt="image" [style]="style" (click)="previewCallback()" />
+                                </ng-template>
+                            </p-image>
+                        </td>
 
-        <p-dialog header="Reject" [(visible)]="displayReject" [style]="{ width: '350px' }" [modal]="true">
-            <div class="flex items-center justify-center">
-                <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
-                <span>Bạn có chắc muốn từ chối khóa học?</span>
-            </div>
-            <ng-template #footer>
-                <p-button label="Không" icon="pi pi-times" (click)="closeReject()" text severity="secondary" />
-                <p-button label="Có" icon="pi pi-check" (click)="confirmReject()" severity="danger" outlined autofocus />
-            </ng-template>
-        </p-dialog>
+                        <td class="p-3">
+                            <div>{{ course.title }}</div>
+                        </td>
+                        <td class="p-3">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                                    <img *ngIf="course.authorAvatar" [src]="course.authorAvatar" alt="user avatar" class="object-cover w-full h-full" />
+                                    <div *ngIf="!course.authorAvatar" class="flex items-center justify-center w-full h-full text-gray-500">No Image</div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <div class="font-semibold text-gray-800">{{ course.authorName }}</div>
+                                    <a [href]="'mailto:' + course.authorEmail" class="text-blue-600 text-sm hover:underline">{{ course.authorEmail }}</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-3">{{ course.price | number: '1.0-0' }} VND</td>
+
+                        <td class="p-3">
+                            <p-tag [value]="course.level" [severity]="getSeverity(course.level)" />
+                        </td>
+
+                        <td class="p-3 space-x-2">
+                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">Xem</button>
+                            <button class="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700" (click)="confirmApproval(course.id)">Phê duyệt</button>
+                            <button class="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700" (click)="confirmReject(course.id)">Từ chối</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
 
         <!-- dialog -->
-        <p-toast></p-toast>
     `,
     styles: `
-        .p-toast {
-            @apply w-96; /* width 24rem */
-        }
 
-        .p-toast-message {
-            @apply text-base p-4 rounded-xl;
-        }
     `,
-    providers: [CourseService, CourseData, MessageService]
 })
 export class CoursePendingComponent implements OnInit {
-    totalRecords: number = 0;
-    courses: any[] = [];
-    selectedCourses!: any;
-    visible: boolean = false;
-    displayConfirmation: boolean = false;
-    displayReject: boolean = false;
+    courses: any[] = [];    
+    confirmApproval(id:number) {
+        Swal.fire({
+                title: 'Xác nhận?',
+                text: 'Bạn sẽ không thể thay đổi sau khi phê duyệt khóa học!',
+                icon: 'question',
+                showCancelButton: true,
+                cancelButtonText: 'Hủy',
+                confirmButtonText: 'Duyệt',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                this.http.put<any>(`http://localhost:8080/course/${id}/accept`, {}).subscribe((res) => {
+                    this.courseReloadService.sendReload('accept');
+                    this.loadCourses();
+                    this.toastService.addToast("success","Phê duyệt khóa học thành công")
+                });
+                }
+              });
+    }
 
-    selectedCourseId: number | null = null;
-    closeConfirmation() {
-        this.displayConfirmation = false;
-        this.cdr.detectChanges();
-    }
-    closeReject() {
-        this.displayReject = false;
-        this.cdr.detectChanges();
-    }
-    confirmApproval() {
-        if (this.selectedCourseId) {
-            this.http.put<any>(`http://localhost:8080/course/${this.selectedCourseId}/accept`, {}).subscribe((res) => {
-                this.displayConfirmation = false;
-                this.courses = this.courses.filter((course) => course.id !== this.selectedCourseId);
-                this.totalRecords = this.courses.length;
-                this.showAccept();
-                this.cdr.detectChanges();
+    confirmReject(id:number) {
+        Swal.fire({
+            title: 'Xác nhận?',
+            text: 'Bạn sẽ không thể thay đổi sau khi từ chối khóa học!',
+            icon: 'question',
+            showCancelButton: true,
+            cancelButtonText: 'Hủy',
+            confirmButtonText: 'Từ chối',
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33'
+          }).then((result) => {
+            if (result.isConfirmed) {
+                this.http.put<any>(`http://localhost:8080/course/${id}/reject`, {}).subscribe((res) => {
+                this.courseReloadService.sendReload('reject');
+                this.loadCourses();
+                this.toastService.addToast("success","Từ chối khóa học thành công")
             });
-        }
+            }
+          });
     }
 
-    confirmReject() {
-        if (this.selectedCourseId) {
-            this.http.put<any>(`http://localhost:8080/course/${this.selectedCourseId}/reject`, {}).subscribe((res) => {
-                this.displayReject = false;
-                this.courses = this.courses.filter((course) => course.id !== this.selectedCourseId);
-                this.totalRecords = this.courses.length;
-                this.showReject();
-                this.cdr.detectChanges();
-            });
-        }
-    }
-
-    openConfirmation(courseId: number) {
-        this.selectedCourseId = courseId;
-        this.displayConfirmation = true;
-        this.cdr.detectChanges();
-    }
-
-    openReject(courseId: number) {
-        this.selectedCourseId = courseId;
-        this.displayReject = true;
-        this.cdr.detectChanges();
-    }
-    showDialog() {
-        this.visible = true;
-        this.cdr.detectChanges();
-    }
     constructor(
-        private courseService: CourseService,
         private router: Router,
         private http: HttpClient,
-        private cdr: ChangeDetectorRef,
-        private messageService: MessageService
+        private toastService:ToastService,
+        private courseReloadService:CourseReloadService
     ) {}
+    page: number = 0;
+    size: number = 10;
+    keyword: string = '';
 
     ngOnInit() {
-        this.courseService.getPendingCourses().subscribe((response) => {
-            this.courses = response.data;
-            this.totalRecords = this.courses.length;
+        this.loadCourses();
+    }
+    loadCourses() {
+        const params = new HttpParams().set('page', this.page.toString()).set('size', this.size.toString()).set('keyword', this.keyword);
+        console.log(params)
+        this.http.get<any>(`http://localhost:8080/course/pending-courses`, { params }).subscribe((response) => {
+            this.courses = response.data.content;
             console.log(this.courses);
         });
     }
+
     getSeverity(status: string) {
         switch (status) {
             case 'BEGINNER':
@@ -226,11 +181,5 @@ export class CoursePendingComponent implements OnInit {
     }
     view(id: string) {
         this.router.navigate(['/admin/courses/view-course', id]);
-    }
-    showAccept() {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Đã phê duyệt!' });
-    }
-    showReject() {
-        this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Đã từ chối!' });
     }
 }

@@ -1,8 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Product, ProductService } from '../service/product.service';
-import { Customer, CustomerService } from '../service/customer.service';
+import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
@@ -10,24 +6,18 @@ import { CourseService } from '../service/course.service';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
-import { SpeedDial } from 'primeng/speeddial';
 import { ButtonModule } from 'primeng/button';
-import { Toolbar, ToolbarModule } from 'primeng/toolbar';
-import { InputGroup } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { IconField, IconFieldModule } from 'primeng/iconfield';
-import { InputIcon, InputIconModule } from 'primeng/inputicon';
-import { Select } from 'primeng/select';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterModule } from '@angular/router';
 import { Dialog, DialogModule } from 'primeng/dialog';
-import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CourseData } from '../service/data.service';
 import { InputTextModule } from 'primeng/inputtext';
-import { BreadcrumpComponent } from './breadcrump';
-interface City {
-    name: string;
-    code: string;
-}
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { ImageModule } from 'primeng/image';
+import { CourseReloadService } from '../service/course-reload.service';
+
 @Component({
     selector: 'app-course-accept',
     standalone: true,
@@ -45,138 +35,112 @@ interface City {
     BadgeModule,
     RatingModule,
     FormsModule,
-    TagModule
+    TagModule,
+    ImageModule
 ],
     template: `
-        <div class="bg-green-100 border-l-4 border-green-500 text-green-800 p-4 rounded-lg shadow-md mb-4">
-            <p class="font-bold text-xl flex items-center">
-                <svg class="w-6 h-6 mr-2 text-green-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-                Có {{totalRecords}} khóa học đã phê duyệt
-            </p>
+        <div class="flex justify-end mb-4">
+            <div class="relative">
+                <input (input)="loadCourses()"  type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm khóa học..." class="border border-gray-400 rounded-md px-3 py-2 text-base w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
+                <button (click)="loadCourses()" class="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </button>
+            </div>
         </div>
-        <style>
-            .search-input {
-                width: 100%;
-                max-width: 300px;
-                padding: 0.5rem;
-                border: 1px solid #ccc;
-                border-radius: 4px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                transition: border-color 0.3s ease;
-            }
 
-            .search-input:focus {
-                border-color: #007bff;
-                outline: none;
-            }
-        </style>
-        <p-table [value]="courses" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '70rem' }" [rowsPerPageOptions]="[10, 15, 20]" [(selection)]="selectedCourses" [scrollable]="true">
-            <ng-template #header>
-                <tr>
-                    <th style="min-width: 10rem">Hình ảnh</th>
-                    <th style="min-width: 10rem">Tiêu đề</th>
-                    <th style="min-width: 14rem">Tác giả</th>
-                    <th>Giá</th>
-                    <th>Thời lượng</th>
-                    <!-- <th style="min-width: 10rem">Ngôn ngữ</th> -->
-                    <th>Trình độ</th>
-                    <th>Trạng thái</th>
-                    <th style="min-width: 10rem">Thao tác</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-course>
-                <tr>
-                    <td>
-                        <img [src]="course.thumbnail" alt="thumbnail" class="w-50 rounded" />
-                    </td>
-                    <td>{{ course.title }}</td>
-                    <td>
-                        <div class="flex items-center gap-2">
-                            <!-- <img [src]="course.authorAvatar" width="50" style="vertical-align: middle"/> -->
-                            <img src="https://www.aceshowbiz.com/images/still/avatar09.jpg" width="50" style="vertical-align: middle" />
-                            <span class="font-bold ml-2">{{ course.authorName }}</span>
-                        </div>
-                    </td>
-                    <td>{{ course.price | currency: 'USD' }}</td>
-                    <td>{{ course.duration }} giờ</td>
-                    <!-- <td>{{ course.language }}</td> -->
-                    <td>
-                        <p-tag [value]="course.level" [severity]="getSeverity(course.level)" />
-                    </td>
-                    <td>
-                        <p-tag [value]="'ACCEPT'" [severity]="'success'" />
-                    </td>
-                    <td>
-                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" (click)="view(course.id)"/>
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
-        <!-- dialog -->
-        <p-dialog header="Confirmation" [(visible)]="displayConfirmation" [style]="{ width: '350px' }" [modal]="true">
-            <div class="flex items-center justify-center">
-                <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
-                <span>Are you sure you want to proceed?</span>
-            </div>
-            <ng-template #footer>
-                <p-button label="No" icon="pi pi-times" (click)="closeConfirmation()" text severity="secondary" />
-                <p-button label="Yes" icon="pi pi-check" (click)="closeConfirmation()" severity="danger" outlined autofocus />
-            </ng-template>
-        </p-dialog>
-        <p-dialog header="Confirmation" [(visible)]="displayReject" [style]="{ width: '350px' }" [modal]="true">
-            <div class="flex items-center justify-center">
-                <i class="pi pi-exclamation-triangle mr-4" style="font-size: 2rem"> </i>
-                <span>Are you sure you want to proceed?</span>
-            </div>
-            <ng-template #footer>
-                <p-button label="No" icon="pi pi-times" (click)="closeReject()" text severity="secondary" />
-                <p-button label="Yes" icon="pi pi-check" (click)="closeReject()" severity="danger" outlined autofocus />
-            </ng-template>
-        </p-dialog>
+        <div class="overflow-x-auto w-full">
+            <table class="min-w-full bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm">
+                <thead class="bg-gray-100 text-gray-700 text-left">
+                    <tr>
+                        <th class="p-3">ID</th>
+                        <th class="p-3">Hình ảnh</th>
+                        <th class="p-3">Tiêu đề</th>
+                        <th class="p-3">Tác giả</th>
+                        <th class="p-3">Giá</th>
+                        <th class="p-3">Trình độ</th>
+                        <th class="p-3 min-w-[100px]">Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let course of courses" class="border-t hover:bg-gray-50">
+                        <td class="p-3">{{ course.id }}</td>
+
+                        <td class="p-3">
+                            <p-image *ngIf="course.thumbnail" [src]="course.thumbnail" [preview]="true" alt="Image" styleClass="w-24 h-16 object-cover">
+                                <ng-template #indicator><i class="pi pi-search"></i></ng-template>
+                                <ng-template #image><img [src]="course.thumbnail" alt="image" width="250" /></ng-template>
+                                <ng-template #preview let-style="style" let-previewCallback="previewCallback">
+                                    <img [src]="course.thumbnail" alt="image" [style]="style" (click)="previewCallback()" />
+                                </ng-template>
+                            </p-image>
+                        </td>
+
+                        <td class="p-3">
+                            <div>{{ course.title }}</div>
+                        </td>
+                        <td class="p-3">
+                            <div class="flex items-center space-x-4">
+                                <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                                    <img *ngIf="course.authorAvatar" [src]="course.authorAvatar" alt="user avatar" class="object-cover w-full h-full" />
+                                    <div *ngIf="!course.authorAvatar" class="flex items-center justify-center w-full h-full text-gray-500">No Image</div>
+                                </div>
+                                <div class="flex flex-col">
+                                    <div class="font-semibold text-gray-800">{{ course.authorName }}</div>
+                                    <a [href]="'mailto:' + course.authorEmail" class="text-blue-600 text-sm hover:underline">{{ course.authorEmail }}</a>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="p-3">{{ course.price | number: '1.0-0' }} VND</td>
+
+                        <td class="p-3">
+                            <p-tag [value]="course.level" [severity]="getSeverity(course.level)" />
+                        </td>
+
+                        <td class="p-3 space-x-2">
+                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">Xem</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
         
     `,
     styles: ``,
-    providers: [CourseService, CourseData]
 })
 export class CourseAcceptComponent implements OnInit {
   totalRecords:number=0;
   courses: any[]=[];
   selectedCourses!: any;
-  visible: boolean = false;
-  displayConfirmation: boolean = false;
-  displayReject: boolean = false;
-  closeConfirmation() {
-      this.displayConfirmation = false;
-  }
-  closeReject() {
-      this.displayReject = false;
-  }
-  openConfirmation() {
-      this.displayConfirmation = true;
-  }
-  openReject() {
-      this.displayReject = true;
-  }
-  showDialog() {
-      this.visible = true;
-  }
-  constructor(
-      private courseService: CourseService,
-      private router: Router
-  ) {}
+  
+    constructor(
+        private router: Router,
+        private http:HttpClient,
+        private courseReloadService:CourseReloadService
+    ) {}
 
-  ngOnInit() {
-      this.courseService.getAcceptCourses().subscribe(
-          (response) => {
-              this.courses = response.data;
-              this.totalRecords=this.courses.length;
-              console.log('total:'+this.totalRecords)
-              console.log(this.courses)
+    page: number = 0;
+    size: number = 10;
+    keyword: string = '';
+
+    ngOnInit() {
+        this.courseReloadService.onReload().subscribe((source) => {
+            if (source === 'accept') {
+              this.loadCourses();
             }
-      );
-  }
+          });
+        this.loadCourses();
+    }
+    loadCourses() {
+        const params = new HttpParams().set('page', this.page.toString()).set('size', this.size.toString()).set('keyword', this.keyword);
+        console.log(params)
+        this.http.get<any>(`http://localhost:8080/course/accept-courses`, { params }).subscribe((response) => {
+            this.courses = response.data.content;
+            console.log(this.courses);
+        });
+    }
 
   getSeverity(status: string) {
       switch (status) {
