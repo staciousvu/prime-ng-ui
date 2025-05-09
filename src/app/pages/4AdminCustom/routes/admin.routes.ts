@@ -4,6 +4,8 @@ import { Dashboard } from '../../dashboard/dashboard';
 import { OrderComponent } from '../order/order';
 import { SlideComponent } from '../slide/slide';
 import { ReportComponent } from '../report/report';
+import { PostComponent } from '../post/post-list';
+import { PostAddComponent } from '../post/post-add';
 
 export const AdminRoutes: Routes = [
     {
@@ -41,6 +43,12 @@ export const AdminRoutes: Routes = [
             { 
                 path: 'report/list', 
                 component :ReportComponent
+            },
+            { 
+                path: 'post', children:[
+                    { path: 'list', component: PostComponent },
+                    { path: 'add', component: PostAddComponent },
+                ]
             }
         ]
     }

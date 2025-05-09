@@ -43,18 +43,31 @@ import { BreadcrumpComponent } from './breadcrump';
 
         <div class="font-semibold text-xl mb-4">Label Course</div>
         <div class="flex gap-4 mb-4">
-            <!-- Dropdown sắp xếp theo thời gian tạo -->
-            <p-select [options]="sortDirections"[(ngModel)]="selectedSortDirections.createdAt" (ngModelChange)="performSearch()" placeholder="Sort by Created At" class="w-56" />
+            <!-- Label và Dropdown sắp xếp theo thời gian tạo -->
+            <div class="flex flex-col">
+                <label for="sort-createdAt" class="mb-1">Thời gian tạo</label>
+                <p-select id="sort-createdAt" [options]="sortDirections" [(ngModel)]="selectedSortDirections.createdAt" (ngModelChange)="performSearch()" placeholder="Sort by Created At" class="w-56" />
+            </div>
 
-            <!-- Dropdown sắp xếp theo số lượng đánh giá -->
-            <p-select [options]="sortDirections" [(ngModel)]="selectedSortDirections.countRating" (ngModelChange)="performSearch()" placeholder="Sort by Count Rating" class="w-56" />
+            <!-- Label và Dropdown sắp xếp theo số lượng đánh giá -->
+            <div class="flex flex-col">
+                <label for="sort-countRating" class="mb-1">Số lượng đánh giá</label>
+                <p-select id="sort-countRating" [options]="sortDirections" [(ngModel)]="selectedSortDirections.countRating" (ngModelChange)="performSearch()" placeholder="Sort by Count Rating" class="w-56" />
+            </div>
 
-            <!-- Dropdown sắp xếp theo điểm trung bình -->
-            <p-select [options]="sortDirections" [(ngModel)]="selectedSortDirections.avgRating" (ngModelChange)="performSearch()" placeholder="Sort by Avg Rating" class="w-56" />
+            <!-- Label và Dropdown sắp xếp theo điểm trung bình -->
+            <div class="flex flex-col">
+                <label for="sort-avgRating" class="mb-1">Điểm trung bình</label>
+                <p-select id="sort-avgRating" [options]="sortDirections" [(ngModel)]="selectedSortDirections.avgRating" (ngModelChange)="performSearch()" placeholder="Sort by Avg Rating" class="w-56" />
+            </div>
 
-            <!-- Dropdown sắp xếp theo số người đăng ký -->
-            <p-select [options]="sortDirections" [(ngModel)]="selectedSortDirections.countEnrolled" (ngModelChange)="performSearch()" placeholder="Sort by Count Enrolled" class="w-56" />
+            <!-- Label và Dropdown sắp xếp theo số người đăng ký -->
+            <div class="flex flex-col">
+                <label for="sort-countEnrolled" class="mb-1">Số người đăng ký</label>
+                <p-select id="sort-countEnrolled" [options]="sortDirections" [(ngModel)]="selectedSortDirections.countEnrolled" (ngModelChange)="performSearch()" placeholder="Sort by Count Enrolled" class="w-56" />
+            </div>
         </div>
+
         <div class="flex justify-between items-center mb-4">
             <div class="flex items-center space-x-2 ml-auto">
                 <p-button icon="pi pi-refresh" label="Reload" severity="warn" (click)="refresh()" />
@@ -63,11 +76,11 @@ import { BreadcrumpComponent } from './breadcrump';
         </div>
         <!-- Thêm 4 nút chức năng -->
         <div class="flex mb-3 items-center gap-2">
-        <div class="flex items-center space-x-2 ml-auto">
-        <p-button label="Gán nhãn Bestseller" icon="pi pi-star" severity="success" (click)="setLabel('BESTSELLER')"/>
-    <p-button label="Gán nhãn High Rating" icon="pi pi-thumbs-up" severity="info" (click)="setLabel('HIGHRATING')"/>
-    <p-button label="Gán nhãn Trending" icon="pi pi-chart-line" severity="primary" (click)="setLabel('TRENDING')"/>
-    <p-button label="Bỏ nhãn" icon="pi pi-times" severity="danger" (click)="setLabel('NONE')"/>
+            <div class="flex items-center space-x-2 ml-auto">
+                <p-button label="Gán nhãn Bestseller" icon="pi pi-star" severity="success" (click)="setLabel('BESTSELLER')" />
+                <p-button label="Gán nhãn High Rating" icon="pi pi-thumbs-up" severity="info" (click)="setLabel('HIGHRATING')" />
+                <p-button label="Gán nhãn Trending" icon="pi pi-chart-line" severity="primary" (click)="setLabel('TRENDING')" />
+                <p-button label="Bỏ nhãn" icon="pi pi-times" severity="danger" (click)="setLabel('NONE')" />
             </div>
         </div>
 
@@ -98,16 +111,16 @@ import { BreadcrumpComponent } from './breadcrump';
                     </td>
                     <td>{{ course.title }}</td>
                     <td>
-                    <div class="flex items-center space-x-4">
-                                <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
-                                    <img *ngIf="course.authorAvatar" [src]="course.authorAvatar" alt="user avatar" class="object-cover w-full h-full" />
-                                    <div *ngIf="!course.authorAvatar" class="flex items-center justify-center w-full h-full text-gray-500">No Image</div>
-                                </div>
-                                <div class="flex flex-col">
-                                    <div class="font-semibold text-gray-800">{{ course.authorName }}</div>
-                                    <a [href]="'mailto:' + course.authorEmail" class="text-blue-600 text-sm hover:underline">{{ course.authorEmail }}</a>
-                                </div>
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-gray-200 rounded-full overflow-hidden">
+                                <img *ngIf="course.authorAvatar" [src]="course.authorAvatar" alt="user avatar" class="object-cover w-full h-full" />
+                                <div *ngIf="!course.authorAvatar" class="flex items-center justify-center w-full h-full text-gray-500">No Image</div>
                             </div>
+                            <div class="flex flex-col">
+                                <div class="font-semibold text-gray-800">{{ course.authorName }}</div>
+                                <a [href]="'mailto:' + course.authorEmail" class="text-blue-600 text-sm hover:underline">{{ course.authorEmail }}</a>
+                            </div>
+                        </div>
                     </td>
                     <td>{{ course.countEnrolled }}</td>
                     <td><p-rating [(ngModel)]="course.avgRating" [readonly]="true" /></td>
@@ -133,8 +146,8 @@ export class CourseLabelComponent implements OnInit {
 
     // Danh sách hướng sắp xếp
     sortDirections = [
-        { label: 'Ascending', value: 'asc' },
-        { label: 'Descending', value: 'desc' }
+        { label: 'Tăng dần', value: 'asc' },
+        { label: 'Giảm dần', value: 'desc' }
     ];
 
     // Chứa hướng sắp xếp của từng tiêu chí
@@ -199,28 +212,26 @@ export class CourseLabelComponent implements OnInit {
         }
     }
     setLabel(label: string) {
-        console.log(this.selectedCourses)
+        console.log(this.selectedCourses);
         if (this.selectedCourses.length > 0) {
-            const labelRequest = { ids: this.selectedCourses.map(course => course.id) };
-    
+            const labelRequest = { ids: this.selectedCourses.map((course) => course.id) };
+
             this.courseService.addLabel(label, labelRequest).subscribe({
                 next: () => {
                     // Cập nhật lại UI sau khi API thành công
-                    this.selectedCourses.forEach(selectedCourse => {
-                        const courseIndex = this.courses.findIndex(course => course.id === selectedCourse.id);
+                    this.selectedCourses.forEach((selectedCourse) => {
+                        const courseIndex = this.courses.findIndex((course) => course.id === selectedCourse.id);
                         if (courseIndex !== -1) {
                             this.courses[courseIndex] = { ...this.courses[courseIndex], label: label };
                         }
                     });
-    
+
                     this.selectedCourses = [];
                 },
                 error: (err) => {
-                    console.error("Error updating label:", err);
+                    console.error('Error updating label:', err);
                 }
             });
         }
     }
-    
-    
 }

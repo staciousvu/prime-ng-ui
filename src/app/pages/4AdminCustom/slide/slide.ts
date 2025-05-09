@@ -26,7 +26,6 @@ import { ImageModule } from 'primeng/image';
         <!-- Upload Button -->
         <div class="mb-6 p-4 border rounded shadow-sm bg-white">
             <div class="font-semibold text-lg mb-3">Tạo slide mới</div>
-
             <!-- Tabs -->
             <div class="flex space-x-4 mb-4">
                 <button class="px-4 py-2 rounded border" [ngClass]="{ 'bg-blue-500 text-white': uploadMode === 'file', 'bg-gray-100': uploadMode !== 'file' }" (click)="uploadMode = 'file'">Upload File</button>
@@ -86,7 +85,6 @@ import { ImageModule } from 'primeng/image';
                             <button (click)="slide.editing = false" class="text-red-600 hover:text-red-800 ml-1"><i class="fa-solid fa-xmark"></i></button>
                         </div>
                     </td> 
-
                     <td class="py-2 px-4 border-b">
                         <p-toggleswitch [(ngModel)]="slide.isActive" (onChange)="onToggleActive(slide)" [style]="{ width: '3rem' }"></p-toggleswitch>
                     </td>
@@ -111,8 +109,7 @@ export class SlideComponent implements OnInit {
         });
     }
     updatePosition(slide: any) {
-
-        this.http.post<any>(`http://localhost:8080/slide/${slide.id}/position?newPosition=${slide.position}`, {}).subscribe((res) => {
+        this.http.put<any>(`http://localhost:8080/slide/${slide.id}/position?newPosition=${slide.position}`, {}).subscribe((res) => {
             this.loadSlides();
             this.toastService.addToast('success', 'Cập nhật position cho slide thành công');
         });

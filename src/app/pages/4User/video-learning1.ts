@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { VideoPlayerComponent } from './video-player';
 import { AccordionModule } from 'primeng/accordion';
 import { CommonModule } from '@angular/common';
@@ -7,15 +7,13 @@ import { TabsModule } from 'primeng/tabs';
 import { OverviewVideoComponent } from './video-learning/overview';
 import { QAndAComponent } from './video-learning/Q&A';
 import { RatingVideoComponent } from './video-learning/rating';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { RatingModule } from 'primeng/rating';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { TextareaModule } from 'primeng/textarea';
-import { ToastModule } from 'primeng/toast';
-import { MessageService } from 'primeng/api';
 import { ToastService } from '../service/toast.service';
 import { QuizVLComponent } from './video-learning/quiz';
 import { ToastContainerComponent } from '../SharedComponent/toast-container-components';
@@ -40,10 +38,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         TabsModule,
         OverviewVideoComponent,
         QAndAComponent,
-        RatingVideoComponent,OnlyNotificationContainerComponent,ToastContainerComponent,ProgressSpinnerModule],
+        RatingVideoComponent,
+        OnlyNotificationContainerComponent,
+        ToastContainerComponent,
+        ProgressSpinnerModule
+    ],
     template: `
-    <app-only-notification-container/>
-    <app-toast-container></app-toast-container>
+        <app-only-notification-container />
+        <app-toast-container></app-toast-container>
         <div class="app">
             <header class="header-top">
                 <div class="header-top-left">
@@ -58,7 +60,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                         <span class="btn-rating-title">Leave a rating</span>
                     </button>
                     <button class="btn-rating" (click)="showReportDialog()">
-                    <i class="fa-solid fa-flag" style="color: #ffffff;"></i>
+                        <i class="fa-solid fa-flag" style="color: #ffffff;"></i>
                         <span class="btn-rating-title">Report</span>
                     </button>
                     <button class="btn-progress">
@@ -70,7 +72,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
             <div class="video-container">
                 <!-- Phần Video 70% -->
                 <div class="video-player">
-                    <app-video-player [videoUrl]="videoUrl" [lectureId]="activeLecture" (lectureCompleted)="onLectureCompleted($event)"></app-video-player>
+                    <!-- <app-video-player [videoUrl]="videoUrl" [lectureId]="activeLecture" (lectureCompleted)="onLectureCompleted($event)"></app-video-player> -->
                     <div class="wrapper-tabs">
                         <div class="grid-tab">
                             <div class="tabs">
@@ -179,51 +181,54 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         </div>
         <!-- report -->
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" *ngIf="reportDialogVisible">
-  <!-- Modal content -->
-  <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
-    <!-- Header -->
-    <div class="flex justify-between items-center mb-6">
-      <h2 class="text-2xl font-bold">Báo cáo khóa học</h2>
-      <button (click)="reportDialogVisible = false" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
-    </div>
+            <!-- Modal content -->
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+                <!-- Header -->
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold">Báo cáo khóa học</h2>
+                    <button (click)="reportDialogVisible = false" class="text-gray-500 hover:text-gray-700 text-2xl font-bold">&times;</button>
+                </div>
 
-    <!-- Course Name (readonly) -->
-    <div class="mb-4">
-      <label class="block font-semibold mb-2 text-lg">Tên khóa học</label>
-      <input type="text" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-700" [value]="specialObject.courseName" disabled>
-    </div>
+                <!-- Course Name (readonly) -->
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2 text-lg">Tên khóa học</label>
+                    <input type="text" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-100 text-gray-700" [value]="specialObject.courseName" disabled />
+                </div>
 
-    <!-- Reason Select -->
-    <div class="mb-4">
-      <label class="block font-semibold mb-2 text-lg">Lý do báo cáo</label>
-      <select [(ngModel)]="reportReason" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600">
-        <option value="" disabled selected>Chọn lý do</option>
-        <option *ngFor="let reason of reportReasons" [value]="reason">{{ reason }}</option>
-      </select>
-    </div>
+                <!-- Reason Select -->
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2 text-lg">Lý do báo cáo</label>
+                    <select [(ngModel)]="reportReason" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600">
+                        <option value="" disabled selected>Chọn lý do</option>
+                        <option *ngFor="let reason of reportReasons" [value]="reason">{{ reason }}</option>
+                    </select>
+                </div>
 
-    <!-- Description -->
-    <div class="mb-4">
-      <label class="block font-semibold mb-2 text-lg">Mô tả chi tiết</label>
-      <textarea [(ngModel)]="reportDescription" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" placeholder="Nhập chi tiết lý do bạn muốn báo cáo..."></textarea>
-    </div>
+                <!-- Description -->
+                <div class="mb-4">
+                    <label class="block font-semibold mb-2 text-lg">Mô tả chi tiết</label>
+                    <textarea [(ngModel)]="reportDescription" rows="4" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600" placeholder="Nhập chi tiết lý do bạn muốn báo cáo..."></textarea>
+                </div>
 
-    <!-- Upload Image -->
-    <div class="mb-6">
-      <label class="block font-semibold mb-2 text-lg">Hình ảnh bằng chứng (nếu có)</label>
-      <input type="file" (change)="onImageSelected($event)" accept="image/*" class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200">
-    </div>
+                <!-- Upload Image -->
+                <div class="mb-6">
+                    <label class="block font-semibold mb-2 text-lg">Hình ảnh bằng chứng (nếu có)</label>
+                    <input
+                        type="file"
+                        (change)="onImageSelected($event)"
+                        accept="image/*"
+                        class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200"
+                    />
+                </div>
 
-    <!-- Buttons -->
-    <div class="flex justify-end gap-2">
-      <button (click)="reportDialogVisible = false" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Hủy</button>
-      <button *ngIf="!isBooleanReport" (click)="submitReport()" class="px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700">
-        Gửi báo cáo
-    </button>
-    <p-progress-spinner class="p-4" *ngIf="isBooleanReport" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
-    </div>
-  </div>
-</div>
+                <!-- Buttons -->
+                <div class="flex justify-end gap-2">
+                    <button (click)="reportDialogVisible = false" class="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-100">Hủy</button>
+                    <button *ngIf="!isBooleanReport" (click)="submitReport()" class="px-4 py-2 rounded-lg text-white bg-red-600 hover:bg-red-700">Gửi báo cáo</button>
+                    <p-progress-spinner class="p-4" *ngIf="isBooleanReport" strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '20px', height: '20px' }" />
+                </div>
+            </div>
+        </div>
 
         <!-- Modal -->
         <div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
@@ -246,7 +251,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                         }"
                     >
                         <input type="radio" name="answer" [value]="answer.content" class="form-radio text-blue-600" [disabled]="answerChecked" (change)="selectAnswer(answer)" />
-                        <span class="text-gray-800" [innerHTML]="answer.content"></span> 
+                        <span class="text-gray-800" [innerHTML]="answer.content"></span>
                     </label>
                 </div>
 
@@ -552,10 +557,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
             max-height: calc(100vh - 80px);
             box-sizing: border-box;
         }
-    `,
+    `
 })
 export class VideoLearning1Component implements OnInit {
-    isBooleanReport=false;
+    isBooleanReport = false;
     quiz: any;
     currentQuestionIndex = 0;
     isModalOpen = false;
@@ -574,35 +579,34 @@ export class VideoLearning1Component implements OnInit {
         this.answerChecked = true;
         if (answer.isCorrect) {
             this.playSound('correct');
-          } else {
+        } else {
             this.playSound('wrong');
-          }
-      }
-      playSound(type: 'correct' | 'wrong') {
+        }
+    }
+    playSound(type: 'correct' | 'wrong') {
         const audio = new Audio();
         audio.src = `assets/sounds/${type}.mp3`;
         audio.load();
         audio.play();
-      }
-      
-      
-      nextQuestion() {
+    }
+
+    nextQuestion() {
         if (this.currentQuestionIndex < this.quiz.questions.length - 1) {
-          this.currentQuestionIndex++;
-          this.selectedAnswer = null;
-          this.answerChecked = false;
+            this.currentQuestionIndex++;
+            this.selectedAnswer = null;
+            this.answerChecked = false;
         } else {
-          // Hết câu hỏi → có thể hiện kết quả
-          this.closeModal();
+            // Hết câu hỏi → có thể hiện kết quả
+            this.closeModal();
         }
-      }
-      
-      closeModal() {
+    }
+
+    closeModal() {
         this.isModalOpen = false;
         this.quiz = null;
         this.selectedAnswer = null;
         this.answerChecked = false;
-      }
+    }
     activeTab: number = 0;
     tabs = [
         { title: 'Overview', content: 'Content for Overview' },
@@ -744,61 +748,53 @@ export class VideoLearning1Component implements OnInit {
     }
     reportDialogVisible = false;
 
-selectedCourseName = 'Tên khóa học mẫu'; // để hiển thị readonly
-reportReason = '';
-reportDescription = '';
-reportImage: File | null = null;
+    selectedCourseName = 'Tên khóa học mẫu'; // để hiển thị readonly
+    reportReason = '';
+    reportDescription = '';
+    reportImage: File | null = null;
 
-reportReasons: string[] = [
-  'Nội dung không phù hợp',
-  'Thông tin sai lệch',
-  'Vi phạm bản quyền',
-  'Hành vi lừa đảo',
-  'Khác'
-];
+    reportReasons: string[] = ['Nội dung không phù hợp', 'Thông tin sai lệch', 'Vi phạm bản quyền', 'Hành vi lừa đảo', 'Khác'];
 
-onImageSelected(event: Event) {
-  const fileInput = event.target as HTMLInputElement;
-  if (fileInput.files && fileInput.files.length > 0) {
-    this.reportImage = fileInput.files[0];
-  }
-}
-
-submitReport() {
-  if (!this.courseId || !this.reportReason) {
-    alert('Vui lòng chọn lý do và đảm bảo có ID khóa học!');
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('courseId', this.courseId.toString());
-  formData.append('reason', this.reportReason);
-  formData.append('description', this.reportDescription || '');
-  if (this.reportImage) {
-    formData.append('image', this.reportImage);
-  }
-  this.isBooleanReport=true;
-
-  this.http.post('http://localhost:8080/report', formData).subscribe({
-    next: (res) => {
-        this.isBooleanReport=false;
-    this.toastService.addToast('success', 'Báo cáo khóa học thành công');
-      this.resetReportForm();
-    },
-    error: (err) => {
-      console.error(err);
-      this.isBooleanReport=false;
-      this.toastService.addToast('error', 'Báo cáo khóa học thất bại');
+    onImageSelected(event: Event) {
+        const fileInput = event.target as HTMLInputElement;
+        if (fileInput.files && fileInput.files.length > 0) {
+            this.reportImage = fileInput.files[0];
+        }
     }
-  });
-}
 
-resetReportForm() {
-  this.reportReason = '';
-  this.reportDescription = '';
-  this.reportImage = null;
-  this.reportDialogVisible = false;
-}
+    submitReport() {
+        if (!this.courseId || !this.reportReason) {
+            alert('Vui lòng chọn lý do và đảm bảo có ID khóa học!');
+            return;
+        }
 
+        const formData = new FormData();
+        formData.append('courseId', this.courseId.toString());
+        formData.append('reason', this.reportReason);
+        formData.append('description', this.reportDescription || '');
+        if (this.reportImage) {
+            formData.append('image', this.reportImage);
+        }
+        this.isBooleanReport = true;
 
+        this.http.post('http://localhost:8080/report', formData).subscribe({
+            next: (res) => {
+                this.isBooleanReport = false;
+                this.toastService.addToast('success', 'Báo cáo khóa học thành công');
+                this.resetReportForm();
+            },
+            error: (err) => {
+                console.error(err);
+                this.isBooleanReport = false;
+                this.toastService.addToast('error', 'Báo cáo khóa học thất bại');
+            }
+        });
+    }
+
+    resetReportForm() {
+        this.reportReason = '';
+        this.reportDescription = '';
+        this.reportImage = null;
+        this.reportDialogVisible = false;
+    }
 }

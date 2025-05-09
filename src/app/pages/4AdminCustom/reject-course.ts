@@ -23,7 +23,6 @@ import { CourseReloadService } from '../service/course-reload.service';
     standalone: true,
     imports: [
     RouterModule,
-    Dialog,
     DialogModule,
     ConfirmDialogModule,
     InputTextModule,
@@ -35,12 +34,14 @@ import { CourseReloadService } from '../service/course-reload.service';
     BadgeModule,
     RatingModule,
     FormsModule,
-    TagModule,ImageModule
+    TagModule, ImageModule
 ],
     template: `
-        <div class="flex justify-end mb-4">
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-gray-700 text-sm ml-2">Có tổng cộng {{ totalCourses }} khóa học trong danh sách</span>
+
             <div class="relative">
-                <input (input)="loadCourses()"  type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm khóa học..." class="border border-gray-400 rounded-md px-3 py-2 text-base w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
+                <input (input)="loadCourses()" type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm khóa học..." class="border border-gray-400 rounded-md px-3 py-2 text-base w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
                 <button (click)="loadCourses()" class="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -98,23 +99,57 @@ import { CourseReloadService } from '../service/course-reload.service';
                         </td>
 
                         <td class="p-3 space-x-2">
-                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">Xem</button>
+                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700" (click)="view(course.id)">Xem</button>
                             <!-- <button class="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700"></button> -->
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
+<!-- Pagination -->
+<div class="pagination" *ngIf="totalPages > 1">
+            <button (click)="goToPage(page - 1)" [disabled]="page === 0">Previous</button>
 
-        
+            <button *ngFor="let p of [].constructor(totalPages); let i = index" (click)="goToPage(i)" [class.active]="i === page">
+                {{ i + 1 }}
+            </button>
+
+            <button (click)="goToPage(page + 1)" [disabled]="page === totalPages - 1">Next</button>
+        </div>
     `,
-    styles: ``,
-    providers: [CourseService, CourseData]
+    styles: `
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            border: none;
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: blue;
+            color: white;
+            font-weight: bold;
+        }
+
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    `
 })
 export class CourseRejectComponent implements OnInit {
   totalRecords:number=0;
   courses: any[]=[];
   selectedCourses!: any;
+    totalCourses=0;
   
   constructor(
       private courseService: CourseService,
@@ -123,9 +158,16 @@ export class CourseRejectComponent implements OnInit {
       private courseReloadService:CourseReloadService
   ) {}
 
-    page: number = 0;
-    size: number = 10;
-    keyword: string = '';
+  totalPages = 0;
+  page: number = 0;
+  size: number = 10;
+  keyword: string = '';
+  goToPage(page: number): void {
+      if (page >= 0 && page < this.totalPages) {
+          this.page = page;
+          this.loadCourses();
+      }
+  }
 
     ngOnInit() {
         this.courseReloadService.onReload().subscribe((source) => {
@@ -140,6 +182,8 @@ export class CourseRejectComponent implements OnInit {
         console.log(params)
         this.http.get<any>(`http://localhost:8080/course/reject-courses`, { params }).subscribe((response) => {
             this.courses = response.data.content;
+            this.totalCourses = response.data.totalElements;
+            this.totalPages = response.data.totalPages;
             console.log(this.courses);
         });
     }

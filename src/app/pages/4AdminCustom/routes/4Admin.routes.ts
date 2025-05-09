@@ -9,6 +9,7 @@ import { CategoryComponent } from "../category";
 import { TestComponent } from "../test";
 import { CourseLabelComponent } from "../label-course";
 import { NotificationComponent } from "../notification/notification";
+import { RecommendComponent } from "../recommend/recommend";
 
 
 
@@ -22,6 +23,7 @@ export default [
     {path:'test',data: { breadcrumb: 'Button' }, component: TestComponent},
     { path: 'update-course/:id', data: { breadcrumb: 'Button' }, component: UpdateCourse },
     { path: 'view-course/:id', data: { breadcrumb: 'Button' }, component: ViewCourseComponent },
+    { path: 'recommend', data: { breadcrumb: 'Button' }, component: RecommendComponent },
     { path: 'notifications/list', data: { breadcrumb: 'Button' }, component: NotificationComponent },
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;

@@ -1,8 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
-import { ConfirmationService, MenuItem, MessageService } from 'primeng/api';
-import { Table } from 'primeng/table';
-import { Product, ProductService } from '../service/product.service';
-import { Customer, CustomerService } from '../service/customer.service';
+import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
@@ -10,20 +6,13 @@ import { CourseService } from '../service/course.service';
 import { RatingModule } from 'primeng/rating';
 import { FormsModule } from '@angular/forms';
 import { TagModule } from 'primeng/tag';
-import { SpeedDial } from 'primeng/speeddial';
 import { ButtonModule } from 'primeng/button';
-import { Toolbar, ToolbarModule } from 'primeng/toolbar';
-import { InputGroup } from 'primeng/inputgroup';
-import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
-import { IconField, IconFieldModule } from 'primeng/iconfield';
-import { InputIcon, InputIconModule } from 'primeng/inputicon';
-import { Select } from 'primeng/select';
+import { IconFieldModule } from 'primeng/iconfield';
+import { InputIconModule } from 'primeng/inputicon';
 import { Router, RouterModule } from '@angular/router';
 import { Dialog, DialogModule } from 'primeng/dialog';
-import { ConfirmDialog, ConfirmDialogModule } from 'primeng/confirmdialog';
-import { CourseData } from '../service/data.service';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { InputTextModule } from 'primeng/inputtext';
-import { BreadcrumpComponent } from './breadcrump';
 import { ImageModule } from 'primeng/image';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
@@ -32,7 +21,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
     standalone: true,
     imports: [
     RouterModule,
-    Dialog,
     DialogModule,
     ConfirmDialogModule,
     InputTextModule,
@@ -48,9 +36,11 @@ import { HttpClient, HttpParams } from '@angular/common/http';
     ImageModule
 ],
     template: `
-        <div class="flex justify-end mb-4">
+        <div class="flex justify-between items-center mb-4">
+            <span class="text-gray-700 text-sm ml-2">Có tổng cộng {{ totalCourses }} khóa học trong danh sách</span>
+
             <div class="relative">
-                <input (input)="loadCourses()"  type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm khóa học..." class="border border-gray-400 rounded-md px-3 py-2 text-base w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
+                <input (input)="loadCourses()" type="text" [(ngModel)]="keyword" placeholder="Tìm kiếm khóa học..." class="border border-gray-400 rounded-md px-3 py-2 text-base w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 pr-10" />
                 <button (click)="loadCourses()" class="absolute right-1 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-blue-600">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -114,10 +104,44 @@ import { HttpClient, HttpParams } from '@angular/common/http';
                 </tbody>
             </table>
         </div>
-        
+        <!-- Pagination -->
+        <div class="pagination" *ngIf="totalPages > 1">
+            <button (click)="goToPage(page - 1)" [disabled]="page === 0">Previous</button>
+
+            <button *ngFor="let p of [].constructor(totalPages); let i = index" (click)="goToPage(i)" [class.active]="i === page">
+                {{ i + 1 }}
+            </button>
+
+            <button (click)="goToPage(page + 1)" [disabled]="page === totalPages - 1">Next</button>
+        </div>
     `,
-    styles: ``,
-    providers: [CourseService]
+    styles: `
+        .pagination {
+            margin-top: 20px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination button {
+            padding: 6px 12px;
+            border: none;
+            background-color: #eee;
+            cursor: pointer;
+        }
+
+        .pagination button.active {
+            background-color: blue;
+            color: white;
+            font-weight: bold;
+        }
+
+        .pagination button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    `
 })
 export class CourseDraftComponent implements OnInit {
   totalRecords:number=0;
@@ -130,18 +154,28 @@ export class CourseDraftComponent implements OnInit {
       private http:HttpClient
   ) {}
 
-    page: number = 0;
-    size: number = 10;
-    keyword: string = '';
+  totalPages = 0;
+  page: number = 0;
+  size: number = 10;
+  keyword: string = '';
+  goToPage(page: number): void {
+      if (page >= 0 && page < this.totalPages) {
+          this.page = page;
+          this.loadCourses();
+      }
+  }
   
     ngOnInit() {
         this.loadCourses();
     }
+    totalCourses=0;
     loadCourses() {
         const params = new HttpParams().set('page', this.page.toString()).set('size', this.size.toString()).set('keyword', this.keyword);
         console.log(params)
         this.http.get<any>(`http://localhost:8080/course/draft-courses`, { params }).subscribe((response) => {
             this.courses = response.data.content;
+            this.totalCourses = response.data.totalElements;
+            this.totalPages = response.data.totalPages;
             console.log(this.courses);
         });
     }
