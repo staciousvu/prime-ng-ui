@@ -76,13 +76,13 @@ import { RouterOutlet } from '@angular/router';
             text-decoration: none;
             border-radius: 5px;
             padding:10px 20px;
-            background-color:#6a1b9a;
+            background-color: blue;
         }
         .header .actions a:hover{
-            background-color:rgba(105, 27, 154, 0.8);
+            background-color:rgba(0, 0, 255, 0.83);
         }
         .header .actions a:active{
-            background-color:rgba(105, 27, 154, 0.52);
+            background-color:rgba(0, 0, 255, 0.69);
         }
 
         .header .language {

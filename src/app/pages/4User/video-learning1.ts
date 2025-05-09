@@ -72,7 +72,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
             <div class="video-container">
                 <!-- Phần Video 70% -->
                 <div class="video-player">
-                    <!-- <app-video-player [videoUrl]="videoUrl" [lectureId]="activeLecture" (lectureCompleted)="onLectureCompleted($event)"></app-video-player> -->
+                    <app-video-player [videoUrl]="videoUrl" [lectureId]="activeLecture" (lectureCompleted)="onLectureCompleted($event)"></app-video-player>
                     <div class="wrapper-tabs">
                         <div class="grid-tab">
                             <div class="tabs">

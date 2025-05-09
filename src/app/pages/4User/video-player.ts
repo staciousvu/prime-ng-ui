@@ -8,7 +8,7 @@ import Player from 'video.js';
 @Component({
     selector: 'app-video-player',
     standalone:true,
-    encapsulation: ViewEncapsulation.None,
+    encapsulation: ViewEncapsulation.None, 
     imports: [ProgressSpinnerModule, CommonModule],
     template: `
 

@@ -85,7 +85,7 @@ import { Router } from '@angular/router';
         }
 
         input[type='checkbox'] {
-            accent-color: #7E42D9;
+            accent-color: blue;
             width: 18px;
             height: 18px;
         }
@@ -105,7 +105,7 @@ import { Router } from '@angular/router';
 
         .next-btn {
             padding: 12px 24px;
-            background-color: #6a1b9a;
+            background-color: blue;
             color: white;
             border: none;
             border-radius: 6px;
@@ -114,7 +114,7 @@ import { Router } from '@angular/router';
         }
         .back-btn {
             padding: 12px 24px;
-            background-color: #6a1b9a;
+            background-color: blue;
             color: white;
             border: none;
             border-radius: 6px;
@@ -124,7 +124,7 @@ import { Router } from '@angular/router';
 
         .next-btn:hover,
         .back-btn:hover {
-            background-color: #4a148c;
+            background-color: blue;
         }
         /* Progress Bar */
         .progress-wrapper {

@@ -32,7 +32,7 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
             <div class="flex gap-5 bg-white w-full flex-wrap">
             <label *ngFor="let topic of item.leafCategories" class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 transition cursor-pointer">
                 <input type="checkbox" name="option2" value="2" class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out" />
-                <span class="text-gray-700 text-base">{{topic.name}}</span>
+                <span class="text-gray-700 text-base">{{topic.name}} <span class="text-blue-600 font-semibold">({{topic.totalCourses}} khóa học)</span></span>
             </label>
 </div>
         </div>

@@ -91,7 +91,7 @@ import { FormsModule } from '@angular/forms';
         }
 
         .radio-item:hover {
-            border-color: #a435f0;
+            border-color: blue;
             background-color: #f3e8fd;
         }
 
@@ -110,8 +110,8 @@ import { FormsModule } from '@angular/forms';
         }
 
         .radio-item input[type='radio']:checked + .custom-radio {
-            border-color: #a435f0;
-            background-color: #a435f0;
+            border-color: blue;
+            background-color: blue;
         }
 
         .radio-item input[type='radio']:checked + .custom-radio::after {
@@ -140,7 +140,7 @@ import { FormsModule } from '@angular/forms';
 
         .next-btn {
             padding: 12px 24px;
-            background-color: #6a1b9a;
+            background-color: blue;
             color: white;
             border: none;
             border-radius: 6px;
@@ -149,7 +149,7 @@ import { FormsModule } from '@angular/forms';
         }
 
         .next-btn:hover {
-            background-color: #4a148c;
+            background-color: blue;
         }
 
         /* Progress Bar */
@@ -166,7 +166,7 @@ import { FormsModule } from '@angular/forms';
         .progress-bar {
             height: 100%;
             width: 50%; /* hoặc tùy bước */
-            background-color: #a435f0;
+            background-color: blue;
             transition: width 0.3s ease;
         }
     `
