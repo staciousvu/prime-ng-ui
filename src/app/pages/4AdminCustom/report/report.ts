@@ -13,6 +13,7 @@ import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { ImageModule } from 'primeng/image';
 import { ToastService } from '../../service/toast.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-report',
@@ -86,7 +87,7 @@ import { ToastService } from '../../service/toast.service';
 
                         <!-- Hành động -->
                         <td class="p-3 space-x-2">
-                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700" (click)="viewReport(report)">Xem</button>
+                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700" (click)="viewReport(report.courseId)">Xem</button>
                             <button class="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700" (click)="approveReport(report.id)" [disabled]="report.status !== 'PENDING'">Phê duyệt</button>
                             <button class="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700" (click)="rejectReport(report.id)" [disabled]="report.status !== 'PENDING'">Từ chối</button>
                         </td>
@@ -98,20 +99,16 @@ import { ToastService } from '../../service/toast.service';
     `
 })
 export class ReportComponent implements OnInit {
-viewReport(_t18: any) {
-throw new Error('Method not implemented.');
-}
     reports: any[] = [];
-
     constructor(
         private http: HttpClient,
-        private toastService: ToastService
+        private toastService: ToastService,
+        private router : Router 
     ) {}
 
     ngOnInit(): void {
         this.loadReports();
     }
-
     loadReports(): void {
         this.http.get<any>('http://localhost:8080/report/pending').subscribe({
             next: (res) => {
@@ -147,5 +144,8 @@ throw new Error('Method not implemented.');
                 alert('Lỗi từ chối báo cáo!');
             }
         });
+    }
+    viewReport(courseId: any) {
+        this.router.navigate(['/review/course', courseId, 'admin', 'report']);
     }
 }

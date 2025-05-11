@@ -7,7 +7,7 @@ import { TabsModule } from 'primeng/tabs';
 import { OverviewVideoComponent } from './video-learning/overview';
 import { QAndAComponent } from './video-learning/Q&A';
 import { RatingVideoComponent } from './video-learning/rating';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { RatingModule } from 'primeng/rating';
 import { DialogModule } from 'primeng/dialog';
@@ -55,6 +55,10 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                     <span class="xv-coursename">{{ specialObject.courseName }}</span>
                 </div>
                 <div class="header-top-right">
+                    <button class="btn-rating" (click)="navigateMessage()">
+                        <i class="fa-solid fa-message" style="color: #ffffff;"></i>
+                        <span class="btn-rating-title">Message with instructor</span>
+                    </button>
                     <button class="btn-rating" (click)="showReviewDialog()">
                         <i class="fa-solid fa-star btn-rating-icon" style="color: #ffffff;"></i>
                         <span class="btn-rating-title">Leave a rating</span>
@@ -645,7 +649,8 @@ export class VideoLearning1Component implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private http: HttpClient,
-        private toastService: ToastService
+        private toastService: ToastService,
+        private router:Router
     ) {}
 
     ngOnInit(): void {
@@ -656,6 +661,7 @@ export class VideoLearning1Component implements OnInit {
         this.http.get<any>(`http://localhost:8080/course/${this.courseId}/sections-lectures`).subscribe((response) => {
             this.specialObject = response.data;
             this.videoUrl = response.data.sections[0].lectures[0].contentUrl;
+            this.authorId = response.data.authorId;
             this.activeLecture = response.data.sections[0].lectures[0].id;
 
             // Mở section chứa bài giảng active
@@ -796,5 +802,12 @@ export class VideoLearning1Component implements OnInit {
         this.reportDescription = '';
         this.reportImage = null;
         this.reportDialogVisible = false;
+    }
+    authorId:any;
+    navigateMessage() {
+        this.http.get<any>(`http://localhost:8080/conversations/get-or-create?instructorId=${this.authorId}`).subscribe((response) => {
+            const conversationId = response.data.id;
+            this.router.navigate(['/message'], { queryParams: { conversationId: conversationId } });
+        });
     }
 }

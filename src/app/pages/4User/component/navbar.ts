@@ -13,7 +13,9 @@ import { NotificationService } from '../../service/notification.service';
     // encapsulation: ViewEncapsulation.None,
     imports: [CommonModule, RouterLink, FormsModule],
     template: `
-        <div class="wrapper-nav">
+        <div class="wrapper-nav w-full bg-white z-50">
+            <!-- <div class="hidden md:block wrapper-nav w-full bg-white z-50"> -->
+
             <nav class="navbar">
                 <div class="navbar-left">
                     <div class="logo">
@@ -47,7 +49,7 @@ import { NotificationService } from '../../service/notification.service';
                 </div>
                 <div class="navbar-right">
                     <ul class="nav-links" *ngIf="isLoggedIn">
-                        <li (click)="blogClick()" class="nav-link-item">Blog</li>
+                        <li [routerLink]="'/post'" class="nav-link-item">Blog</li>
                         <li class="nav-link-item" [routerLink]="['/instructor/courses']">Teacher</li>
                         <li [routerLink]="'/my-learning'" class="nav-link-item mylearning" style="position: relative;">
                             My learning
@@ -123,17 +125,31 @@ import { NotificationService } from '../../service/notification.service';
                         </li>
                         <li class="nav-link-item user-menu" style="position: relative;">
                             <img class="avatar" [src]="avatarUrl ? avatarUrl : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />
-                            <ul class="dropdown">
-                                <li class="dropdown-item" [routerLink]="'/instructor/profiles/basic-information'"><a>Profile</a></li>
-                                <li class="dropdown-item" [routerLink]="'/my-learning'"><a>My Learning</a></li>
-                                <li class="dropdown-item" [routerLink]="'/favorite'"><a>Favorite</a></li>
-                                <li class="dropdown-item" [routerLink]="'/cart'"><a>My Cart</a></li>
-                                <li class="dropdown-item" [routerLink]="'/message'"><a>Message</a></li>
-                                <li class="dropdown-item"><a href="#">Settings</a></li>
-                                <li class="dropdown-item">
-                                    <hr />
+                            <ul class="dropdown bg-white shadow-md rounded-lg py-2 px-0 w-56">
+                                <li class="hover:bg-gray-100 px-4 py-2 rounded-md transition">
+                                    <a [routerLink]="'/instructor/profiles/basic-information'" class="block text-gray-800 font-medium">Profile</a>
                                 </li>
-                                <li class="dropdown-item"><a href="#" class="logout" (click)="logout()">Logout</a></li>
+                                <li class="hover:bg-gray-100 px-4 py-2 rounded-md transition">
+                                    <a [routerLink]="'/my-learning'" class="block text-gray-800 font-medium">My Learning</a>
+                                </li>
+                                <li class="hover:bg-gray-100 px-4 py-2 rounded-md transition">
+                                    <a [routerLink]="'/favorite'" class="block text-gray-800 font-medium">Favorite</a>
+                                </li>
+                                <li class="hover:bg-gray-100 px-4 py-2 rounded-md transition">
+                                    <a [routerLink]="'/cart'" class="block text-gray-800 font-medium">My Cart</a>
+                                </li>
+                                <li class="hover:bg-gray-100 px-4 py-2 rounded-md transition">
+                                    <a [routerLink]="'/message'" class="block text-gray-800 font-medium">Message</a>
+                                </li>
+                                <li class="hover:bg-gray-100 px-4 py-2 rounded-md transition">
+                                    <a href="#" class="block text-gray-800 font-medium">Settings</a>
+                                </li>
+                                <li class="px-4">
+                                    <hr class="my-2 border-gray-300" />
+                                </li>
+                                <li class="hover:bg-gray-100 px-4 py-2 rounded-md transition">
+                                    <button class="w-full text-left text-red-600 font-medium hover:text-red-800" (click)="logout()">Logout</button>
+                                </li>
                             </ul>
                         </li>
                     </ul>
@@ -149,7 +165,7 @@ import { NotificationService } from '../../service/notification.service';
         .wrapper-nav {
             //   margin: 2px 0px;
             width: 100%;
-            border-bottom: 1px solid rgb(159, 154, 154);
+            border-bottom: 2px solid rgba(223, 223, 223, 0.69);
         }
         * {
             text-decoration: none;

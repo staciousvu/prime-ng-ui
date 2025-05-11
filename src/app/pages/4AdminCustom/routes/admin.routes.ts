@@ -6,6 +6,8 @@ import { SlideComponent } from '../slide/slide';
 import { ReportComponent } from '../report/report';
 import { PostComponent } from '../post/post-list';
 import { PostAddComponent } from '../post/post-add';
+import { PostEditComponent } from '../post/post-edit';
+import { AdminReviewComponent } from '../admin-review-course/admin-review';
 
 export const AdminRoutes: Routes = [
     {
@@ -44,10 +46,12 @@ export const AdminRoutes: Routes = [
                 path: 'report/list', 
                 component :ReportComponent
             },
+
             { 
                 path: 'post', children:[
                     { path: 'list', component: PostComponent },
                     { path: 'add', component: PostAddComponent },
+                    { path: 'edit/:slug', component: PostEditComponent },
                 ]
             }
         ]

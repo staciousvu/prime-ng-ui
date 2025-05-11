@@ -65,6 +65,7 @@ export class ChatService {
       senderId,
       content,
     };
+    console.log('sendddd messageeeeeeeeeee:',chatMessage)
     this.client.publish({
       destination: '/app/chat.sendMessage',
       body: JSON.stringify(chatMessage),

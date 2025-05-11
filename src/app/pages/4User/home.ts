@@ -21,7 +21,9 @@ import { GalleriaModule } from 'primeng/galleria';
     // encapsulation: ViewEncapsulation.None,
     imports: [GalleriaModule,RouterLink,ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],
     template: `
+    <div class="hidden md:block">
         <app-category-list />
+</div>
         <div class="welcome">
             <div class="avatar">
             <img class="avatar" [src]="avatarUrl ? avatarUrl : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />

@@ -8,7 +8,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
     template: `
         <div class="px-10">
             <div class="w-[80%] mx-auto">
-                <h1 class="text-5xl font-bold mb-10">Profile &amp; settings</h1>
+                <h1 class="text-3xl text-gray-500 font-bold mb-10">Profile &amp; settings</h1>
                 <div>
                     <nav class="flex space-x-6 border-b border-gray-300 mb-8 text-sm font-semibold text-gray-700">
                         <button class="text-lg pb-2"

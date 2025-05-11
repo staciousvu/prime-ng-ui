@@ -87,7 +87,7 @@ import { CourseReloadService } from '../service/course-reload.service';
                         </td>
 
                         <td class="p-3 space-x-2">
-                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700" (click)="view(course.id)">Xem</button>
+                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700" (click)="viewPending(course.id)">Xem</button>
                             <button class="px-3 py-1 text-sm bg-green-600 text-white rounded hover:bg-green-700" (click)="confirmApproval(course.id)">Phê duyệt</button>
                             <button class="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700" (click)="confirmReject(course.id)">Từ chối</button>
                         </td>
@@ -225,7 +225,13 @@ export class CoursePendingComponent implements OnInit {
                 return 'info';
         }
     }
-    view(id: string) {
-        this.router.navigate(['/admin/courses/view-course', id]);
-    }
+    viewPending(id: string) {
+    this.router.navigate(['/review/course', id, 'admin', 'pending'], {
+        queryParams: {
+            tabIndex: '0' // Thêm tabIndex=0 vào queryParams
+        }
+    });
+}
+
+
 }

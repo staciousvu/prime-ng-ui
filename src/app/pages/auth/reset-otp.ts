@@ -8,12 +8,17 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { HttpClient } from '@angular/common/http';
 import { LucideAngularModule, FileIcon } from 'lucide-angular';
+import { OnlyNotificationContainerComponent } from '../SharedComponent/only-notification-container';
+import { ToastContainerComponent } from '../SharedComponent/toast-container-components';
+import { ToastService } from '../service/toast.service';
 @Component({
     selector: 'app-reset-otp',
     standalone: true,
-    imports: [CommonModule, FormsModule,ToastModule,LucideAngularModule ],
+    imports: [CommonModule, FormsModule,ToastModule,LucideAngularModule,OnlyNotificationContainerComponent,ToastContainerComponent ],
     providers: [MessageService],
     template: `
+    <app-only-notification-container/>
+    <app-toast-container></app-toast-container>
     <!-- <p-toast></p-toast> -->
         <div class="min-h-screen py-10 mt-10" (click)="focusInput(hiddenInput)">
   <div class="bg-white dark:bg-gray-700 shadow-xl rounded-2xl mx-auto w-full max-w-md overflow-hidden grid md:grid-cols-1 transform transition-transform duration-300 hover:scale-[1.02]">
@@ -202,7 +207,8 @@ showNotification(type: 'success' | 'error' | 'warn', message: string) {
     private route: ActivatedRoute,
     private router: Router,
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private toastService:ToastService
   ) {
     this.route.queryParams.subscribe(params => {
       this.email = params['email'];
@@ -221,7 +227,8 @@ showNotification(type: 'success' | 'error' | 'warn', message: string) {
 
   verifyOtp() {
     if (this.otpInput.length !== 6 || !this.email) {
-      this.showNotification('warn', '⚠️ Vui lòng nhập đủ 6 chữ số OTP.');
+      // this.showNotification('warn', '⚠️ Vui lòng nhập đủ 6 chữ số OTP.');
+      this.toastService.addToast("warning","Vui lòng nhập đủ 6 chữ số OTP.")
       return;
     }
 
@@ -233,17 +240,20 @@ showNotification(type: 'success' | 'error' | 'warn', message: string) {
     this.http.post<any>('http://localhost:8080/user/verify-otp-reset', payload).subscribe({
       next: (response) => {
         if (response.success) {
-          this.showNotification('success', 'Xác minh thành công! Đang chuyển hướng...');
+          // this.showNotification('success', 'Xác minh thành công! Đang chuyển hướng...');
+          this.toastService.addToast("success","Xác minh thành công! Đang chuyển hướng.")
           setTimeout(() => {
             this.router.navigate(['/user/login']);
           }, 1500);
         } else {
-          this.showNotification('error', response.message || 'Mã OTP không hợp lệ.');
+          // this.showNotification('error', response.message || 'Mã OTP không hợp lệ.');
+          this.toastService.addToast("error","Mã OTP không hợp lệ")
         }
       },
       error: (err) => {
         const msg = err.error?.message || 'Đã xảy ra lỗi khi xác minh OTP.';
-        this.showNotification('error', msg);
+        // this.showNotification('error', msg);
+        this.toastService.addToast("error","Đã xảy ra lỗi khi xác minh OTP.")
       }
     });
   }

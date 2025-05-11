@@ -7,11 +7,14 @@ import { MessageService } from 'primeng/api';
 import { Editor, EditorModule } from 'primeng/editor';
 import { TextareaModule } from 'primeng/textarea';
 import { ToastModule } from 'primeng/toast';
-
+import { CKEDITOR_CONFIG } from '../../models/ckeditor-config';
+import { ClassicEditor } from 'ckeditor5';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { ToastService } from '../../service/toast.service';
 @Component({
     selector: 'app-profile-basic',
     standalone: true,
-    imports: [CommonModule, EditorModule, TextareaModule, FormsModule,ToastModule],
+    imports: [CommonModule, EditorModule, TextareaModule, FormsModule,ToastModule,CKEditorModule],
     template: `
         <main class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6 w-full mx-auto">
             <div>
@@ -67,7 +70,7 @@ import { ToastModule } from 'primeng/toast';
             <div>
                 <label for="biography" class="block font-semibold mb-2">Biography</label>
                 <div class="border border-gray-300 rounded-md">
-                    <p-editor [(ngModel)]="user.bio" [style]="{ height: '250px' }" />
+                    <ckeditor [editor]="Editor" [(ngModel)]="user.bio" [config]="config" class="h-[200px] w-full"></ckeditor>
                 </div>
                 <p class="mt-2 text-xs text-gray-600 max-w-xl">
                     To help learners learn more about you, your bio should reflect your Credibility, Empathy, Passion, and Personality. Your biography should have at least 50 words, links and coupon codes are not permitted.
@@ -91,19 +94,19 @@ import { ToastModule } from 'primeng/toast';
         </main>
         <!-- Nút Save ở dưới cùng -->
         <div class="mt-5 flex justify-end" style="margin-bottom:20px ;">
-            <button (click)="updateProfile()" type="submit" class="bg-purple-700 text-white font-semibold rounded-lg  px-10 py-3 hover:bg-purple-800 transition-colors">Save</button>
+            <button (click)="updateProfile()" type="submit" class="bg-purple-700 text-white font-semibold mb-5 rounded-lg  px-10 py-3 hover:bg-purple-800 transition-colors">Save</button>
         </div>
-        <p-toast></p-toast>
     `,
     styles: ``,
-    providers:[MessageService]
 })
 export class ProfileBasicComponent implements OnInit {
+    public Editor = ClassicEditor;
+            public config = CKEDITOR_CONFIG;
     user: any;
     constructor(
         private http: HttpClient,
         private router: ActivatedRoute,
-        private messageService:MessageService
+        private toastService:ToastService
     ) {}
     ngOnInit(): void {
         this.http.get<any>(`http://localhost:8080/profile`).subscribe((response) => {
@@ -126,18 +129,10 @@ export class ProfileBasicComponent implements OnInit {
         console.log('request: ',request)
         this.http.put<any>('http://localhost:8080/user/update-profile', request).subscribe(
             (response) => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Success',
-                    detail: 'Profile updated successfully'
-                });
+                this.toastService.addToast("success","Cập nhật thông tin cá nhân thành công")
             },
             (error) => {
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Error',
-                    detail: 'Failed to update profile'
-                });
+                this.toastService.addToast("error","Cập nhật thông tin cá nhân thất bại")
             }
         );
         

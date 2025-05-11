@@ -162,7 +162,8 @@ export class InstructorCoursesComponent implements OnInit {
     this.http.post<any>(`http://localhost:8080/course/draft?title=${this.courseTitle}`,{}).subscribe(
         (res)=>{
             this.toastService.addToast("success","Tạo khóa học mới thành công");
-            this.route.navigate(['/edit-course', res.data, 'landing-page']);
+            // this.route.navigate(['/edit-course', res.data, 'landing-page']);
+            this.load();
         }
     )
     console.log('Đã lưu khóa học:', this.courseTitle);

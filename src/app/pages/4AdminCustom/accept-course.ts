@@ -208,6 +208,10 @@ export class CourseAcceptComponent implements OnInit {
         }
     }
     view(id: string) {
-        this.router.navigate(['/admin/courses/view-course', id]);
+        this.router.navigate(['/review/course', id, 'admin', 'accept'], {
+            queryParams: {
+                tabIndex: '1' // Thêm query param tabIndex với giá trị 1
+            }
+        });
     }
 }

@@ -33,6 +33,10 @@ import { TestToastComponent } from './app/pages/4Instructor/component/test';
 import { VideoLearning1Component } from './app/pages/4User/video-learning1';
 import { EditCourseQuizComponent } from './app/pages/4Instructor/quiz';
 import { FavoriteComponent } from './app/pages/4User/favorite';
+import { UserPostComponent } from './app/pages/4User/user-post-list';
+import { UserPostDetailComponent } from './app/pages/4User/user-post-detail';
+import { AdminReviewComponent } from './app/pages/4AdminCustom/admin-review-course/admin-review';
+import { EditCourseCurriculum2Component } from './app/pages/4Instructor/curriculum2';
 export const appRoutes: Routes = [
 
     {
@@ -48,6 +52,8 @@ export const appRoutes: Routes = [
             {path:'course-detail/:id',component:CourseDetail2Component},
             {path:'payment-success',component:PaymentSuccessComponent},
             {path:'payment-failed',component:PaymentFailedComponent},
+            {path:'post',component:UserPostComponent},
+            {path:'post-detail/:slug',component:UserPostDetailComponent},
             {path:'search/:keyword',component:SearchCourseComponent},
             {path:'message',component:MessageUserComponent},
             {path:'instructor-detail/:id',component:InstructorDetailComponent},
@@ -68,7 +74,7 @@ export const appRoutes: Routes = [
     {
         path:'',
         component:BlankLayoutComponent,
-        // canActivate:[AuthGuard],
+        canActivate:[AuthGuard],
         children:[
             {path:'course/video-learning/:id',component:VideoLearning1Component},
             {path:'survey',component:SurveyLayoutComponent},
@@ -76,7 +82,7 @@ export const appRoutes: Routes = [
             children:[
                 { path: '', redirectTo: 'goals', pathMatch: 'full' },
                 {path:'goals',component:EditCourseIntendedLearnerComponent},
-                {path:'curriculum',component:EditCourseCurriculumComponent},
+                {path:'curriculum',component:EditCourseCurriculum2Component},
                 {path:'landing-page',component:EditCourseLandingPageComponent},
                 {path:'price',component:EditCoursePriceComponent},
                 {path:'quiz',component:EditCourseQuizComponent},
@@ -91,8 +97,14 @@ export const appRoutes: Routes = [
             { path: '',loadChildren: () => import('./app/pages/4AdminCustom/routes/admin.routes').then(m => m.AdminRoutes) },
             { path: 'uikit', loadChildren: () => import('./app/pages/uikit/uikit.routes') },
             { path: 'documentation', component: Documentation },
+            
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') }
         ]
+    },
+    {
+        path:'review/course/:courseId/admin/:context',
+        component:AdminReviewComponent,
+        canActivate:[AdminGuard],
     },
     { path:'admin/login',component:AdminLoginComponent},
     { path:'user/login',component:UserLoginComponent},

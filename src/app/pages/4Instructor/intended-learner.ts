@@ -11,19 +11,118 @@ import { ToastService } from '../service/toast.service';
     // standalone:true,
     imports: [RouterModule, CommonModule, FormsModule],
     template: `
-        <section class="bg-white rounded-md shadow-sm flex-grow w-full min-w-0 border border-[#E2E8F0] pb-14" aria-label="Intended learners">
-        <header class="border-b border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
-                <h1 class="text-2xl font-semibold text-[#1E293B] mb-0">Intended learner</h1>
-            </header>
-            <div class="px-10 pt-10 space-y-8 text-[#334155] text-lg font-normal w-full">
+    <div class="container">
+    <!-- <div class="header">
+      <h1>Tạo khóa học mới</h1>
+      <p>Thiết lập thông tin để thu hút học viên tiềm năng</p>
+    </div> -->
+    
+    <div class="course-form">
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <div class="form-section-title">
+            <h2>Mục tiêu học tập</h2>
+            <p>Những gì học viên sẽ đạt được sau khi hoàn thành khóa học của bạn</p>
+          </div>
+        </div>
+        
+        <div class="input-list" id="learning-objectives">
+          <div *ngFor="let item of courseContent; let i = index; trackBy: trackByIndexCC " class="input-item">
+            <div class="input-wrapper">
+              <input [(ngModel)]="courseContent[i]" [name]="'coursecontent' + i" type="text" placeholder="Ví dụ: Hiểu và áp dụng các nguyên tắc cơ bản của thiết kế UX/UI" maxlength="160">
+              <span class="char-count">160</span>
+              <button class="remove-btn">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          
+          <p class="error-message" id="error-objectives">{{ errorMessageContent }}</p>
+        </div>
+        
+        <button (click)="addInputCourseContent()" class="add-button" id="add-objective">
+          <i class="fas fa-plus"></i> Thêm mục tiêu học tập
+        </button>
+      </div>
+      
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon">
+            <i class="fas fa-list-check"></i>
+          </div>
+          <div class="form-section-title">
+            <h2>Yêu cầu tiên quyết</h2>
+            <p>Các kỹ năng hoặc kiến thức cần có trước khi tham gia khóa học</p>
+          </div>
+        </div>
+        
+        <div class="input-list" id="prerequisites">
+          <div *ngFor="let item of courseRequirement; let i = index; trackBy: trackByIndexCR" class="input-item">
+            <div class="input-wrapper">
+              <input [(ngModel)]="courseRequirement[i]" [name]="'courserequirement' + i" type="text" placeholder="Ví dụ: Kiến thức cơ bản về thiết kế đồ họa">
+              <button class="remove-btn">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+
+          <p class="error-message" id="error-prerequisites">{{ errorMessageRequirement }}</p>
+        </div>
+        
+        <button (click)="addInputCourseRequirement()" class="add-button" id="add-prerequisite">
+          <i class="fas fa-plus"></i> Thêm yêu cầu tiên quyết
+        </button>
+      </div>
+      
+      <div class="form-section">
+        <div class="form-section-header">
+          <div class="form-section-icon">
+            <i class="fas fa-users"></i>
+          </div>
+          <div class="form-section-title">
+            <h2>Đối tượng mục tiêu</h2>
+            <p>Những học viên lý tưởng cho khóa học của bạn</p>
+          </div>
+        </div>
+        
+        <div class="input-list" id="target-audience">
+          <div *ngFor="let item of courseTarget; let i = index; trackBy: trackByIndexCT" class="input-item">
+            <div class="input-wrapper">
+              <input [(ngModel)]="courseTarget[i]" [name]="'coursetarget' + i"  type="text" placeholder="Ví dụ: Sinh viên ngành thiết kế muốn nâng cao kỹ năng thực hành">
+              <button class="remove-btn">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+          </div>
+          
+          <p class="error-message" id="error-audience">{{ errorMessageTarget }}</p>
+        </div>
+        
+        <button (click)="addInputCourseTarget()" class="add-button" id="add-target">
+          <i class="fas fa-plus"></i> Thêm đối tượng mục tiêu
+        </button>
+      </div>
+    </div>
+    
+    <div class="form-actions">
+      <button class="btn btn-secondary">Hủy bỏ</button>
+      <button class="btn btn-primary">Lưu và tiếp tục</button>
+    </div>
+  </div>
+        <!-- <section class="bg-white shadow-sm flex-grow w-full min-w-0 border-l border-r border-[#E2E8F0] pb-5" aria-label="Intended learners">
+
+            <div class="px-10 pt-0 space-y-8 text-[#334155] text-lg font-normal w-full">
 
 
                 <div class="mt-6">
-                    <p class="font-bold text-xl text-[#1E293B] mb-3">Học sinh sẽ học được gì trong khóa học của bạn?</p>
-                    <p class="mb-5">Bạn phải nhập ít nhất 4 mục tiêu hoặc kết quả học tập mà người học có thể mong đợi đạt được sau khi hoàn thành khóa học.</p>
+                    <p class="font-bold text-lg text-[#1E293B] mb-3">Học sinh sẽ học được gì trong khóa học của bạn?</p>
+                    <p class="mb-5 text-base">Bạn phải nhập ít nhất 4 mục tiêu hoặc kết quả học tập mà người học có thể mong đợi đạt được sau khi hoàn thành khóa học.</p>
 
                     <form class="space-y-5">
-                        <div *ngFor="let item of courseContent; let i = index; trackBy: trackByIndexCC " class="flex items-center justify-between border border-[#CBD5E1] rounded-md px-5 py-3 text-[#64748B] text-base focus-within:border-purple-500 transition-all duration-200">
+                        <div *ngFor="let item of courseContent; let i = index; trackBy: trackByIndexCC " class="flex items-center justify-between border border-[#CBD5E1] rounded-md px-5 py-3 text-[#64748B] text-base focus-within:border-blue-500 transition-all duration-200">
                             <input type="text" [(ngModel)]="courseContent[i]" [name]="'coursecontent' + i" placeholder="Ví dụ: Define the roles and responsibilities of a project manager" class="w-full text-gray-600 placeholder-gray-400 bg-transparent rounded focus:outline-none" />
                             <span class="ml-5 text-[#64748B]">160</span>
                         </div>
@@ -33,20 +132,20 @@ import { ToastService } from '../service/toast.service';
                     </p>
 
 
-                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none" (click)="addInputCourseContent()">
+                    <button type="button" class="mt-6 inline-flex items-center text-blue-700 font-semibold text-base hover:text-blue-800 focus:outline-none" (click)="addInputCourseContent()">
                         <i class="fas fa-plus mr-2"></i> Add more to your response
                     </button>
                 </div>
 
                 <div class="mt-6">
-                    <p class="font-bold  text-xl text-[#1E293B] mb-3">Yêu cầu hoặc điều kiện tiên quyết để tham gia khóa học của bạn là gì?</p>
-                    <p class="mb-5">
+                    <p class="font-bold text-base text-[#1E293B] mb-3">Yêu cầu hoặc điều kiện tiên quyết để tham gia khóa học của bạn là gì?</p>
+                    <p class="mb-5 text-xs">
                         Liệt kê các kỹ năng, kinh nghiệm, công cụ hoặc thiết bị cần thiết mà người học cần có trước khi tham gia khóa học của bạn. Nếu không có yêu cầu nào, hãy sử dụng không gian này như một cơ hội để giảm rào cản cho người mới bắt
                         đầu.
                     </p>
 
                     <form class="space-y-5">
-                        <div *ngFor="let item of courseRequirement; let i = index; trackBy: trackByIndexCR" class="flex items-center justify-between border border-[#CBD5E1] rounded-md px-5 py-3 text-[#64748B] text-base focus-within:border-purple-500 transition-all duration-200">
+                        <div *ngFor="let item of courseRequirement; let i = index; trackBy: trackByIndexCR" class="flex items-center justify-between border border-[#CBD5E1] rounded-md px-5 py-3 text-[#64748B] text-base focus-within:border-blue-500 transition-all duration-200">
                             <input
                                 type="text"
                                 [(ngModel)]="courseRequirement[i]"
@@ -60,16 +159,16 @@ import { ToastService } from '../service/toast.service';
                         {{ errorMessageRequirement }}
                     </p>
 
-                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none"  (click)="addInputCourseRequirement()">
+                    <button type="button" class="mt-6 inline-flex items-center text-blue-700 font-semibold text-base hover:text-blue-800 focus:outline-none"  (click)="addInputCourseRequirement()">
                         <i class="fas fa-plus mr-2"></i> Add more to your response
                     </button>
                 </div>
                 <div class="mt-6">
-                    <p class="font-bold  text-xl text-[#1E293B] mb-3">Khóa học này dành cho ai?</p>
-                    <p class="mb-5">Viết mô tả rõ ràng về những người học dự kiến ​​cho khóa học của bạn, những người sẽ thấy nội dung khóa học của bạn có giá trị. Điều này sẽ giúp bạn thu hút đúng người học vào khóa học của mình.</p>
+                    <p class="font-bold  text-base text-[#1E293B] mb-3">Khóa học này dành cho ai?</p>
+                    <p class="mb-5 text-xs">Viết mô tả rõ ràng về những người học dự kiến ​​cho khóa học của bạn, những người sẽ thấy nội dung khóa học của bạn có giá trị. Điều này sẽ giúp bạn thu hút đúng người học vào khóa học của mình.</p>
 
                     <form class="space-y-5">
-                        <div *ngFor="let item of courseTarget; let i = index; trackBy: trackByIndexCT" class="flex items-center justify-between border border-[#CBD5E1] rounded-md px-5 py-3 text-[#64748B] text-base focus-within:border-purple-500 transition-all duration-200">
+                        <div *ngFor="let item of courseTarget; let i = index; trackBy: trackByIndexCT" class="flex items-center justify-between border border-[#CBD5E1] rounded-md px-5 py-3 text-[#64748B] text-base focus-within:border-blue-500 transition-all duration-200">
                             <input type="text" [(ngModel)]="courseTarget[i]" [name]="'coursetarget' + i" 
                             placeholder="Ví dụ: Beginner Python developers curious about data science" 
                             class="w-full text-gray-600 placeholder-gray-400 bg-transparent rounded focus:outline-none" />
@@ -79,14 +178,257 @@ import { ToastService } from '../service/toast.service';
                         {{ errorMessageTarget }}
                     </p>
 
-                    <button type="button" class="mt-6 inline-flex items-center text-purple-700 font-semibold text-base hover:text-purple-800 focus:outline-none" (click)="addInputCourseTarget()">
+                    <button type="button" class="mt-6 inline-flex items-center text-blue-700 font-semibold text-base hover:text-blue-800 focus:outline-none" (click)="addInputCourseTarget()">
                         <i class="fas fa-plus mr-2"></i> Add more to your response
                     </button>
                 </div>
             </div>
-        </section>
+        </section> -->
+
     `,
-    styles: ``
+    styles: `
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background-color: #f8fafc;
+      color: #334155;
+      line-height: 1.6;
+    }
+    
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      overflow: hidden;
+    }
+    
+    .header {
+      background: linear-gradient(135deg, #3b82f6, #2563eb);
+      color: white;
+      padding: 2rem;
+      text-align: center;
+    }
+    
+    .header h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .header p {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+    
+    .course-form {
+      padding: 2rem;
+    }
+    
+    .form-section {
+      margin-bottom: 2.5rem;
+      background-color: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      border-left: 4px solid #3b82f6;
+    }
+    
+    .form-section-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    
+    .form-section-icon {
+      background-color: #eff6ff;
+      color: #3b82f6;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      font-size: 1.2rem;
+    }
+    
+    .form-section-title {
+      flex: 1;
+    }
+    
+    .form-section-title h2 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 0.25rem;
+    }
+    
+    .form-section-title p {
+      font-size: 0.875rem;
+      color: #64748b;
+    }
+    
+    .input-list {
+      margin-top: 1.5rem;
+    }
+    
+    .input-item {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+    
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      background-color: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      transition: all 0.2s ease;
+    }
+    
+    .input-wrapper:focus-within {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+    
+    .input-wrapper input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      padding: 0.5rem;
+      font-size: 0.95rem;
+      color: #334155;
+      width: 100%;
+    }
+    
+    .input-wrapper input:focus {
+      outline: none;
+    }
+    
+    .input-wrapper .char-count {
+      color: #94a3b8;
+      font-size: 0.875rem;
+      margin-left: 8px;
+    }
+    
+    .input-wrapper .remove-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      margin-left: 8px;
+      font-size: 1rem;
+      opacity: 0.6;
+      transition: opacity 0.2s;
+    }
+    
+    .input-wrapper .remove-btn:hover {
+      opacity: 1;
+      color: #ef4444;
+    }
+    
+    .add-button {
+      display: inline-flex;
+      align-items: center;
+      background-color: transparent;
+      color: #3b82f6;
+      border: none;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+    
+    .add-button:hover {
+      background-color: #eff6ff;
+    }
+    
+    .add-button i {
+      margin-right: 0.5rem;
+    }
+    
+    .form-actions {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 2rem;
+      padding: 1rem 2rem;
+      background-color: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+    }
+    
+    .btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .btn-secondary {
+      background-color: white;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      margin-right: 1rem;
+    }
+    
+    .btn-secondary:hover {
+      background-color: #f8fafc;
+    }
+    
+    .btn-primary {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+    }
+    
+    .btn-primary:hover {
+      background-color: #2563eb;
+    }
+    
+    .error-message {
+      color: #ef4444;
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      font-style: italic;
+    }
+    
+    /* Hiệu ứng thêm */
+    .input-wrapper.new-item {
+      animation: fadeIn 0.5s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        margin: 0;
+        border-radius: 0;
+      }
+      
+      .course-form {
+        padding: 1rem;
+      }
+      
+      .form-section {
+        padding: 1rem;
+      }
+    }
+    `
 })
 export class EditCourseIntendedLearnerComponent implements OnInit, OnDestroy {
     courseId: number = 0;

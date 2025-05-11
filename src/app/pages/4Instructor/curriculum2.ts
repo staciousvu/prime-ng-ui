@@ -12,7 +12,7 @@ import { ToastService } from "../service/toast.service";
 
 
 @Component({
-    selector: 'app-edit-course-curriculum',
+    selector: 'app-edit-course-curriculum2',
     standalone:true,
     encapsulation:ViewEncapsulation.None,
     imports:[ButtonModule,CommonModule,FormsModule,FileUploadModule,ProgressSpinnerModule ],
@@ -178,7 +178,7 @@ import { ToastService } from "../service/toast.service";
 
     `
 })
-export class EditCourseCurriculumComponent implements OnInit {
+export class EditCourseCurriculum2Component implements OnInit {
   courseId: number = 0;
   sections: SectionResponse[] = [];
 

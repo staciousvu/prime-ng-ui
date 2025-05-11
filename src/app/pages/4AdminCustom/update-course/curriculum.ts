@@ -114,7 +114,7 @@ export interface LectureResponse {
                     </div>
                     <p-button label="Add Lecture" icon="pi pi-plus" class="btn-add" (click)="startAddingLecture(sectionIndex)" />
                     <div *ngIf="isAddingLecture && currentSectionIndex === sectionIndex" class="mt-3 flex items-center gap-2">
-                        <input pInputText [(ngModel)]="newLectureTitle" placeholder="Enter lecture title" class="input-text w-full" />
+                        <input pInputText [(ngModel)]="newLectureTitle" placeholder="Enter lecture title haha.." class="input-text w-full" />
                         <p-button icon="pi pi-save" class="btn-save" (click)="saveLecture(section.id)" />
                     </div>
                 </div>
@@ -187,7 +187,7 @@ export class UpdateCurriculumComponent implements OnChanges {
                 courseId: this.courseId
             };
             this.http.post<any>(`http://localhost:8080/section/create`, requestBody).subscribe((response) => {
-                this.sections.push({ title: this.newSectionTitle, totalLectures: 0, lectures: [] });
+                this.sections.push({id:response.data.id, title: this.newSectionTitle, totalLectures: 0, lectures: [] });
                 this.newSectionTitle = '';
                 this.isAddingSection = false;
 
@@ -238,6 +238,7 @@ export class UpdateCurriculumComponent implements OnChanges {
     }
 
     saveLecture(sectionId?: number): void {
+        console.log('sectionidddddddddddddd:',sectionId);
         if (this.newLectureTitle.trim() && this.currentSectionIndex !== null) {
             const sectionIndex = this.currentSectionIndex;
             const requestBody = {

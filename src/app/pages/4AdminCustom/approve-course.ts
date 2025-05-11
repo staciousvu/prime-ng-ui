@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { TableModule } from 'primeng/table';
 import { CommonModule } from '@angular/common';
 import { BadgeModule } from 'primeng/badge';
@@ -8,7 +8,7 @@ import { TagModule } from 'primeng/tag';
 import { ButtonModule } from 'primeng/button';
 import { IconFieldModule } from 'primeng/iconfield';
 import { InputIconModule } from 'primeng/inputicon';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { CourseData } from '../service/data.service';
@@ -47,7 +47,7 @@ import { CourseDraftComponent } from './draft-courses';
     template: `
         <app-breadcrump [apr]="'Approve course'" [manager]="'Manage course'"></app-breadcrump>
         <div class="font-semibold text-xl mb-4">Approve Course</div>
-            <p-tabs value="0">
+            <p-tabs [value]="tabIndex">
                 <p-tablist>
                     <p-tab value="0">Chờ duyệt</p-tab>
                     <p-tab value="1">Đã duyệt</p-tab>
@@ -73,4 +73,19 @@ import { CourseDraftComponent } from './draft-courses';
     styles: [``],
     providers: [CourseData]
 })
-export class ApproveCourseComponent {}
+export class ApproveCourseComponent implements OnInit{
+    tabIndex: string = '1'; 
+
+    constructor(
+        private route: ActivatedRoute
+    ) {}
+
+    ngOnInit(): void {
+        // Lấy queryParams từ URL để xác định tab
+        this.route.queryParams.subscribe(params => {
+            this.tabIndex = params['tabIndex'] ? params['tabIndex'] : '1';
+            console.log('tabindex queryyyyyyyyy:',params['tabIndex'])
+            console.log('tabindexxxxxxxxxxxxxx:',this.tabIndex)
+        });
+    }
+}

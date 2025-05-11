@@ -193,6 +193,11 @@ export class CourseDraftComponent implements OnInit {
       }
   }
     view(id: string) {
-        this.router.navigate(['/admin/courses/view-course', id]);
-      }
+    this.router.navigate(['/review/course', id, 'admin', 'draft'], {
+        queryParams: {
+            tabIndex: '3' // Thêm tabIndex=3 vào queryParams
+        }
+    });
+}
+
 }

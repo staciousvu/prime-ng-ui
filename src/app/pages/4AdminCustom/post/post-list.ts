@@ -83,8 +83,8 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
                             <p-toggleswitch [(ngModel)]="post.isPublished" (onChange)="onToggleActive(post)" [style]="{ width: '3rem' }"></p-toggleswitch>
                         </td>
                         <td class="p-3 space-x-2">
-                            <button class="px-3 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700" (click)="confirmApproval(post.id)"><i class="pi pi-pen-to-square"></i></button>
-                            <button class="px-3 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700" (click)="confirmReject(post.id)"><i class="pi pi-trash"></i></button>
+                            <button class="px-3 py-2 text-sm bg-green-600 text-white rounded hover:bg-green-700" (click)="edit(post.slug)"><i class="pi pi-pen-to-square"></i></button>
+                            <button class="px-3 py-2 text-sm bg-red-600 text-white rounded hover:bg-red-700" (click)="delete(post.id)"><i class="pi pi-trash"></i></button>
                         </td>
                     </tr>
                 </tbody>
@@ -132,6 +132,12 @@ import { ToggleSwitchModule } from 'primeng/toggleswitch';
     `
 })
 export class PostComponent implements OnInit {
+delete(id: any) {
+throw new Error('Method not implemented.');
+}
+    edit(slug: any) {
+    this.router.navigate(['admin','post','edit',slug]);
+    }
     posts: any[] = [];
     totalPosts = 0;
     confirmApproval(id: number) {

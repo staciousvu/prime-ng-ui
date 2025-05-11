@@ -9,7 +9,9 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
     template: `
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <nav class="w-64 bg-white shadow-md rounded-lg overflow-hidden p-5">
+            <!-- <nav class="w-64 bg-white shadow-md rounded-lg overflow-hidden p-5"> -->
+            <nav class="hidden md:block w-64 bg-white shadow-md rounded-lg overflow-hidden p-5">
+
                 <ul class="space-y-1">
                     <!-- Q&A -->
                     <li>

@@ -4,11 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../service/auth.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { ClassicEditor } from 'ckeditor5';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
+import { CKEDITOR_CONFIG } from '../models/ckeditor-config';
 @Component({
     selector: 'app-message-user',
     standalone: true,
-    imports: [CommonModule, FormsModule],
+    imports: [CommonModule, FormsModule,CKEditorModule],
     template: `
         <h1 class="font-semibold text-gray-800 w-[80%] mx-auto px-6 py-2">Messages</h1>
         <div class="w-[80%] mx-auto p-1 bg-gray-100">
@@ -27,7 +29,7 @@ import { ActivatedRoute } from '@angular/router';
                             <img [src]="conv.instructor.avatar || 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?rs=1&pid=ImgDetMain'" alt="User" class="w-10 h-10 rounded-full" />
                             <div class="flex-1">
                                 <h5 class="font-semibold text-gray-800">{{ conv.instructor.firstName + '' + conv.instructor.lastName }}</h5>
-                                <p class="text-sm text-gray-500 truncate">{{ conv.lastMessage || 'No messages yet' }}</p>
+                                <p class="text-sm text-gray-500 truncate" [innerHTML]="conv.lastMessage || 'No messages yet'"></p>
                             </div>
                             <span class="text-xs text-gray-400">{{ conv.lastMessageTime | date: 'shortTime' }}</span>
                         </div>
@@ -52,16 +54,16 @@ import { ActivatedRoute } from '@angular/router';
                             <!-- Tin nhắn từ người khác -->
                             <div *ngIf="msg.senderId !== currentUserId" class="flex items-start">
                                 <img [src]="msg.senderAvatar || defaultAvatar" class="w-8 h-8 rounded-full mr-2" />
-                                <div class="bg-white p-3 rounded-lg shadow max-w-xs">
-                                    <p>{{ msg.content }}</p>
+                                <div class="bg-white p-3 rounded-lg shadow max-w-lg">
+                                    <p [innerHTML]="msg.content"></p>
                                     <p class="text-xs text-gray-400 mt-1">{{ msg.senderName }} · {{ msg.createdAt | date: 'shortTime' }}</p>
                                 </div>
                             </div>
 
                             <!-- Tin nhắn từ bạn -->
                             <div *ngIf="msg.senderId === currentUserId" class="flex items-end justify-end">
-                                <div class="bg-purple-600 text-white p-3 rounded-lg shadow max-w-xs">
-                                    <p>{{ msg.content }}</p>
+                                <div class="bg-purple-600 text-white p-3 rounded-lg shadow max-w-lg">
+                                    <p [innerHTML]="msg.content"></p>
                                     <p class="text-xs text-purple-200 mt-1 text-right">You · {{ msg.createdAt | date: 'shortTime' }}</p>
                                 </div>
                             </div>
@@ -70,7 +72,8 @@ import { ActivatedRoute } from '@angular/router';
 
                     <!-- Message Input -->
                     <div class="mt-4">
-                        <textarea (keydown.enter)="handleEnterKey($event)" [(ngModel)]="newMessage" rows="3" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Type your message..."></textarea>
+                      <ckeditor (keydown.enter)="handleEnterKey($event)" [editor]="Editor" [(ngModel)]="newMessage" [config]="config" class="h-[400px] w-full"></ckeditor>
+                        <!-- <textarea (keydown.enter)="handleEnterKey($event)" [(ngModel)]="newMessage" rows="3" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Type your message..."></textarea> -->
                         <div class="flex justify-end mt-2">
                             <button (click)="sendMessage()" class="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition">Send</button>
                         </div>
@@ -83,6 +86,8 @@ import { ActivatedRoute } from '@angular/router';
     providers: []
 })
 export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
+  public Editor = ClassicEditor;
+            public config = CKEDITOR_CONFIG;
   conversations: any[] = [];
   messages: any[] = [];
   selectedConversationId: number | null = null;
@@ -102,31 +107,7 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
     private router:ActivatedRoute
   ) {}
 
-  // ngOnInit(): void {
-  //   this.chatService.connect();
-  //   this.studentEmail=this.authService.getEmail()!;
-  //   this.chatService.getConversationsForStudent(this.studentEmail).subscribe({
-  //     next: (response: any) => {
-  //       this.conversations = response.data;
-  //       console.log('conversations:', this.conversations);
-  //       this.router.queryParams.subscribe(params => {
-  //         const conversationId = Number(params['conversationId']);
-  //         console.log('hello haha:', conversationId);
-  //         if (conversationId) {
-  //           console.log('hello haha1');
-  //           this.selectConversation(conversationId);
-  //         }else{
-  //           this.selectConversation(this.conversations[0].id)
-  //         }
-  //       });
-        
-  //     },
-  //     error: (err) => console.error('Error fetching conversations:', err)
-  //   });
 
-  //   this.currentUserId = Number(this.authService.getId())!;
-
-  // }
   ngOnInit(): void {
     this.studentEmail = this.authService.getEmail()!;
     this.currentUserId = Number(this.authService.getId());
@@ -205,6 +186,7 @@ export class MessageUserComponent implements OnInit, OnDestroy, AfterViewInit, A
   }
 
   sendMessage(): void {
+    console.log('new messageeeeeee:',this.newMessage)
     if (this.newMessage.trim() && this.selectedConversationId) {
       this.chatService.sendMessage(this.selectedConversationId, this.currentUserId, this.newMessage);
       this.newMessage = '';

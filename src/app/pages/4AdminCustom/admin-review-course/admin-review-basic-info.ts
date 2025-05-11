@@ -1,38 +1,38 @@
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AccordionModule } from 'primeng/accordion';
-import { StarRatingComponent } from './star-rating';
-import { CartService } from '../service/cart.service';
-import { MessageService } from 'primeng/api';
-import { ToastModule } from 'primeng/toast';
-import { ToastService } from '../service/toast.service';
+import { StarRatingComponent } from '../../4User/star-rating';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+import { CartService } from '../../service/cart.service';
+import { ToastService } from '../../service/toast.service';
 
 @Component({
-    selector: 'app-course-detail2',
+    selector: 'app-admin-review-basic-info',
     standalone: true,
     encapsulation: ViewEncapsulation.None,
-    imports: [AccordionModule, CommonModule, StarRatingComponent, RouterLink, ToastModule],
+    imports: [RouterLink, AccordionModule, CommonModule, StarRatingComponent],
     template: `
         <div class="bg-[#1d1e27] p-8 md:p-12 lg:p-15 relative overflow-visible">
             <div class="w-[75%] mx-auto relative z-10">
                 <!-- Nội dung chính -->
                 <div>
-                    <nav class="text-lg text-[#5694E5] space-x-1 mb-4">
-                        <a href="#" class="hover:underline">{{ course.categories[0].categoryName }}</a>
-                        <span>></span>
-                        <a href="#" class="hover:underline">{{ course.categories[1].categoryName }}</a>
-                        <span>></span>
-                        <span class="hover:underline">{{ course.categories[2].categoryName }}</span>
+                    <nav class="text-lg text-[#5694E5] mb-4 flex items-center space-x-1">
+                        <ng-container *ngFor="let category of course.categories; let last = last">
+                            <a href="#" class="hover:underline">{{ category.categoryName }}</a>
+                            <svg *ngIf="!last" class="w-4 h-4 mx-1 text-[#5694E5]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+                            </svg>
+                        </ng-container>
                     </nav>
 
                     <h1 class="text-3xl font-bold text-white mb-2">{{ course.title }}</h1>
                     <p class="text-lg text-white opacity-90 mb-4">{{ course.subtitle }}</p>
 
                     <div class="flex items-center gap-3 mb-2">
-                        <span class="text-yellow-500 font-semibold">{{ course.avgRating }}</span>
-                        <app-star-rating [rating]="course.avgRating"></app-star-rating>
+                        <span class="text-yellow-500 font-semibold">{{ course.avgRating | number:'1.1-1' }}</span>
+
+                        <app-star-rating [rating]="roundedRating"></app-star-rating>
                         <span class="text-gray-500">({{ course.countRating }} ratings)</span>
                         <span class="text-gray-500">({{ course.countEnrolled }} students)</span>
                     </div>
@@ -56,34 +56,7 @@ import { ToastService } from '../service/toast.service';
                     <!-- Info Section -->
                     <div class="w-full px-5 py-6 border rounded-md shadow-sm">
                         <!-- Price + Discount -->
-                        <div class="text-3xl font-bold text-gray-900 mb-1">đ{{ course.discount_price | number: '1.0-1' }}</div>
-                        <div *ngIf="course.discount_price !== course.price" class="flex items-center gap-2 mb-2 text-sm">
-                            <span class="line-through text-lg text-gray-500">đ{{ course.price | number: '1.0-1' }}</span>
-                            <span class="text-red-600 text-base font-semibold">{{ calculateDiscount(course.price, course.discount_price) }}% off</span>
-                        </div>
-
-                        <!-- Emergency notice -->
-                        <!-- <div *ngIf="course.discount_price !== course.price" class="flex items-center text-lg text-red-600 mb-4">
-                            <i class="fa-solid fa-bell mr-2"></i>
-                            <span><strong>10 hours</strong> left at this price</span>
-                        </div> -->
-
-                        <!-- Add to cart and heart -->
-                        <div class="flex gap-3 mb-6">
-                            <button
-                                class="flex-1 bg-purple-700 hover:bg-purple-600 text-white font-bold py-3 rounded-md transition-all duration-200 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
-                                (click)="handleCartClick()"
-                                [disabled]="loading"
-                            >
-                                <span *ngIf="!loading">{{ isInCart ? 'Go to cart' : 'Add to cart' }}</span>
-                                <span *ngIf="loading" class="spinner"></span>
-                            </button>
-
-                            <button class="w-[48px] h-[48px] border border-gray-300 rounded-md flex items-center justify-center hover:border-purple-500 transition">
-                                <i class="fa-regular fa-heart text-xl text-purple-600"></i>
-                            </button>
-                        </div>
-
+                         <div class="text-3xl font-bold text-gray-900 mb-1">đ{{ course.price | number: '1.0-1' }}</div>
                         <!-- Course Includes -->
                         <div>
                             <p class="font-semibold text-sm text-gray-900 mb-3">This course includes:</p>
@@ -192,7 +165,6 @@ import { ToastService } from '../service/toast.service';
                 </div>
             </div>
         </div>
-        <p-toast></p-toast>
     `,
     styles: `
         .spinner {
@@ -699,11 +671,10 @@ import { ToastService } from '../service/toast.service';
             color: #1f2937;
             margin-bottom: 24px;
         }
-    `,
-    providers: [MessageService]
+    `
 })
-export class CourseDetail2Component implements OnInit {
-    courseId: any;
+export class AdminReviewBasicInfoComponent implements OnInit {
+    @Input() courseId: string = ''; // Nhận giá trị courseId từ component cha
     course: any;
     specialObject: any;
     courseSections: any[] = [];
@@ -712,17 +683,13 @@ export class CourseDetail2Component implements OnInit {
         private http: HttpClient,
         private cartService: CartService,
         private route: Router,
-        private messageService: MessageService,
         private toastService: ToastService
     ) {}
     ngOnInit(): void {
-        this.router.paramMap.subscribe((params) => {
-            this.courseId = +params.get('id')!;
-            console.log('Course ID:', this.courseId);
-        });
+
         this.http.get<any>(`http://localhost:8080/course/course-detail/${this.courseId}`).subscribe((response) => {
             this.course = response.data;
-            console.log('video:', this.course.previewVideo);
+            this.roundedRating = Math.round(this.course.avgRating);
         });
         this.http.get<any>(`http://localhost:8080/course/${this.courseId}/sections-lectures`).subscribe((response) => {
             this.specialObject = response.data;
@@ -736,22 +703,6 @@ export class CourseDetail2Component implements OnInit {
     }
     isInCart: boolean = false;
     loading: boolean = false;
-    handleCartClick() {
-        if (this.isInCart) {
-            this.route.navigate(['/cart']);
-        } else {
-            this.loading = true;
-            this.cartService.addToCart(this.courseId).subscribe(() => {
-                this.cartService.loadCart();
-                // giả lập hiệu ứng loading 1s rồi mới set lại
-                setTimeout(() => {
-                    this.loading = false;
-                    this.isInCart = true; // nếu bạn không dùng BehaviorSubject thì set thủ công
-                    this.toastService.addToast('success', 'Thêm vào giỏ hàng thành công');
-                }, 1000);
-            });
-        }
-    }
 
     calculateDiscount(original: number, discount: number): number {
         if (!original || original === 0) return 0;
@@ -771,4 +722,8 @@ export class CourseDetail2Component implements OnInit {
     santinizeBio() {
         return this.course.author.bio.replace(/&nbsp;/g, ' ');
     }
+    roundedRating=0;
+
+
+
 }

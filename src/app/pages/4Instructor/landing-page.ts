@@ -14,11 +14,11 @@ import { SelectModule } from 'primeng/select';
     encapsulation:ViewEncapsulation.None, 
     imports: [RouterModule, FormsModule, CommonModule, Editor, SelectModule],
     template: `
-        <section class="bg-white rounded-md shadow-sm flex-grow w-full min-w-0 border border-[#E2E8F0] pb-14" aria-label="Intended learners">
-        <header class="border-b border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
+        <section class="bg-white  flex-grow max-w-6xl min-w-0 border-l border-r border-[#E2E8F0] pb-14" aria-label="Intended learners">
+        <!-- <header class="border-[#E2E8F0] px-10 py-2 flex justify-center items-center">
                 <h1 class="text-2xl font-semibold text-[#1E293B] mb-0">Course landing page</h1>
-            </header>
-            <div class="px-10 pt-10 space-y-8 text-[#334155] text-lg font-normal w-full">
+            </header> -->
+            <div class="px-10 pt-0 space-y-8 text-[#334155] text-lg font-normal w-full">
                 <!-- <p>
                     Trang đích khóa học của bạn đóng vai trò quan trọng đối với thành công của bạn trên Eduflow. Nếu thực hiện đúng, nó cũng có thể giúp bạn tăng khả năng hiển thị trên các công cụ tìm kiếm như Google. Khi bạn hoàn thành phần này, hãy
                     nghĩ đến việc tạo Trang đích khóa học hấp dẫn để chứng minh lý do tại sao ai đó muốn đăng ký khóa học của bạn. Tìm hiểu thêm về cách tạo <a href="#" class="text-purple-700 underline hover:text-purple-800">landing page</a>.
@@ -26,9 +26,9 @@ import { SelectModule } from 'primeng/select';
                 <form class="space-y-6">
                     <!-- Course title -->
                     <div>
-                        <label for="course-title" class="block font-semibold text-gray-900 mb-1"> Course title </label>
+                        <label for="course-title" class="block font-semibold text-base text-gray-700 mb-1"> Course title </label>
                         <div class="flex items-center border border-gray-400 rounded-md overflow-hidden">
-                            <input id="course-title" type="text" [(ngModel)]="course.title" name="title" placeholder="Insert your course title." maxlength="60" class="flex-grow px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none" />
+                            <input id="course-title" type="text" [(ngModel)]="course.title" name="title" placeholder="Insert your course title." maxlength="60" class="text-base flex-grow px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none" />
                             <span class="text-gray-600 px-4 select-none">{{ 60 - (course.title?.length || 0) }}</span>
                         </div>
                         <p class="mt-1 text-xs text-gray-600">Tiêu đề của bạn phải là sự kết hợp giữa sự thu hút, thông tin rõ ràng và được tối ưu hóa cho tìm kiếm.</p>
@@ -36,7 +36,7 @@ import { SelectModule } from 'primeng/select';
 
                     <!-- Course subtitle -->
                     <div>
-                        <label for="course-subtitle" class="block font-semibold text-gray-900 mb-1"> Course subtitle </label>
+                        <label for="course-subtitle" class="block font-semibold text-base text-gray-700 mb-1"> Course subtitle </label>
                         <div class="flex items-center border border-gray-400 rounded-md overflow-hidden">
                             <input
                                 id="course-subtitle"
@@ -45,7 +45,7 @@ import { SelectModule } from 'primeng/select';
                                 name="subtitle"
                                 placeholder="Insert your course subtitle."
                                 maxlength="120"
-                                class="flex-grow px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"
+                                class="text-base flex-grow px-4 py-2 text-gray-700 placeholder-gray-400 focus:outline-none"
                             />
                             <span class="text-gray-600 px-4 select-none">{{ 120 - (course.subtitle?.length || 0) }}</span>
                         </div>
@@ -54,9 +54,9 @@ import { SelectModule } from 'primeng/select';
 
                     <!-- Course description -->
                     <div>
-                        <label for="course-description" class="block font-semibold text-gray-900 mb-1"> Course description </label>
+                        <label for="course-description" class="block font-semibold text-base text-gray-700 mb-1"> Course description </label>
                         <!-- <p-editor class="" [(ngModel)]="course.description" name="description" [style]="{ height: '250px' }" /> -->
-                        <p-editor [(ngModel)]="course.description" name="description" [style]="{ height: '250px' , fontSize: '16px' }">
+                        <p-editor [(ngModel)]="course.description" name="description" [style]="{ height: '250px' , fontSize: '15px' }">
                             <ng-template #header>
                                 <span class="ql-formats">
                                     <button type="button" class="ql-bold" aria-label="Bold"></button>
@@ -70,7 +70,7 @@ import { SelectModule } from 'primeng/select';
 
                     <div class="flex space-x-4">
                         <div class="max-w-lg flex-1">
-                            <label for="language" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Select language</label>
+                            <label for="language" class="block mb-2 text-base font-medium text-gray-700 dark:text-white">Select language</label>
                             <select
                                 id="language"
                                 [(ngModel)]="course.language"
@@ -82,7 +82,7 @@ import { SelectModule } from 'primeng/select';
                             </select>
                         </div>
                         <div class="max-w-lg flex-1">
-                            <label for="level" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Select level</label>
+                            <label for="level" class="block mb-2 text-base font-medium text-gray-700 dark:text-white">Select level</label>
                             <select
                                 id="level"
                                 [(ngModel)]="course.level"
@@ -97,7 +97,7 @@ import { SelectModule } from 'primeng/select';
 
                     <div class="flex space-x-4">
                         <div class="max-w-sm flex-1">
-                            <label for="root-category" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Select category</label>
+                            <label for="root-category" class="block mb-2 text-base font-medium text-gray-700 dark:text-white">Select category</label>
                             <select
                                 id="root-category"
                                 [(ngModel)]="selectedRoot"
@@ -110,7 +110,7 @@ import { SelectModule } from 'primeng/select';
                             </select>
                         </div>
                         <div class="max-w-sm flex-1">
-                            <label for="sub-category" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Select subcategory</label>
+                            <label for="sub-category" class="block mb-2 text-base font-medium text-gray-700 dark:text-white">Select subcategory</label>
                             <select
                                 id="sub-category"
                                 [(ngModel)]="selectedSub"
@@ -124,7 +124,7 @@ import { SelectModule } from 'primeng/select';
                             </select>
                         </div>
                         <div class="max-w-sm flex-1">
-                            <label for="topic" class="block mb-2 text-base font-medium text-gray-900 dark:text-white">Select topic</label>
+                            <label for="topic" class="block mb-2 text-base font-medium text-gray-700 dark:text-white">Select topic</label>
                             <select
                                 id="topic"
                                 [(ngModel)]="selectedTopic"

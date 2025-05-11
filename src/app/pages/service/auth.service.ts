@@ -114,6 +114,7 @@ export class AuthService {
         sessionStorage.removeItem('user_data');   // Xóa dữ liệu user
         sessionStorage.removeItem('roles');        // Xóa role
         this.authStatus.next(false);
+        console.log("Toi da dang xuat")
       }
       
       getAuthStatus() {
