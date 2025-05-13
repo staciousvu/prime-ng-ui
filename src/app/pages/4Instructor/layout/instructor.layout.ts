@@ -76,6 +76,23 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
                                 hover:bg-gray-800 rounded-md cursor-pointer 
                                 transition active:scale-95"
                         routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                        [routerLink]="['/instructor/advertisements']"
+                    >
+                        <i class="fa-solid fa-rectangle-ad me-3"></i>
+                        <span
+                            class="transition-all duration-300 
+                                   opacity-0 translate-x-[-20px]
+                                   group-hover:opacity-100 group-hover:translate-x-0 
+                                   whitespace-nowrap"
+                        >
+                            Advertisement
+                        </span>
+                    </div>
+                    <div
+                        class="flex items-center space-x-2 px-3 py-4
+                                hover:bg-gray-800 rounded-md cursor-pointer 
+                                transition active:scale-95"
+                        routerLinkActive="border-l-4 border-purple-500 font-semibold"
                         [routerLink]="['/instructor/profiles']"
                     >
                         <i class="bi bi-person-circle me-3"></i>

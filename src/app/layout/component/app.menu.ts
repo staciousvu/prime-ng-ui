@@ -48,6 +48,12 @@ export class AppMenu {
 
                 ]
             },
+            {
+                label: 'Quản lý quảng cáo',
+                items: [
+                    { label: 'List advertisements', icon: 'pi pi-fw pi-window-maximize', routerLink: ['/admin/advertisements/list'] },
+                ]
+            },
             // {
             //     label: 'Quản lý đánh giá',
             //     items: [

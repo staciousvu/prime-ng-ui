@@ -12,6 +12,7 @@ import { PerformanceLayoutComponent } from "../layout/performance.layout";
 import { PerformanceOverviewComponent } from "../component/performance-overview";
 import { PerformanceStudentComponent } from "../component/performance-student";
 import { PerformanceReviewComponent } from "../component/performance-review";
+import { AdvertisementLayoutComponent } from "../layout/advertisement.layout";
 
 
 
@@ -40,6 +41,7 @@ export default [
         {path:'student',component:PerformanceStudentComponent},
         {path:'review',component:PerformanceReviewComponent},
     ] },
+    { path: 'advertisements', data: { breadcrumb: 'Button' },component:AdvertisementLayoutComponent},
 
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;

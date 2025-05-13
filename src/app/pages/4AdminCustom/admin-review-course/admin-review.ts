@@ -101,6 +101,8 @@ export class AdminReviewComponent implements OnInit {
             if (this.context === 'report') {
                 // Nếu context là 'report', điều hướng về trang danh sách báo cáo
                 this.router.navigate(['/admin/report/list']);
+            }else if(this.context === 'advertisement'){
+                this.router.navigate(['/admin/advertisements/list']);
             } else {
                 // Nếu context không phải 'report', điều hướng về trang approve-course và truyền lại tabIndex
                 this.router.navigate(['/admin/courses/approve-course'], {

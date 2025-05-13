@@ -804,7 +804,7 @@ export class NavBarComponent implements OnInit {
         console.log('Logout clicked in AppTopbar!');
 
         this.authService.logout();
-        // this.router.navigate(['/home']);
+        this.router.navigate(['user/login']);
     }
     isLoggedIn: boolean = false;
     constructor(
