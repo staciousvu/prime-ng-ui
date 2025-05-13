@@ -4,13 +4,12 @@ import { Component } from '@angular/core';
     selector: 'app-announcements-communication',
     standalone: true,
     template: `
-        <div class="col-lg-9 right">
+        <!-- <div class="col-lg-9 right">
             <div class="bg-white rounded shadow-sm mb-3">
                 <div class="border-b p-3">
                     <h6 class="m-0 text-base font-semibold">Recent</h6>
                 </div>
                 <div class="p-0">
-                    <!-- First Post -->
                     <div class="p-3 flex items-center bg-gray-100 border-b">
                         <div class="mr-3">
                             <img class="rounded-full w-10 h-10" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt="" />
@@ -26,7 +25,12 @@ import { Component } from '@angular/core';
 
                 </div>
             </div>
-        </div>
+        </div> -->
+        <div class="flex items-center justify-center">
+  <p class="text-lg font-semibold text-gray-600">
+    Đang trong thời gian phát triển, vui lòng chờ.
+  </p>
+</div>
     `,
     styles: ``
 })

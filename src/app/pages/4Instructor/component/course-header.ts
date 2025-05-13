@@ -14,10 +14,14 @@ import { HttpClient } from '@angular/common/http';
     template: `
         <nav class="bg-[#0F172A] flex items-center justify-between px-4 sm:px-6 lg:px-8 h-20">
             <div class="flex items-center text-white text-sm font-semibold">
-                <button [routerLink]="['/instructor/courses']" aria-label="Back to courses" class="flex items-center space-x-2">
-                    <i class="fas fa-arrow-left text-white text-xl"></i>
-                    <span class="text-base">Back to courses</span>
-                </button>
+                <button [routerLink]="['/instructor/courses']" aria-label="Back to courses" 
+      class="flex items-center space-x-2 text-gray-300 hover:text-white transition-colors duration-200 group">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" 
+        class="w-5 h-5 transform group-hover:-translate-x-1 transition-transform duration-200">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      <span class="text-sm font-medium">Back to courses</span>
+    </button>
                 <span class="ml-10 font-bold text-base">{{ course.title }}</span>
                 <span [ngClass]="{
                         'bg-gray-500 text-white': courseStatus === 'DRAFT',
@@ -35,30 +39,21 @@ import { HttpClient } from '@angular/common/http';
                 <ng-container *ngFor="let control of controls">
                     <!-- Button -->
                     <button
-                        *ngIf="control.type === 'button'"
-                        class="bg-[#374151] text-white text-sm font-semibold rounded px-4 py-2 
-                            active:bg-[#2d3a41] focus:outline-none"
-                            [ngClass]="{
-                            'bg-[#374151]': !control.disabled,
-                            'bg-gray-400 cursor-not-allowed': control.disabled
-                        }"
+        *ngIf="control.type === 'button'"
+        (click)="control.action?.()"
+        [disabled]="control.disabled"
+        class="relative inline-flex items-center px-4 py-2 rounded-md text-sm font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+        [ngClass]="{
+          'bg-blue-600 hover:bg-blue-700 text-white shadow-sm': !control.disabled,
+          'bg-slate-500 bg-opacity-50 text-slate-300 cursor-not-allowed': control.disabled
+        }">
+        {{ control.label }}
+      </button>
 
-                        (click)="control.action?.()"
-                        [disabled]="control.disabled"
-                    >
-                        {{ control.label }} 
-                    </button>
-
-                    <!-- Select -->
-                    <select *ngIf="control.type === 'select'" class="bg-[#374151] text-white text-sm rounded px-2 py-1" [ngModel]="control.value" (ngModelChange)="onSelectChange(control, $event)">
-                        <option *ngFor="let opt of control.options" [value]="opt.value">{{ opt.label }}</option>
-                    </select>
                 </ng-container>
 
                 <!-- Settings Icon -->
-                <button aria-label="Settings" class="text-[#9CA3AF] hover:text-white">
-                    <i class="fas fa-cog"></i>
-                </button>
+
             </div>
         </nav>
     `,

@@ -343,9 +343,10 @@ export class Cart2Component implements OnInit {
             email: this.authService.getEmail(),
             payment_method: 'VNPAY',
             total_amount: this.totalMoney,
+            orderType: 'COURSE',
             // total_amount:10000,
             courses: this.myCarts.map((item) => item.courseResponse.id),
-            order_info: `Thanh toán đơn hàng cho user ${localStorage.getItem('email')}`
+            order_info: `Thanh toán đơn hàng cho ${this.authService.getEmail()}`
         };
         console.log('request:', request);
         this.http.post<any>('http://localhost:8080/payment/vn-pay', request).subscribe(

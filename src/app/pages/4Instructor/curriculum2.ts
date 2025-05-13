@@ -18,8 +18,13 @@ import { ToastService } from "../service/toast.service";
     imports:[ButtonModule,CommonModule,FormsModule,FileUploadModule,ProgressSpinnerModule ],
     template: `
     <section class="bg-white flex-grow w-full min-w-0 border-l border-r border-[#E2E8F0] pb-14" aria-label="Intended learners">
+        
 
-    <div class="px-10 pt-0 space-y-8 text-[#334155] text-lg font-normal w-full">
+    <div class="px-10 py-6 pt-0 space-y-8 text-[#334155] text-lg font-normal w-full">
+        <div class="mb-8 mt-6">
+      <h1 class="text-xl font-bold text-gray-800">Quản lý chương trình học</h1>
+      <p class="text-gray-500 mt-1">Tạo và quản lý các chương trình học cho khóa học của bạn</p>
+    </div>
     <div class=" min-h-screen">
             <!-- Sections -->
             <div *ngFor="let section of sections; let sectionIndex = index" class="mb-4 p-4 bg-white shadow rounded-lg border border-gray-200">

@@ -6,7 +6,12 @@ import { Component } from "@angular/core";
     selector: 'app-qna-communication',
     standalone:true,
     template: `
-    <p>qna component</p>
+    <div class="flex items-center justify-center">
+  <p class="text-lg font-semibold text-gray-600">
+    Đang trong thời gian phát triển, vui lòng chờ.
+  </p>
+</div>
+
     `,
     styles: ``
 })

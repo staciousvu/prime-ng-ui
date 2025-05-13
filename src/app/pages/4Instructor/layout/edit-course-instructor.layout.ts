@@ -107,14 +107,14 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
     </div>
     
     <!-- Course Status -->
-    <div class="mt-6 pt-5 border-t border-gray-200">
+    <!-- <div class="mt-6 pt-5 border-t border-gray-200">
         <div class="flex items-center justify-between">
             <span class="text-sm text-gray-500">Trạng thái:</span>
             <span class="text-sm font-medium bg-yellow-100 text-yellow-800 px-2.5 py-0.5 rounded-full">
                 Bản nháp
             </span>
         </div>
-    </div>
+    </div> -->
 </aside>
 
             <!-- Main content -->
