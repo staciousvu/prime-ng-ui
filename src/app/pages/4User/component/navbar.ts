@@ -124,7 +124,7 @@ import { NotificationService } from '../../service/notification.service';
                             </div>
                         </li>
                         <li class="nav-link-item user-menu" style="position: relative;">
-                            <img class="avatar" [src]="avatarUrl ? avatarUrl : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />
+                            <img class="avatar" [src]="myprofile.avatar ? myprofile.avatar : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />
                             <ul class="dropdown bg-white shadow-md rounded-lg py-2 px-0 w-56">
                                 <li class="hover:bg-gray-100 px-4 py-2 rounded-md transition">
                                     <a [routerLink]="'/instructor/profiles/basic-information'" class="block text-gray-800 font-medium">Profile</a>
@@ -844,11 +844,18 @@ export class NavBarComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.loadProfile();
         this.authService.getAuthStatus().subscribe((status) => {
             this.isLoggedIn = status;
             if (status) {
                 this.loadUserData();
             }
+        });
+    }
+    myprofile:any;
+    loadProfile(){
+        this.http.get<any>(`http://localhost:8080/profile`).subscribe((response) => {
+            this.myprofile = response.data;
         });
     }
 }

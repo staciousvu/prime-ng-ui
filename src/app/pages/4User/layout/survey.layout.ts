@@ -22,6 +22,7 @@ import { CommonModule } from "@angular/common";
 })
 export class SurveyLayoutComponent{
   prefRootId: string | null = null; // Lưu trữ lựa chọn của người dùng
+  prefRootName: string | null = null;
     currentStep:number =1;
     goToStepTwo(prefId:string |null) {
       this.prefRootId = prefId;

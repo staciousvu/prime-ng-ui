@@ -14,27 +14,28 @@ import { HttpClient } from '@angular/common/http';
 import { AuthService } from '../service/auth.service';
 import { RouterLink } from '@angular/router';
 import { GalleriaModule } from 'primeng/galleria';
+import { PopupComponent } from './component/popup-ads';
 
 @Component({
     selector: 'app-home',
     standalone: true,
     // encapsulation: ViewEncapsulation.None,
-    imports: [GalleriaModule, RouterLink, ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],
+    imports: [PopupComponent,GalleriaModule, RouterLink, ProductCarouselComponent, ButtonModule, TagModule, CarouselModule, CommonModule, RatingModule, FormsModule, CategoryNavComponent],
     template: `
         <div class="hidden md:block">
             <app-category-list />
         </div>
         <div class="welcome">
             <div class="avatar">
-                <img class="avatar" [src]="avatarUrl ? avatarUrl : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />
+                <img class="avatar" [src]="myprofile.avatar ? myprofile.avatar : 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?w=193&h=193&c=7&r=0&o=5&dpr=1.3&pid=1.7'" alt="" />
             </div>
             <div class="info">
                 <p class="welcome-name">Bạn đã trở lại, {{ fullname }}</p>
-                <div class="major" *ngIf="favoriteCategory">
-                    <span class="major-name">Danh mục yêu thích: {{ favoriteCategory }}</span>
+                <div class="major" *ngIf="myprofile.favoriteCategory">
+                    <span class="major-name">Danh mục yêu thích: {{ myprofile.favoriteCategory }}</span>  
                     <a href="#" class="edit-major" [routerLink]="['/survey']">Chỉnh sửa thông tin</a>
                 </div>
-                <div class="major" *ngIf="!favoriteCategory">
+                <div class="major" *ngIf="!myprofile.favoriteCategory">
                     <span class="major-name">Chưa có danh mục yêu thích</span>
                     <a href="#" class="edit-major" [routerLink]="['/survey']">Thêm thông tin</a>
                 </div>
@@ -82,6 +83,7 @@ import { GalleriaModule } from 'primeng/galleria';
                 <app-product-carousel *ngIf="item.courses.length > 3" [title]="'Hệ thống đề xuất cho bạn chủ đề '" [keyword]="item.categoryName" [courses]="item.courses"> </app-product-carousel>
             </ng-container>
         </div>
+        <app-popup [course]="popupcourse"/>
     `,
     styles: `
         .border {
@@ -285,11 +287,16 @@ export class HomeComponent implements OnInit {
         private http: HttpClient,
         private authService: AuthService
     ) {}
+    popupcourse:any;
 
     ngOnInit() {
+        this.loadProfile();
         this.avatarUrl = this.authService.getAvatar();
         this.fullname = this.authService.getFullname();
         this.favoriteCategory = this.authService.getFavoriteCategory();
+        this.http.get<any>(`http://localhost:8080/advertisements/ads-for-learner`).subscribe((response) => {
+            this.popupcourse = response.data;
+        });
         this.http.get<any>(`http://localhost:8080/recommend/root`).subscribe((response) => {
             this.courses_preference_root = response.data;
             console.log('courses_preference_root:', this.courses_preference_root);
@@ -346,4 +353,10 @@ export class HomeComponent implements OnInit {
             numVisible: 1
         }
     ];
+    myprofile:any;
+    loadProfile(){
+        this.http.get<any>(`http://localhost:8080/profile`).subscribe((response) => {
+            this.myprofile = response.data;
+        });
+    }
 }

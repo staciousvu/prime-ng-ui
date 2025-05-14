@@ -49,6 +49,30 @@ export class AuthService {
         })
       );
     }
+    // Cập nhật avatar mới trong sessionStorage
+setAvatar(newAvatarUrl: string): void {
+  const role = this.getRole();
+  const key = role === 'ADMIN' ? 'admin_data' : 'user_data';
+  const json = sessionStorage.getItem(key);
+  if (json) {
+    const userData = JSON.parse(json);
+    userData.avatar = newAvatarUrl;
+    sessionStorage.setItem(key, JSON.stringify(userData));
+  }
+}
+
+// Cập nhật danh mục yêu thích mới trong sessionStorage
+setFavoriteCategory(newCategory: string): void {
+  const role = this.getRole();
+  const key = role === 'ADMIN' ? 'admin_data' : 'user_data';
+  const json = sessionStorage.getItem(key);
+  if (json) {
+    const userData = JSON.parse(json);
+    userData.favoriteCategory = newCategory;
+    sessionStorage.setItem(key, JSON.stringify(userData));
+  }
+}
+
     
     
       

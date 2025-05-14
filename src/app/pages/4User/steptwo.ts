@@ -147,6 +147,7 @@ import { Router } from '@angular/router';
 })
 export class StepTwoComponent implements OnInit, OnChanges {
     @Input() prefRootId: string | null = null;
+    @Input() prefRootName: string | null = null;
     @Output() prev = new EventEmitter<void>();
 
     selectedTopicsIds: any[] = [];
