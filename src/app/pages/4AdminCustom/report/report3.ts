@@ -61,8 +61,15 @@ import { Router } from '@angular/router';
                             </div>
                         </div>
                         <div class="report-footer">
-                            <div class="status-badge status-pending cursor-pointer">
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px;">
+                            <div
+                                class="status-badge cursor-pointer"
+                                [ngClass]="{
+                                    'status-pending': report.status === 'PENDING',
+                                    'status-approved': report.status === 'RESOLVED',
+                                    'status-rejected': report.status === 'REJECTED'
+                                }"
+                            >
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px">
                                     <path
                                         d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
                                         stroke="currentColor"
@@ -71,10 +78,11 @@ import { Router } from '@angular/router';
                                         stroke-linejoin="round"
                                     />
                                 </svg>
-                                Chờ xử lý
+                                {{ getStatusText(report.status) }}
                             </div>
+
                             <div class="report-actions">
-                                <a class="action-link cursor-pointer" (click)="viewReport(report.id)"> 
+                                <a class="action-link cursor-pointer" (click)="viewReport(report.id)">
                                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="action-icon">
                                         <path
                                             d="M13 16H12V12H11M12 8H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
@@ -118,43 +126,25 @@ import { Router } from '@angular/router';
                     </div>
 
                     <div class="filter-buttons">
-                        <button class="filter-btn filter-btn-active">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-btn-icon">
-                                <path
-                                    d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
+                        <button class="filter-btn" [ngClass]="{ 'filter-btn-active': selectedStatus === 'pending', 'filter-btn-inactive': selectedStatus !== 'pending' }" (click)="loadReportsByStatus('pending')">
+                            <!-- icon -->
                             Chờ xử lý
-                            <span class="filter-count">{{reports.length}}</span>
+                            <span class="filter-count">{{ selectedStatus === 'pending' ? reports.length : '' }}</span>
                         </button>
 
-                        <button class="filter-btn filter-btn-inactive">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-btn-icon">
-                                <path
-                                    d="M7 13L10 16L17 9M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
-                                    stroke="currentColor"
-                                    stroke-width="2"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                />
-                            </svg>
+                        <button class="filter-btn" [ngClass]="{ 'filter-btn-active': selectedStatus === 'approved', 'filter-btn-inactive': selectedStatus !== 'approved' }" (click)="loadReportsByStatus('approved')">
+                            <!-- icon -->
                             Đã duyệt
-                            <span class="filter-count filter-inactive-count">8</span>
+                            <span class="filter-count">{{ selectedStatus === 'approved' ? reports.length : '' }}</span>
                         </button>
 
-                        <button class="filter-btn filter-btn-inactive">
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-btn-icon">
-                                <path d="M6 18L18 6M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
+                        <button class="filter-btn" [ngClass]="{ 'filter-btn-active': selectedStatus === 'rejected', 'filter-btn-inactive': selectedStatus !== 'rejected' }" (click)="loadReportsByStatus('rejected')">
+                            <!-- icon -->
                             Từ chối
-                            <span class="filter-count filter-inactive-count">5</span>
+                            <span class="filter-count">{{ selectedStatus === 'rejected' ? reports.length : '' }}</span>
                         </button>
 
-                        <button class="filter-btn filter-btn-inactive">
+                        <!-- <button class="filter-btn filter-btn-inactive">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="filter-btn-icon">
                                 <path
                                     d="M9 12H15M9 16H15M9 8H15M5 21H19C20.1046 21 21 20.1046 21 19V5C21 3.89543 20.1046 3 19 3H5C3.89543 3 3 3.89543 3 5V19C3 20.1046 3.89543 21 5 21Z"
@@ -166,10 +156,10 @@ import { Router } from '@angular/router';
                             </svg>
                             Tất cả báo cáo
                             <span class="filter-count filter-inactive-count">25</span>
-                        </button>
+                        </button> -->
                     </div>
 
-                    <div class="filter-stats">
+                    <!-- <div class="filter-stats">
                         <h4 class="stats-title">Thống kê báo cáo</h4>
                         <div class="stats-grid">
                             <div class="stat-card">
@@ -182,14 +172,14 @@ import { Router } from '@angular/router';
                             </div>
                             <div class="stat-card">
                                 <div class="stat-value">8</div>
-                                <div class="stat-label">Đã duyệt</div>
+                                <div class="stat-label">Đã xử lí</div>
                             </div>
                             <div class="stat-card">
                                 <div class="stat-value">5</div>
                                 <div class="stat-label">Đã từ chối</div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -458,7 +448,7 @@ import { Router } from '@angular/router';
         .action-link {
             display: flex;
             align-items: center;
-            color:rgb(90, 90, 90);
+            color: rgb(90, 90, 90);
             font-size: 0.875rem;
             font-weight: 500;
             text-decoration: none;
@@ -643,7 +633,7 @@ import { Router } from '@angular/router';
 })
 export class Report3Component implements OnInit {
     reports: any[] = [];
-
+    selectedStatus: string = 'pending'; // mặc định là 'Chờ xử lý'
 
     displayReportDetailModal = false;
     // Thêm vào component
@@ -652,26 +642,25 @@ export class Report3Component implements OnInit {
             case 'PENDING':
                 return 'Đang chờ xử lý';
             case 'RESOLVED':
-                return 'Đã duyệt';
+                return 'Đã xử lí';
             case 'REJECTED':
                 return 'Đã từ chối';
             default:
                 return status;
         }
     }
-    reportDetail:any;
-    viewReport(id:any){
-      this.http.get<any>(`http://localhost:8080/report/${id}`).subscribe({
+    reportDetail: any;
+    viewReport(id: any) {
+        this.http.get<any>(`http://localhost:8080/report/${id}`).subscribe({
             next: (res) => {
                 this.reportDetail = res.data;
-                this.displayReportDetailModal=true;
+                this.displayReportDetailModal = true;
             },
             error: (err) => {
                 console.error('Lỗi khi tải báo cáo:', err);
             }
         });
     }
-
 
     viewFullImage(imageUrl: string): void {
         // Xử lý hiển thị ảnh đầy đủ, có thể mở dialog hoặc lightbox
@@ -689,17 +678,32 @@ export class Report3Component implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        this.loadPendingReports();
+        this.loadReportsByStatus(this.selectedStatus);
     }
-    loadPendingReports(): void {
-        this.http.get<any>('http://localhost:8080/report/pending').subscribe({
+
+    loadReportsByStatus(status: string): void {
+        let url = '';
+        switch (status) {
+            case 'pending':
+                url = 'http://localhost:8080/report/pending';
+                break;
+            case 'approved':
+                url = 'http://localhost:8080/report/resolved';
+                break;
+            case 'rejected':
+                url = 'http://localhost:8080/report/reject';
+                break;
+            default:
+                return;
+        }
+
+        this.http.get<any>(url).subscribe({
             next: (res) => {
-              
                 this.reports = res.data;
-                console.log('reportttt:',this.reports)
+                this.selectedStatus = status;
             },
             error: (err) => {
-                console.error('Lỗi khi tải báo cáo:', err); 
+                console.error('Lỗi khi tải báo cáo:', err);
             }
         });
     }
@@ -708,12 +712,12 @@ export class Report3Component implements OnInit {
         this.http.put<any>(`http://localhost:8080/report/${reportId}/approve`, {}).subscribe({
             next: () => {
                 this.toastService.addToast('success', 'Báo cáo được phê duyệt');
-                this.displayReportDetailModal=false;
-                this.loadPendingReports();
+                this.displayReportDetailModal = false;
+                this.loadReportsByStatus(this.selectedStatus);
             },
             error: (err) => {
                 console.error('Lỗi phê duyệt:', err);
-                this.displayReportDetailModal=false;
+                this.displayReportDetailModal = false;
             }
         });
     }
@@ -722,12 +726,12 @@ export class Report3Component implements OnInit {
         this.http.put<any>(`http://localhost:8080/report/${reportId}/reject`, {}).subscribe({
             next: () => {
                 this.toastService.addToast('success', 'Báo cáo được từ chối');
-                this.displayReportDetailModal=false;
-                this.loadPendingReports();
+                this.displayReportDetailModal = false;
+                this.loadReportsByStatus(this.selectedStatus);
             },
             error: (err) => {
                 console.error('Lỗi từ chối:', err);
-                this.displayReportDetailModal=false;
+                this.displayReportDetailModal = false;
             }
         });
     }

@@ -36,6 +36,9 @@ export interface LectureResponse {
     displayOrder?: number;
     duration?: number;
     isUploading?: boolean;
+    documentUrl?:string | null;
+    isUploadingDocument?:boolean;
+    previewable?:boolean;
 }
 @Component({
     selector: 'app-update-curriculum',

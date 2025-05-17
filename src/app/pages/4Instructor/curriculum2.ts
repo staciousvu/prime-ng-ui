@@ -30,11 +30,7 @@ import { ToastService } from '../service/toast.service';
                                 <span>Mục {{ sectionIndex + 1 }}: {{ section.title }}</span>
                             </div>
                             <div class="flex space-x-2" *ngIf="editingSectionIndex !== sectionIndex">
-                                <button
-                                    (click)="startEditSection(sectionIndex)"
-                                    type="button"
-                                    class="flex items-center space-x-2 rounded-md border border-blue-600 bg-white hover:bg-blue-50 active:bg-blue-100 text-blue-700 font-semibold text-base px-4 py-3 transition"
-                                >
+                                <button (click)="startEditSection(sectionIndex)" type="button" class="flex items-center space-x-2 rounded-md bg-white hover:bg-blue-50 active:bg-blue-100 text-blue-700 font-semibold text-base px-4 py-3 transition">
                                     <i class="pi pi-pencil text-lg"></i>
                                     <!-- <span>Edit</span> -->
                                 </button>
@@ -42,7 +38,7 @@ import { ToastService } from '../service/toast.service';
                                 <button
                                     (click)="deleteSection(sectionIndex, section.id)"
                                     type="button"
-                                    class="flex items-center space-x-2 rounded-md border border-red-600 bg-white hover:bg-red-50 active:bg-red-100 text-red-700 font-semibold text-base px-4 py-3 transition"
+                                    class="flex items-center space-x-2 rounded-md bg-white hover:bg-red-50 active:bg-red-100 text-red-700 font-semibold text-base px-4 py-3 transition"
                                 >
                                     <i class="pi pi-trash text-lg"></i>
                                     <!-- <span>Delete</span> -->
@@ -129,27 +125,49 @@ import { ToastService } from '../service/toast.service';
                                         </button>
                                     </div>
                                 </div>
-                                <div class="flex flex-col gap-2 mt-2">
-                                    <label class="flex items-center space-x-2 rounded-md border border-blue-600 bg-white hover:bg-blue-50 active:bg-blue-100 text-blue-700 font-semibold text-base px-4 py-2 cursor-pointer transition">
-                                        <i class="pi pi-upload text-lg"></i>
-                                        <span>Choose Video</span>
-                                        <input type="file" accept="video/*" (change)="onVideoSelected($event, sectionIndex, lectureIndex, lecture.id)" class="hidden" />
-                                    </label>
+                                <div class="flex flex-row gap-4 mt-2">
+                                    <!-- Upload Video -->
+                                    <div class="flex-1 flex flex-col gap-2">
+                                        <label class="flex items-center space-x-2 rounded-md border border-blue-600 bg-white hover:bg-blue-50 active:bg-blue-100 text-blue-700 font-semibold text-base px-4 py-2 cursor-pointer transition">
+                                            <i class="pi pi-upload text-lg"></i>
+                                            <span>Choose Video</span>
+                                            <input type="file" accept="video/*" (change)="onVideoSelected($event, sectionIndex, lectureIndex, lecture.id)" class="hidden" />
+                                        </label>
 
-                                    <!-- <p-fileUpload name="videoUpload" mode="basic" accept="video/*" (onSelect)="onVideoSelected($event, sectionIndex, lectureIndex, lecture.id)" chooseLabel="Choose Video" /> -->
-                                    <!--  -->
-                                    <div class="col-span-12 flex justify-center" *ngIf="lecture.isUploading">
-                                        <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }" />
+                                        <div class="flex justify-center" *ngIf="lecture.isUploading">
+                                            <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"></p-progress-spinner>
+                                        </div>
+
+                                        <div *ngIf="lecture.contentUrl && !lecture.isUploading" class="flex flex-col items-center mt-4 gap-2">
+                                            <video [src]="lecture.contentUrl" controls class="w-[50%] rounded-lg shadow-lg border"></video>
+
+                                            <label class="flex items-center gap-2 text-sm text-gray-700 mt-2">
+                                                <input type="checkbox" [(ngModel)]="lecture.previewable" (change)="onPreviewableChange(lecture.id)" class="form-checkbox text-blue-600" />
+
+                                                Cho phép xem trước video này
+                                            </label>
+                                        </div>
                                     </div>
 
-                                    <!--  -->
-                                    <div *ngIf="lecture.contentUrl && !lecture.isUploading" class="flex justify-center items-center mt-4">
-                                        <video [src]="lecture.contentUrl" controls class="w-1/3 md:w-1/3 rounded-lg shadow-lg border"></video>
+                                    <!-- Upload Document -->
+                                    <div class="flex-1 flex flex-col gap-2">
+                                        <label class="flex items-center space-x-2 rounded-md border border-blue-600 bg-white hover:bg-blue-50 active:bg-blue-100 text-blue-700 font-semibold text-base px-4 py-2 cursor-pointer transition">
+                                            <i class="pi pi-upload text-lg"></i>
+                                            <span>Choose Document</span>
+                                            <input type="file" accept=".pdf,.doc,.docx,.ppt,.pptx" (change)="onDocumentSelected($event, sectionIndex, lectureIndex, lecture.id)" class="hidden" />
+                                        </label>
+
+                                        <div class="flex justify-center" *ngIf="lecture.isUploadingDocument">
+                                            <p-progress-spinner strokeWidth="8" fill="transparent" animationDuration=".5s" [style]="{ width: '50px', height: '50px' }"></p-progress-spinner>
+                                        </div>
+
+                                        <div *ngIf="lecture.documentUrl && !lecture.isUploadingDocument" class="mt-4 text-center">
+                                            <a [href]="lecture.documentUrl" target="_blank" rel="noopener noreferrer">
+                                                <i class="pi pi-file text-6xl"></i>
+                                                {{ lecture.documentUrl }}
+                                            </a>
+                                        </div>
                                     </div>
-
-                                    <!--  -->
-
-                                    <!--  -->
                                 </div>
                             </div>
                             <button
@@ -250,7 +268,14 @@ export class EditCourseCurriculum2Component implements OnInit {
                 this.infoCourse = response.data;
                 this.sections = response.data.sections.map((section) => ({
                     ...section,
-                    lectures: section.lectures.map((lecture) => ({ ...lecture, contentUrl: lecture.contentUrl || null, isUploading: false }))
+                    lectures: section.lectures.map((lecture) => ({
+                        ...lecture,
+                        contentUrl: lecture.contentUrl || null,
+                        isUploading: false,
+                        documentUrl: lecture.documentUrl || null,
+                        isUploadingDocument: false,
+                        previewable: lecture.previewable || false
+                    }))
                 }));
                 console.log(this.sections);
             },
@@ -399,12 +424,13 @@ export class EditCourseCurriculum2Component implements OnInit {
         if (file) {
             const formData = new FormData();
             formData.append('file', file);
-            formData.append('type', 'VIDEO');
+            formData.append('previewable', 'false');
+            // formData.append('type', 'VIDEO');
             if (lectureId !== undefined) {
                 formData.append('lectureId', lectureId.toString());
             }
             this.sections[sectionIndex].lectures[lectureIndex].isUploading = true;
-            this.http.post<any>('http://localhost:8080/lecture/upload', formData).subscribe({
+            this.http.post<any>('http://localhost:8080/lecture/upload-video', formData).subscribe({
                 next: (res) => {
                     console.log('upload thanh cong');
                     const reader = new FileReader();
@@ -426,6 +452,44 @@ export class EditCourseCurriculum2Component implements OnInit {
             });
         }
     }
+    onDocumentSelected(event: any, sectionIndex: number, lectureIndex: number, lectureId?: number): void {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            if (lectureId !== undefined) {
+                formData.append('lectureId', lectureId.toString());
+            }
+
+            this.sections[sectionIndex].lectures[lectureIndex].isUploadingDocument = true;
+
+            this.http.post<any>('http://localhost:8080/lecture/upload-document', formData).subscribe({
+                next: (res) => {
+                    this.sections[sectionIndex].lectures[lectureIndex].documentUrl = res.data || file.name;
+                    this.sections[sectionIndex].lectures[lectureIndex].isUploadingDocument = false;
+                    this.toastService.addToast('success', 'Upload tài liệu thành công');
+                },
+                error: (err) => {
+                    console.error('Lỗi upload:', err);
+                    this.sections[sectionIndex].lectures[lectureIndex].isUploadingDocument = false;
+                    this.toastService.addToast('error', 'Upload tài liệu thất bại, thử lại');
+                }
+            });
+        }
+    }
+    onPreviewableChange(lectureId?: number): void {
+    this.http.put(`http://localhost:8080/lecture/edit-preview/${lectureId}`, null)
+        .subscribe({
+            next: () => {
+                this.toastService.addToast('success', 'Cập nhật trạng thái xem trước thành công');
+            },
+            error: (err) => {
+                console.error(err);
+                this.toastService.addToast('error', 'Cập nhật thất bại');
+            }
+        });
+}
+
 }
 {
 }
