@@ -12,6 +12,9 @@ export class ChatService {
   private connectedSubject = new BehaviorSubject<boolean>(false);
   private client: Client;
   private subscription: StompSubscription | null = null;
+  //new
+  private subscriptions: Map<number, StompSubscription> = new Map();
+
 
   constructor(private http: HttpClient) {
     this.client = new Client({
@@ -25,6 +28,14 @@ export class ChatService {
       },
     });
   }
+  unsubscribeFromConversation(conversationId: number): void {
+  const subscription = this.subscriptions.get(conversationId);
+  if (subscription) {
+    subscription.unsubscribe();
+    this.subscriptions.delete(conversationId);
+  }
+}
+
 
   connect(): void {
     this.client.onConnect = () => {
@@ -42,21 +53,32 @@ export class ChatService {
 
   // Ngắt kết nối WebSocket
   disconnect(): void {
-    this.client.deactivate();
+    // this.client.deactivate();
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
+  this.subscriptions.clear();
+  this.client.deactivate();
   }
 
   // Đăng ký lắng nghe tin nhắn từ một conversation
   subscribeToConversation(conversationId: number, callback: (message: any) => void): void {
-    console.log('subcribe to conversation enter....')
-    if (this.client.connected) {
-      console.log('subcribe to conversation enter....connected')
-      this.subscription = this.client.subscribe(`/topic/conversations/${conversationId}`, (message) => {
-        callback(JSON.parse(message.body));
-      });
-    }else{
-      console.log('cannot connect websocket')
-    }
+  this.unsubscribeFromConversation(conversationId); // Hủy nếu đã đăng ký
+
+  console.log('subcribe to conversation enter....');
+  if (this.client.connected) {
+    console.log('subcribe to conversation enter....connected');
+    
+    const subscription = this.client.subscribe(`/topic/conversations/${conversationId}`, (message) => {
+      callback(JSON.parse(message.body));
+    });
+
+    // ❗ Lưu subscription lại để quản lý đúng
+    this.subscriptions.set(conversationId, subscription);
+
+  } else {
+    console.log('cannot connect websocket');
   }
+}
+
 
   // Gửi tin nhắn qua WebSocket
   sendMessage(conversationId: number, senderId: number, content: string): void {

@@ -8,15 +8,15 @@ import { RouterModule, RouterOutlet } from '@angular/router';
     template: `
         <div class="px-10">
             <div class="w-[80%] mx-auto">
-                <h1 class="text-3xl text-gray-500 font-bold mb-10">Profile &amp; settings</h1>
+                <h1 class="text-3xl text-gray-500 font-bold mb-10">Hồ sơ giảng viên</h1>
                 <div>
                     <nav class="flex space-x-6 border-b border-gray-300 mb-8 text-sm font-semibold text-gray-700">
                         <button class="text-lg pb-2"
                         routerLink="/instructor/profiles/basic-information"
-                        routerLinkActive="border-b-2 border-black text-black">Eduflow profile</button>
+                        routerLinkActive="border-b-2 border-black text-black">Thông tin cơ bản</button>
                         <button class="text-lg pb-2"
                         routerLink="/instructor/profiles/photo"
-                        routerLinkActive="border-b-2 border-black text-black">Profile picture</button>
+                        routerLinkActive="border-b-2 border-black text-black">Ảnh đại diện</button>
                     </nav>
                     <router-outlet/>
                 </div>

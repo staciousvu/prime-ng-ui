@@ -89,7 +89,7 @@ export class AppMenu {
                 label: 'Quản lý tài khoản',
                 items: [
                     // { label: 'Admin', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-admin'] },
-                    { label: 'Instructor', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-instructor'] },
+                    { label: 'Tài khoản', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-instructor'] },
                     // { label: 'Learner', icon: 'pi pi-fw pi-users', routerLink: ['/admin/account/list-student'] }
                 ]
             },

@@ -11,7 +11,7 @@ import { ToastService } from '../../service/toast.service';
 @Component({
     selector: 'app-advertisement-layout',
     standalone: true,
-    imports: [RouterOutlet, RouterLink, RouterModule, CommonModule, FormsModule],
+    imports: [RouterModule, CommonModule, FormsModule],
     template: `
         <div class="container" x-data="adsService">
             <div class="header">

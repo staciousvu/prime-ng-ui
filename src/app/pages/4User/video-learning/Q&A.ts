@@ -10,24 +10,31 @@ import { delay, map } from 'rxjs/operators';
     standalone: true,
     imports: [CommonModule, FormsModule],
     template: `
-        <div class="max-w-3xl px-4 py-0">
+
+        <div class="max-w-4xl mx-auto px-4 py-0">
       <h2 class="text-2xl font-medium mb-6 text-gray-600">Thảo luận về khóa học</h2>
 
-      <button class="bg-gray-500 hover:bg-gray-700 text-white font-semibold py-2 px-4 rounded mb-6"
-              (click)="toggleAddDiscussion()">Thêm thảo luận</button>
+      <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-5 rounded-lg 
+          transition duration-200 flex items-center mb-8 shadow-md"
+          (click)="toggleAddDiscussion()">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+    </svg>
+    Thêm thảo luận
+  </button>
 
-      <div *ngIf="showNewDiscussion" class="bg-gray-100 p-4 rounded-lg mb-8 animate-fade-in">
-        <textarea [(ngModel)]="newDiscussion"
-                  class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
-                  rows="4"
-                  placeholder="Nhập nội dung thảo luận"></textarea>
-        <div class="flex justify-end space-x-4">
-          <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
-                  (click)="toggleAddDiscussion()">Hủy</button>
-          <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-                  (click)="saveNewDiscussion()">Gửi</button>
-        </div>
-      </div>
+      <div *ngIf="showNewDiscussion" class="bg-white p-6 rounded-xl shadow-lg mb-10 border border-gray-100 animate-fade-in">
+    <textarea [(ngModel)]="newDiscussion"
+              class="w-full p-4 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-4 text-gray-700"
+              rows="4"
+              placeholder="Nhập nội dung thảo luận của bạn..."></textarea>
+    <div class="flex justify-end space-x-4">
+      <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2.5 px-5 rounded-lg transition duration-200"
+              (click)="toggleAddDiscussion()">Hủy</button>
+      <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2.5 px-5 rounded-lg transition duration-200 shadow-sm"
+              (click)="saveNewDiscussion()">Gửi</button>
+    </div>
+  </div>
 
       <div class="space-y-8">
         <div *ngFor="let discussion of discussions" class="space-y-4">
@@ -46,27 +53,26 @@ import { delay, map } from 'rxjs/operators';
             </div>
           </div>
 
-          <!-- Ô nhập liệu trả lời -->
-          <div *ngIf="discussion.showReplyInput" class="bg-gray-100 p-4 rounded-lg animate-fade-in max-w-2xl mx-auto">
-            <textarea [(ngModel)]="newReply"
-                      class="w-full p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400 mb-4"
-                      rows="3"
-                      placeholder="Nhập câu trả lời của bạn..."></textarea>
-            <div class="flex justify-end space-x-4">
-              <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded"
-                      (click)="toggleReplyInput(discussion)">Hủy</button>
-              <button class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded"
-                      (click)="submitReply(discussion)">Gửi</button>
-            </div>
+          <div *ngIf="discussion.showReplyInput" class="ml-16 animate-fade-in">
+        <div class="bg-white p-5 rounded-xl shadow-sm border border-gray-100">
+          <textarea [(ngModel)]="newReply"
+                    class="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 mb-3 text-gray-700"
+                    rows="3"
+                    placeholder="Nhập câu trả lời của bạn..."></textarea>
+          <div class="flex justify-end space-x-3">
+            <button class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium py-2 px-4 rounded-lg transition duration-200"
+                    (click)="toggleReplyInput(discussion)">Hủy</button>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 px-4 rounded-lg transition duration-200 shadow-sm"
+                    (click)="submitReply(discussion)">Gửi</button>
           </div>
+        </div>
+      </div>
 
-          <!-- Nút Xem thêm -->
           <div *ngIf="!discussion.showReplies" class="text-sm text-blue-500 cursor-pointer ml-14"
                (click)="toggleReplies(discussion)">
             <i class="fas fa-reply"></i> Xem thêm
           </div>
 
-          <!-- Hiển thị câu trả lời -->
           <div *ngIf="discussion.showReplies" class="space-y-4 ml-14">
             <div *ngFor="let reply of discussion.replies" class="flex space-x-4">
               <img [src]="reply.userAvatar" alt="avatar" class="w-9 h-9 rounded-full bg-blue-400">
@@ -77,7 +83,6 @@ import { delay, map } from 'rxjs/operators';
               </div>
             </div>
 
-            <!-- Nút thu gọn -->
             <div class="text-sm text-blue-500 cursor-pointer" (click)="toggleReplies(discussion)">
               <i class="fas fa-reply"></i> Thu gọn
             </div>
@@ -86,6 +91,7 @@ import { delay, map } from 'rxjs/operators';
         </div>
       </div>
     </div>
+    
     `,
     styles: `
     @keyframes fade-in {
@@ -94,6 +100,13 @@ import { delay, map } from 'rxjs/operators';
     }
     .animate-fade-in {
       animation: fade-in 0.3s ease forwards;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.3s ease-out forwards;
     }
     `
 })
@@ -159,7 +172,7 @@ export class QAndAComponent {
                     this.newReply = '';
                     discussion.showReplyInput = false;
                     // discussion.showReplies = true;
-                    this.toggleReplies(discussion)
+                    // this.toggleReplies(discussion)
                 },
                 (error) => {
                     console.error('Lỗi khi gửi câu trả lời:', error);

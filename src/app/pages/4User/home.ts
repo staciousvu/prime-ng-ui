@@ -33,11 +33,11 @@ import { PopupComponent } from './component/popup-ads';
                 <p class="welcome-name">Bạn đã trở lại, {{ fullname }}</p>
                 <div class="major" *ngIf="myprofile.favoriteCategory">
                     <span class="major-name">Danh mục yêu thích: {{ myprofile.favoriteCategory }}</span>  
-                    <a href="#" class="edit-major" [routerLink]="['/survey']">Chỉnh sửa thông tin</a>
+                    <a href="#" class="edit-major text-blue-400 hover:text-blue-300 active:text-blue-300" [routerLink]="['/survey']">Chỉnh sửa thông tin</a>
                 </div>
                 <div class="major" *ngIf="!myprofile.favoriteCategory">
                     <span class="major-name">Chưa có danh mục yêu thích</span>
-                    <a href="#" class="edit-major" [routerLink]="['/survey']">Thêm thông tin</a>
+                    <a href="#" class="edit-major text-blue-400 hover:text-blue-300 active:text-blue-300" [routerLink]="['/survey']">Thêm thông tin</a>
                 </div>
             </div>
         </div>
@@ -107,7 +107,7 @@ import { PopupComponent } from './component/popup-ads';
             flex-shrink: 0;
             overflow: hidden;
             border-radius: 50%;
-            border: 2px solid #a435f0;
+            border: 2px solid #60A5FA;
         }
 
         .avatar img {
@@ -145,15 +145,15 @@ import { PopupComponent } from './component/popup-ads';
 
         .edit-major {
             font-size: 14px;
-            color: #a435f0;
+            // color: #a435f0;
             font-weight: 500;
             text-decoration: none;
             transition: color 0.3s;
         }
 
-        .edit-major:hover {
-            color: #7f24c9;
-        }
+        // .edit-major:hover {
+        //     color: #7f24c9;
+        // }
 
         .banner {
             max-width: 80%;

@@ -29,6 +29,7 @@ import { TreeTableModule } from 'primeng/treetable';
 import { NodeService } from '../service/node.service';
 import { HttpClient } from '@angular/common/http';
 import { ToastModule } from 'primeng/toast';
+import { ToastService } from '../service/toast.service';
 
 interface Column {
   field: string;
@@ -61,7 +62,7 @@ interface Column {
   template: `
         <app-breadcrump [apr]="'List category'" [manager]="'Manage course'"></app-breadcrump>
 
-        <div class="font-semibold text-xl mb-4">List category</div>
+        <div class="font-semibold text-xl mb-4">Quản lí danh mục</div>
 
         <div class="container">
             <!-- Action buttons -->
@@ -70,21 +71,21 @@ interface Column {
                     <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
-                    Add Root Category
+                    Danh mục gốc
                 </button>
 
                 <button class="btn-action" (click)="openDialogSub()">
                     <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
-                    Add Sub Category
+                    Danh mục con
                 </button>
 
                 <button class="btn-action" (click)="openDialogTopic()">
                     <svg class="icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
                     </svg>
-                    Add Topic
+                    Chủ đề
                 </button>
             </div>
 
@@ -308,8 +309,9 @@ export class CategoryComponent implements OnInit {
     };
     this.http.post<any>(`http://localhost:8080/categories/add-category`, request).subscribe((res) => {
       this.visibleAddRoot = false;
+      this.getCategories();
       this.loadRootCategories();
-      this.showAccept();
+      this.toastService.addToast("success","Thêm danh mục gốc thành công")
     });
   }
   openDialogRoot() {
@@ -338,7 +340,8 @@ export class CategoryComponent implements OnInit {
       this.visibleAddSub = false;
       this.newSubCategoryName =undefined;
       this.selectedRoot =null;
-      this.showAccept();
+      this.getCategories();
+      this.toastService.addToast("success","Thêm danh mục con thành công")
     });
   }
 
@@ -370,7 +373,8 @@ export class CategoryComponent implements OnInit {
       this.newTopicCategoryName =undefined;
       this.selectedRootTopic =null;
       this.selectedSub=null;
-      this.showAccept();
+      this.getCategories();
+      this.toastService.addToast("success","Thêm chủ đề thành công")
     });
   }
   onRootChange(){
@@ -408,11 +412,11 @@ export class CategoryComponent implements OnInit {
         this.visibleEditCategory = false;
         this.newCategoryName = undefined;
         this.editCategorySelected = null;
-        this.showEditsuccess()
+        this.toastService.addToast("success","Sửa danh mục thành công")
       },
       (error) => {
         console.error('Error updating category:', error);
-        this.showEditfailed()
+        this.toastService.addToast("error","Sửa danh mục thất bại")
       }
     );
   }
@@ -421,11 +425,12 @@ export class CategoryComponent implements OnInit {
    deleteCategory(id:number){
     this.http.delete<any>(`http://localhost:8080/categories/${id}`).subscribe(
       (res) =>{
-        this.showDeletedsuccess()
+        this.getCategories();
+        this.toastService.addToast("success","Xóa danh mục thành công")
       },
       (error) =>{
         console.error('Error deleting category:', error);
-        this.showDeletedFailed()
+        this.toastService.addToast("error","Không thể xóa danh mục")
       }
     )
    }
@@ -453,7 +458,8 @@ export class CategoryComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private toastService:ToastService
   ) { }
 
   refresh() {

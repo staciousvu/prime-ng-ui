@@ -17,59 +17,100 @@ import { ToastModule } from 'primeng/toast';
     standalone: true,
     imports: [TagModule, RouterLink, ToastModule, BreadcrumpComponent, ButtonModule, TabsModule, TableModule, ToolbarModule, FormsModule, CommonModule, TagModule],
     template: `
-        <app-breadcrump [apr]="'List instructor'" [manager]="'Manage account'"></app-breadcrump>
-        <div class="font-semibold text-xl mb-4">List instructor</div>
+        <app-breadcrump [apr]="'List account'" [manager]="'Manage account'"></app-breadcrump>
+        <div class="font-semibold text-xl mb-4">Danh sách tài khoản</div>
 
-        <p-toolbar styleClass="mb-6">
-            <ng-template #start>
-                <p-button label="New" icon="pi pi-plus" class="mr-2" [routerLink]="['/admin/account/add-admin']" />
-            </ng-template>
-            <ng-template #end>
-                <div class="flex items-center ml-auto">
-                    <input pInputText type="text" [(ngModel)]="keyword" (ngModelChange)="fetchInstructors()" placeholder="Search keyword" class="search-input" />
-                </div>
-            </ng-template>
-        </p-toolbar>
+        <p-toolbar styleClass="mb-4 shadow-sm bg-white rounded-lg px-4">
+  <ng-template #start>
+    <!-- <h2 class="text-lg font-semibold text-gray-800"> Danh sách giảng viên</h2> -->
+  </ng-template>
+  <ng-template #end>
+    <div class="flex items-center ml-auto gap-2">
+      <span class="pi pi-search text-gray-500"></span>
+      <input
+        pInputText
+        type="text"
+        [(ngModel)]="keyword"
+        (ngModelChange)="fetchInstructors()"
+        placeholder="Tìm kiếm theo tên, email..."
+        class="p-inputtext-sm px-3 py-1"
+        style="width: 250px"
+      />
+    </div>
+  </ng-template>
+</p-toolbar>
 
-        <p-table [value]="instructors" [paginator]="true" [rows]="10" [tableStyle]="{ 'min-width': '70rem' }" [rowsPerPageOptions]="[10, 15, 20]" [scrollable]="true">
-            <ng-template #header>
-                <tr>
-                    <th style="min-width: 8rem">Avatar</th>
-                    <th style="min-width: 8rem">Họ & Tên</th>
-                    <th style="min-width: 8rem">Email</th>
-                    <th style="min-width: 8rem">Giới tính</th>
-                    <th style="min-width: 8rem">Ngày sinh</th>
-                    <th style="min-width: 8rem">Số khóa học</th>
-                    <th style="min-width: 8rem">Số học sinh</th>
-                    <th style="min-width: 8rem">Trạng thái</th>
-                    <th style="min-width: 10rem">Thao tác</th>
-                </tr>
-            </ng-template>
-            <ng-template #body let-admin>
-                <tr>
-                    <td><img [src]="admin.avatar || defaultAvatar" class="w-12 h-12 rounded-full" /></td>
-                    <td style="color: blue; text-decoration: underline; cursor: pointer;">
-                        {{ admin.name }}
-                    </td>
+<p-table
+  [value]="instructors"
+  [paginator]="true"
+  [rows]="10"
+  [rowsPerPageOptions]="[10, 15, 20]"
+  [responsiveLayout]="'scroll'"
+  class="p-datatable-striped"
+  [tableStyle]="{ 'min-width': '70rem' }"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Ảnh đại diện</th>
+      <th>Họ & Tên</th>
+      <th>Email</th>
+      <th>Ngày sinh</th>
+      <th>Khóa học</th>
+      <th>Học sinh</th>
+      <th>Trạng thái</th>
+      <th>Thao tác</th>
+    </tr>
+  </ng-template>
 
-                    <td>{{ admin.email }}</td>
-                    <td>
-                        <p-tag [value]="admin.gender ? 'Nam' : 'Nữ'" [severity]="admin.gender ? 'info' : 'warn'"></p-tag>
-                    </td>
+  <ng-template pTemplate="body" let-admin>
+    <tr>
+      <td>
+        <img
+          [src]="admin.avatar || defaultAvatar"
+          class="w-12 h-12 rounded-full border shadow-sm object-cover"
+          alt="avatar"
+        />
+      </td>
 
-                    <td>{{ admin.birthDate }}</td>
-                    <td>{{ admin.totalCourses }}</td>
-                    <td>{{ admin.totalStudents }}</td>
-                    <td>
-                        <p-tag [value]="admin.isEnabled ? 'Active' : 'Blocked'" [severity]="admin.isEnabled ? 'success' : 'danger'" />
-                    </td>
-                    <td>
-                        <p-button icon="pi pi-eye" class="mr-2" [rounded]="true" [outlined]="true" (click)="view(admin.id)" />
-                        <p-button icon="pi pi-ban" severity="danger" [rounded]="true" [outlined]="true" (click)="blockAdmin(admin.id)" />
-                    </td>
-                </tr>
-            </ng-template>
-        </p-table>
+      <td>
+        <span class="text-blue-700 font-medium cursor-pointer hover:underline" (click)="view(admin.id)">
+          {{ admin.name }}
+        </span>
+      </td>
+
+      <td class="text-sm text-gray-700">{{ admin.email }}</td>
+      <td class="text-sm text-gray-600">{{ admin.birthDate | date }}</td>
+
+      <td>
+        <span class="text-sm font-semibold text-indigo-700">{{ admin.totalCourses }}</span>
+      </td>
+
+      <td>
+        <span class="text-sm font-semibold text-green-700">{{ admin.totalStudents }}</span>
+      </td>
+
+      <td>
+        <p-tag
+          [value]="admin.isEnabled ? 'Hoạt động' : 'Đã khóa'"
+          [severity]="admin.isEnabled ? 'success' : 'danger'"
+        />
+      </td>
+
+      <td>
+        <!-- <p-button
+          icon="pi pi-eye"
+          class="p-button-sm"
+          [rounded]="true"
+          [outlined]="true"
+          (click)="view(admin.id)"
+          tooltip="Xem chi tiết"
+        /> -->
+        <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700" (click)="view(admin.id)">Xem chi tiết</button>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
+
         <p-toast></p-toast>
     `,
     styles: `
@@ -91,7 +132,7 @@ import { ToastModule } from 'primeng/toast';
 })
 export class InstructorAccountComponent implements OnInit {
     view(id: number) {
-        this.router.navigate(['/admin/account/view-instructor', id]);
+        this.router.navigate(['/admin/account/view-instructor',id]);
     }
     instructors: any[] = [];
     keyword: string = '';

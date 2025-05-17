@@ -28,6 +28,7 @@
             text-transform: uppercase;
             font-weight: 700;
             color: var(--text-color);
+            // color: blue;
             margin: 0.75rem 0;
         }
 
@@ -65,6 +66,7 @@
             position: relative;
             outline: 0 none;
             color: var(--text-color);
+            // color :blue;
             cursor: pointer;
             padding: 0.75rem 1rem;
             border-radius: var(--content-border-radius);
@@ -85,10 +87,12 @@
             &.active-route {
                 font-weight: 700;
                 color: var(--primary-color);
+                // color: rgb(35, 35, 200);
             }
 
             &:hover {
                 background-color: var(--surface-hover);
+                
             }
 
             &:focus {

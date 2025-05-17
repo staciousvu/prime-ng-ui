@@ -233,7 +233,7 @@ import { ToastService } from '../service/toast.service';
       background: transparent;
       padding: 0.5rem;
       font-size: 0.95rem;
-      color: #334155;
+      color:rgb(12, 13, 13);
       width: 100%;
     }
     

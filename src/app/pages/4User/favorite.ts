@@ -18,7 +18,7 @@ import { ToastService } from '../service/toast.service';
             <div class="max-w-[80%] mx-auto flex flex-col">
                 <!-- Header + Search in one row -->
                 <div class="flex items-center justify-between px-5 py-2">
-                    <h1 class="text-4xl font-bold">Favorite</h1>
+                    <h1 class="text-4xl font-bold">Khóa học yêu thích của tôi</h1>
 
                     <input type="text" [(ngModel)]="searchKeyword" (input)="onSearchChange()" placeholder="Search courses..." class="w-[20%] p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>

@@ -33,7 +33,7 @@ import { ActivatedRoute } from '@angular/router';
 
       <div class="flex flex-col md:flex-row gap-6">
         <h2 class="text-xl font-bold text-gray-800 flex-1">Description</h2>
-        <p class="text-gray-700 flex-2 leading-relaxed whitespace-pre-line" [innerHTML]="santinizeDescription()">
+        <p *ngIf="course.description" class="text-gray-700 flex-2 leading-relaxed whitespace-pre-line" [innerHTML]="santinizeDescription()">
         </p>
       </div>
     </div>

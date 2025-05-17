@@ -13,19 +13,19 @@ import { ToastService } from '../../service/toast.service';
     template: `
         <div class="p-10">
             <div class="w-full">
-                <h1 class="text-4xl font-bold mb-6">Courses</h1>
+                <h1 class="text-4xl font-bold mb-6">Khóa học của giảng viên</h1>
             </div>
             <div class="w-full mt-5">
                 <!-- Header -->
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center space-x-2">
-                        <input (input)="load()" [(ngModel)]="this.keyword" class="border border-gray-300 rounded px-4 py-3" placeholder="Search your courses" type="text" />
-                        <button class="bg-purple-600 text-white px-4 py-3 rounded">
+                        <input (input)="load()" [(ngModel)]="this.keyword" class="w-[300px] border border-gray-300 rounded px-4 py-3" placeholder="Tìm khóa học của bạn bằng từ khóa" type="text" />
+                        <button class="bg-blue-600 text-white px-4 py-3 rounded">
                             <i class="fas fa-search"> </i>
                         </button>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <button (click)="openModal()" class="bg-purple-600 text-white px-4 py-3 rounded">New course</button>
+                        <button (click)="openModal()" class="bg-blue-600 text-white px-4 py-3 rounded">Thêm khóa học mới</button>
                     </div>
                 </div>
                 <!-- Course List -->
@@ -37,10 +37,10 @@ import { ToastService } from '../../service/toast.service';
                             <button
                                 [routerLink]="['/edit-course', course.id, 'goals']"
                                 [queryParams]="{ courseName: course.title, status: course.status }"
-                                class="bg-purple-600 text-white text-sm px-4 py-2 rounded shadow 
-         hover:bg-purple-700 active:scale-95 transition transform duration-200"
+                                class="bg-blue-600 text-white text-sm px-4 py-2 rounded shadow 
+         hover:bg-blue-700 active:scale-95 transition transform duration-200"
                             >
-                                Edit Course
+                                Chỉnh sửa khóa học
                             </button>
                         </div>
 
@@ -101,7 +101,7 @@ import { ToastService } from '../../service/toast.service';
           name="title"
           [(ngModel)]="courseTitle"
           required
-          class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-purple-500"
+          class="w-full px-4 py-2 border rounded focus:outline-none focus:ring focus:border-blue-500"
           placeholder="Nhập tên khóa học"
         />
       </div>
@@ -110,7 +110,7 @@ import { ToastService } from '../../service/toast.service';
         <button type="button" (click)="closeModal()" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400">
           Hủy
         </button>
-        <button type="submit" class="px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700">
+        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Lưu
         </button>
       </div>

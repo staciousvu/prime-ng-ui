@@ -15,7 +15,7 @@ import { RouterOutlet } from '@angular/router';
                 <a href="#">Edu<span>Flow</span></a>
             </div>
             <div class="actions">
-                <a href="#">Exit</a>
+                <a class="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-4 py-2 rounded" href="#">Exit</a>
             </div>
         </div>
     `,
@@ -76,14 +76,9 @@ import { RouterOutlet } from '@angular/router';
             text-decoration: none;
             border-radius: 5px;
             padding:10px 20px;
-            background-color: blue;
+            // background-color: blue;
         }
-        .header .actions a:hover{
-            background-color:rgba(0, 0, 255, 0.83);
-        }
-        .header .actions a:active{
-            background-color:rgba(0, 0, 255, 0.69);
-        }
+
 
         .header .language {
             border: 1px solid #6a1b9a;

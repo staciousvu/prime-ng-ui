@@ -1,33 +1,39 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from "@angular/core";
-import { ChatService } from "../service/chat.service";
-import { CommonModule } from "@angular/common";
-import { FormsModule } from "@angular/forms";
-import { AuthService } from "../service/auth.service";
-import { ClassicEditor } from "ckeditor5";
-import { CKEDITOR_CONFIG } from "../models/ckeditor-config";
-import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
-
-
+import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChatService } from '../service/chat.service';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { AuthService } from '../service/auth.service';
+import { ClassicEditor } from 'ckeditor5';
+import { CKEDITOR_CONFIG } from '../models/ckeditor-config';
+import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
 
 @Component({
     selector: 'app-messages-communication',
-    standalone:true,
-    imports:[CommonModule, FormsModule,CKEditorModule],
+    standalone: true,
+    imports: [CommonModule, FormsModule, CKEditorModule],
     template: `
-    <h1 class="font-semibold text-gray-800 px-5 py-2">Messages</h1>
-    <div class="w-full mx-auto p-6 bg-gray-100">
+        <h1 class="font-semibold text-gray-800 px-5 py-2">Messages</h1>
+        <div class="w-full mx-auto p-6 bg-gray-100">
             <div class="flex bg-white rounded-lg shadow-lg h-[70vh] overflow-hidden">
                 <!-- Left: Conversations list -->
                 <div class="w-1/3 border-r border-gray-200 p-4 flex flex-col">
                     <!-- Search -->
                     <div class="relative mb-4">
-                        <input type="text" placeholder="Search messages..." class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" />
-                        <i class="fas fa-search absolute right-3 top-3 text-purple-500"></i>
+                        <input type="text" placeholder="Search messages..." class="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+                        <i class="fas fa-search absolute right-3 top-3 text-blue-500"></i>
                     </div>
 
                     <!-- Conversations -->
                     <div class="flex-1 overflow-y-auto space-y-2">
-                    <div *ngFor="let conv of conversations" (click)="selectConversation(conv.id)" class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md cursor-pointer">
+                        <div
+                            [ngClass]="{
+                                'bg-blue-100': conv.id === selectedConversationId,
+                                'hover:bg-gray-100': true
+                            }"
+                            *ngFor="let conv of conversations"
+                            (click)="selectConversation(conv.id)"
+                            class="flex items-center gap-3 p-2 hover:bg-gray-100 rounded-md cursor-pointer"
+                        >
                             <img [src]="conv.student.avatar || 'https://th.bing.com/th/id/OIP.Zvs5IHgOO5kip7A32UwZJgHaHa?rs=1&pid=ImgDetMain'" alt="User" class="w-10 h-10 rounded-full" />
                             <div class="flex-1">
                                 <h5 class="font-semibold text-gray-800">{{ conv.student.fullName }}</h5>
@@ -46,7 +52,7 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
                     <!-- Header -->
                     <div *ngIf="selectedConversationId" class="flex items-center mb-4">
                         <img [src]="getSelectedInstructorAvatar()" alt="User" class="w-10 h-10 rounded-full mr-3" />
-                        <h2 class="text-xl font-bold text-purple-600">{{ getSelectedConversation()?.student.fullName }}</h2>
+                        <h2 class="text-xl font-bold text-blue-600">{{ getSelectedConversation()?.student.fullName }}</h2>
                     </div>
 
                     <!-- Messages Section -->
@@ -65,9 +71,9 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 
                             <!-- Tin nhắn từ bạn -->
                             <div *ngIf="msg.senderId === currentUserId" class="flex items-end justify-end">
-                                <div class="bg-purple-600 text-white p-3 rounded-lg shadow max-w-lg">
+                                <div class="bg-blue-600 text-white p-3 rounded-lg shadow max-w-lg">
                                     <p [innerHTML]="msg.content"></p>
-                                    <p class="text-xs text-purple-200 mt-1 text-right">You · {{ msg.createdAt | date: 'shortTime' }}</p>
+                                    <p class="text-xs text-blue-200 mt-1 text-right">You · {{ msg.createdAt | date: 'shortTime' }}</p>
                                 </div>
                             </div>
                         </div>
@@ -77,9 +83,9 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
                     <div class="mt-4">
                         <ckeditor (keydown.enter)="handleEnterKey($event)" [editor]="Editor" [(ngModel)]="newMessage" [config]="config" class="h-[400px] w-full"></ckeditor>
 
-                        <!-- <textarea (keydown.enter)="handleEnterKey($event)" [(ngModel)]="newMessage" rows="3" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500" placeholder="Type your message..."></textarea> -->
+                        <!-- <textarea (keydown.enter)="handleEnterKey($event)" [(ngModel)]="newMessage" rows="3" class="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Type your message..."></textarea> -->
                         <div class="flex justify-end mt-2">
-                            <button (click)="sendMessage()" class="bg-purple-600 text-white px-6 py-2 rounded-md hover:bg-purple-700 transition">Send</button>
+                            <button (click)="sendMessage()" class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">Send</button>
                         </div>
                     </div>
                 </div>
@@ -89,8 +95,8 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
     styles: ``
 })
 export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterViewInit, AfterViewChecked {
-  public Editor = ClassicEditor;
-  public config = CKEDITOR_CONFIG;
+    public Editor = ClassicEditor;
+    public config = CKEDITOR_CONFIG;
     conversations: any[] = [];
     messages: any[] = [];
     selectedConversationId: number | null = null;
@@ -99,15 +105,15 @@ export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterV
     currentUserId: number = 1;
     shouldScroll = false;
     defaultAvatar = 'https://th.bing.com/th/id/OIP.hHZesFcNsuFVAfAgYznY0QHaHa?rs=1&pid=ImgDetMain';
-  
+
     @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
-  
+
     constructor(
-      private chatService: ChatService,
-      private authService: AuthService,
-      private cdRef: ChangeDetectorRef
+        private chatService: ChatService,
+        private authService: AuthService,
+        private cdRef: ChangeDetectorRef
     ) {}
-  
+
     // ngOnInit(): void {
     //   this.chatService.connect();
     //   this.instructorEmail=this.authService.getEmail()!;
@@ -125,101 +131,107 @@ export class MessagesCommunicationComponent implements OnInit, OnDestroy, AfterV
 
     // }
     ngOnInit(): void {
-      this.instructorEmail = this.authService.getEmail()!;
-      this.currentUserId = Number(this.authService.getId());
-    
-      this.chatService.connect(); // vẫn gọi connect bình thường
-    
-      this.chatService.onConnected().subscribe((connected) => {
-        if (connected) {
-          this.chatService.getConversationsForInstructor(this.instructorEmail).subscribe({
-            next: (response: any) => {
-              this.conversations = response.data;
-              console.log('conversations:', this.conversations);
-              if(this.conversations.length>0){
-                this.selectConversation(this.conversations[0].id)
-              }
-            },
-            error: (err) => console.error('Error fetching conversations:', err)
-          });
-        }
-      });
-    }
-  
-    ngOnDestroy(): void {
-      this.chatService.disconnect();
-    }
-  
-    ngAfterViewInit(): void {
-      this.scrollToBottom();
-    }
-  
-    ngAfterViewChecked(): void {
-      if (this.shouldScroll) {
-        this.scrollToBottom();
-        this.shouldScroll = false;
-      }
-    }
-  
-    scrollToBottom(): void {
-      try {
-        this.scrollContainer.nativeElement.scroll({
-          top: this.scrollContainer.nativeElement.scrollHeight,
-          behavior: 'smooth'
+        this.instructorEmail = this.authService.getEmail()!;
+        this.currentUserId = Number(this.authService.getId());
+
+        this.chatService.connect(); // vẫn gọi connect bình thường
+
+        this.chatService.onConnected().subscribe((connected) => {
+            if (connected) {
+                this.chatService.getConversationsForInstructor(this.instructorEmail).subscribe({
+                    next: (response: any) => {
+                        this.conversations = response.data;
+                        console.log('conversations:', this.conversations);
+                        if (this.conversations.length > 0) {
+                            this.selectConversation(this.conversations[0].id);
+                        }
+                    },
+                    error: (err) => console.error('Error fetching conversations:', err)
+                });
+            }
         });
-      } catch (err) {
-        console.error('Scroll error', err);
-      }
     }
-  
+
+    ngOnDestroy(): void {
+        this.chatService.disconnect();
+    }
+
+    ngAfterViewInit(): void {
+        this.scrollToBottom();
+    }
+
+    ngAfterViewChecked(): void {
+        if (this.shouldScroll) {
+            this.scrollToBottom();
+            this.shouldScroll = false;
+        }
+    }
+
+    scrollToBottom(): void {
+        try {
+            this.scrollContainer.nativeElement.scroll({
+                top: this.scrollContainer.nativeElement.scrollHeight,
+                behavior: 'smooth'
+            });
+        } catch (err) {
+            console.error('Scroll error', err);
+        }
+    }
+
     selectConversation(conversationId: number): void {
-      this.selectedConversationId = conversationId;
-  
-      this.chatService.getMessages(conversationId).subscribe({
-        next: (response: any) => {
-          this.messages = response.data;
-          this.shouldScroll = true;
-          this.cdRef.detectChanges();
-        },
-        error: (err) => console.error('Error fetching messages:', err)
-      });
-  
-      this.chatService.subscribeToConversation(conversationId, (message) => {
-        this.messages.push(message);
-        this.shouldScroll = true;
-        this.cdRef.detectChanges();
-      });
-  
-      this.chatService.markMessagesAsRead(conversationId, this.currentUserId).subscribe();
+        // Hủy đăng ký cuộc trò chuyện trước đó nếu có
+        if (this.selectedConversationId !== null) {
+            console.log('okeeee');
+            this.chatService.unsubscribeFromConversation(this.selectedConversationId);
+        }
+
+        this.selectedConversationId = conversationId;
+
+        this.chatService.getMessages(conversationId).subscribe({
+            next: (response: any) => {
+                this.messages = response.data;
+                this.shouldScroll = true;
+                this.cdRef.detectChanges();
+            },
+            error: (err) => console.error('Error fetching messages:', err)
+        });
+
+        this.chatService.subscribeToConversation(conversationId, (message) => {
+            this.messages.push(message);
+            this.shouldScroll = true;
+            this.cdRef.detectChanges();
+        });
+
+        this.chatService.markMessagesAsRead(conversationId, this.currentUserId).subscribe();
     }
-  
+
     sendMessage(): void {
-      console.log('click button send message')
-      if (this.newMessage.trim() && this.selectedConversationId) {
-        this.chatService.sendMessage(this.selectedConversationId, this.currentUserId, this.newMessage);
-        this.newMessage = '';
-        this.shouldScroll = true;
-        this.cdRef.detectChanges();
-      }
+        console.log('click button send message');
+        if (this.newMessage.trim() && this.selectedConversationId) {
+            this.chatService.sendMessage(this.selectedConversationId, this.currentUserId, this.newMessage);
+            this.newMessage = '';
+            this.shouldScroll = true;
+            this.cdRef.detectChanges();
+        }
     }
-  
+
     getSelectedInstructorAvatar(): string {
-      const selectedConv = this.conversations.find((c) => c.id === this.selectedConversationId);
-      return selectedConv?.student?.avatar ?? this.defaultAvatar;
+        const selectedConv = this.conversations.find((c) => c.id === this.selectedConversationId);
+        return selectedConv?.student?.avatar ?? this.defaultAvatar;
     }
-  
+
     getSelectedConversation() {
-      return this.conversations.find((c) => c.id === this.selectedConversationId);
+        return this.conversations.find((c) => c.id === this.selectedConversationId);
     }
     handleEnterKey(event: Event): void {
-      console.log('enter message')
+        console.log('enter message');
         const keyboardEvent = event as KeyboardEvent;
-      
+
         if (keyboardEvent.shiftKey) {
-          return; // Cho phép xuống dòng nếu giữ Shift
+            return; // Cho phép xuống dòng nếu giữ Shift
         }
-      
+
         keyboardEvent.preventDefault(); // Ngăn không xuống dòng
         this.sendMessage();
-      }
-  }
+    }
+}

@@ -94,7 +94,7 @@ import { ToastService } from '../../service/toast.service';
         </main>
         <!-- Nút Save ở dưới cùng -->
         <div class="mt-5 flex justify-end" style="margin-bottom:20px ;">
-            <button (click)="updateProfile()" type="submit" class="bg-purple-700 text-white font-semibold mb-5 rounded-lg  px-10 py-3 hover:bg-purple-800 transition-colors">Save</button>
+            <button (click)="updateProfile()" type="submit" class="bg-blue-700 text-white font-semibold mb-5 rounded-lg  px-10 py-3 hover:bg-blue-800 transition-colors">Save</button>
         </div>
     `,
     styles: ``,

@@ -20,14 +20,7 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
         <main class="flex mx-auto py-10 px-6 sm:px-8 lg:px-10 max-w-[80%]" style="margin-top:0px;">
             <!-- Sidebar -->
             <aside class="w-72 flex-shrink-0 bg-white p-6">
-    <!-- Course Creation Progress -->
-    <!-- <div class="mb-6">
-        <h3 class="text-lg font-semibold text-gray-800 mb-4">Tạo khóa học</h3>
-        <div class="w-full bg-gray-200 rounded-full h-2.5">
-            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 60%"></div>
-        </div>
-        <p class="text-xs text-gray-500 mt-2 text-right">3/5 hoàn thành</p>
-    </div> -->
+
 
     <!-- Navigation Menu -->
     <nav aria-label="Plan your course" class="mb-8">
@@ -39,7 +32,7 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
                     <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 mr-3">
                         <i class="fas fa-users text-xs"></i>
                     </div>
-                    <span class="text-gray-700">Người học mục tiêu</span>
+                    <span class="text-gray-700">Mục tiêu khóa học</span>
                     
                 </div>
             </li>
@@ -75,7 +68,7 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
                     <div class="flex-shrink-0 w-6 h-6 flex items-center justify-center rounded-full bg-blue-100 text-blue-600 mr-3">
                         <i class="fas fa-home text-xs"></i>
                     </div>
-                    <span class="text-gray-700">Trang đích</span>
+                    <span class="text-gray-700">Thông tin cơ bản</span>
                 </div>
             </li>
              

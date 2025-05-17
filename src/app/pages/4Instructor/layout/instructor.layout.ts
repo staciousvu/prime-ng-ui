@@ -23,7 +23,7 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
                         class="flex items-center space-x-2 px-3 py-4
                                 hover:bg-gray-800 rounded-md cursor-pointer 
                                 transition active:scale-95"
-                        routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                        routerLinkActive="border-l-4 border-blue-500 font-semibold"
                         [routerLink]="['/instructor/courses']"
                     >
                         <i class="fa-solid fa-video me-3"></i>
@@ -41,7 +41,7 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
                         class="flex items-center space-x-2 px-3 py-4
                                 hover:bg-gray-800 rounded-md cursor-pointer 
                                 transition active:scale-95"
-                        routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                        routerLinkActive="border-l-4 border-blue-500 font-semibold"
                         [routerLink]="['/instructor/communications']"
                     >
                         <i class="fa-solid fa-comments me-3"></i>
@@ -58,7 +58,7 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
                         class="flex items-center space-x-2 px-3 py-4
                                 hover:bg-gray-800 rounded-md cursor-pointer 
                                 transition active:scale-95"
-                        routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                        routerLinkActive="border-l-4 border-blue-500 font-semibold"
                         [routerLink]="['/instructor/performances']"
                     >
                         <i class="fa-solid fa-chart-simple me-3"></i>
@@ -75,7 +75,7 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
                         class="flex items-center space-x-2 px-3 py-4
                                 hover:bg-gray-800 rounded-md cursor-pointer 
                                 transition active:scale-95"
-                        routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                        routerLinkActive="border-l-4 border-blue-500 font-semibold"
                         [routerLink]="['/instructor/advertisements']"
                     >
                         <i class="fa-solid fa-rectangle-ad me-3"></i>
@@ -92,7 +92,7 @@ import { ToastContainerComponent } from '../../SharedComponent/toast-container-c
                         class="flex items-center space-x-2 px-3 py-4
                                 hover:bg-gray-800 rounded-md cursor-pointer 
                                 transition active:scale-95"
-                        routerLinkActive="border-l-4 border-purple-500 font-semibold"
+                        routerLinkActive="border-l-4 border-blue-500 font-semibold"
                         [routerLink]="['/instructor/profiles']"
                     >
                         <i class="bi bi-person-circle me-3"></i>

@@ -46,7 +46,7 @@ import { CourseDraftComponent } from './draft-courses';
 ],
     template: `
         <app-breadcrump [apr]="'Approve course'" [manager]="'Manage course'"></app-breadcrump>
-        <div class="font-semibold text-xl mb-4">Approve Course</div>
+        <div class="font-semibold text-xl mb-4">Quản lí khóa học</div>
             <p-tabs [value]="tabIndex">
                 <p-tablist>
                     <p-tab value="0">Chờ duyệt</p-tab>

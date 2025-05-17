@@ -125,7 +125,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
                                             <div class="lecture-right">
                                                 <i class="fa fa-play-circle"></i>
-                                                <span class="lecture-duration">{{ lecture.duration || '1' }}min</span>
+                                                <span class="lecture-duration">{{ lecture.duration || '1' }}s</span>
                                             </div>
                                         </li>
                                     </ul>
@@ -186,7 +186,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         <!-- report -->
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" *ngIf="reportDialogVisible">
             <!-- Modal content -->
-            <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-6">
+            <div class="bg-white rounded-2xl shadow-xl w-full max-w-2xl p-6">
                 <!-- Header -->
                 <div class="flex justify-between items-center mb-6">
                     <h2 class="text-2xl font-bold">Báo cáo khóa học</h2>
@@ -236,34 +236,51 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
         <!-- Modal -->
         <div *ngIf="isModalOpen" class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center z-50">
-            <div class="bg-white rounded-2xl p-6 w-[40%] shadow-xl overflow-auto">
+            <div class="bg-white rounded-2xl p-6 w-[50%] shadow-xl overflow-auto">
                 <div class="mb-4">
                     <h3 class="text-xl font-semibold text-gray-800 mb-2">Câu hỏi</h3>
                     <!-- Hiển thị HTML câu hỏi -->
-                    <div class="text-gray-700" [innerHTML]="quiz.questions[currentQuestionIndex].content"></div>
+                    <div class="text-gray-700 text-center" [innerHTML]="quiz.questions[currentQuestionIndex].content"></div>
                 </div>
 
                 <!-- Danh sách đáp án -->
                 <div class="space-y-3 mb-6">
-                    <label
-                        *ngFor="let answer of quiz.questions[currentQuestionIndex]?.answers"
-                        class="flex items-center gap-3 px-4 py-3 border rounded-xl transition cursor-pointer"
-                        [ngClass]="{
-                            'border-green-500 bg-green-100': answerChecked && selectedAnswer === answer.content && answer.isCorrect,
-                            'border-red-500 bg-red-100': answerChecked && selectedAnswer === answer.content && !answer.isCorrect,
-                            'border-gray-200 hover:bg-blue-50': !answerChecked
-                        }"
-                    >
-                        <input type="radio" name="answer" [value]="answer.content" class="form-radio text-blue-600" [disabled]="answerChecked" (change)="selectAnswer(answer)" />
-                        <span class="text-gray-800" [innerHTML]="answer.content"></span>
-                    </label>
-                </div>
+  <label
+    *ngFor="let answer of quiz.questions[currentQuestionIndex]?.answers"
+    class="flex items-center gap-3 px-4 py-3 border rounded-xl transition cursor-pointer"
+    [ngClass]="{
+      'border-green-500 bg-green-100': answerChecked && answer.isCorrect,
+      'border-red-500 bg-red-100': answerChecked && selectedAnswer === answer && !answer.isCorrect,
+      'border-gray-200 hover:bg-blue-50': !answerChecked
+    }"
+  >
+    <input
+      type="radio"
+      name="answer"
+      [value]="answer.content"
+      class="form-radio text-blue-600"
+      [disabled]="answerChecked"
+      (change)="selectAnswer(answer)"
+    />
+    <span class="text-gray-800" [innerHTML]="answer.content"></span>
+  </label>
+</div>
 
-                <!-- Nút -->
-                <div class="flex justify-end gap-4">
-                    <button (click)="closeModal()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">Huỷ làm bài</button>
-                    <button (click)="nextQuestion()" class="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700">Câu hỏi tiếp theo</button>
-                </div>
+<!-- Nút -->
+<div class="flex justify-end gap-4">
+  <button
+    (click)="closeModal()"
+    class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300"
+  >
+    Huỷ làm bài
+  </button>
+  <button
+    (click)="nextQuestion()"
+    class="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700"
+  >
+    Câu hỏi tiếp theo
+  </button>
+</div>
             </div>
         </div>
     `,
@@ -523,7 +540,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
             background-color: #ffffff91;
         }
         .btn-rating:hover {
-            background-color: #7c2ae8dc;
+            background-color:rgba(52, 116, 200, 0.86);
             transition: all 0.3s ease-in-out;
         }
         .btn-rating:active {
@@ -565,45 +582,87 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 })
 export class VideoLearning1Component implements OnInit {
     isBooleanReport = false;
-    quiz: any;
-    currentQuestionIndex = 0;
-    isModalOpen = false;
-    selectedAnswer: string | null = null;
-    answerChecked = false;
+  quiz: any;
+  currentQuestionIndex = 0;
+  isModalOpen = false;
+  selectedAnswer: any = null;
+  answerChecked = false;
 
-    openQuizModal($event: any) {
-        this.quiz = $event;
-        this.currentQuestionIndex = 0;
-        this.isModalOpen = true;
-        this.selectedAnswer = null;
-        this.answerChecked = false;
-    }
-    selectAnswer(answer: any) {
-        this.selectedAnswer = answer.content;
-        this.answerChecked = true;
-        if (answer.isCorrect) {
-            this.playSound('correct');
-        } else {
-            this.playSound('wrong');
-        }
-    }
-    playSound(type: 'correct' | 'wrong') {
-        const audio = new Audio();
-        audio.src = `assets/sounds/${type}.mp3`;
-        audio.load();
-        audio.play();
-    }
+  openQuizModal($event: any) {
+    this.quiz = $event;
+    this.currentQuestionIndex = 0;
+    this.isModalOpen = true;
+    this.selectedAnswer = null;
+    this.answerChecked = false;
+  }
 
-    nextQuestion() {
-        if (this.currentQuestionIndex < this.quiz.questions.length - 1) {
-            this.currentQuestionIndex++;
-            this.selectedAnswer = null;
-            this.answerChecked = false;
-        } else {
-            // Hết câu hỏi → có thể hiện kết quả
-            this.closeModal();
-        }
+  selectAnswer(answer: any) {
+    this.selectedAnswer = answer;
+    this.answerChecked = true;
+    // if (answer.isCorrect) {
+    //   this.playSound('correct');
+    // } else {
+    //   this.playSound('wrong');
+    // }
+  }
+
+  playSound(type: 'correct' | 'wrong') {
+    const audio = new Audio();
+    audio.src = `assets/sounds/${type}.mp3`;
+    audio.load();
+    audio.play();
+  }
+
+  nextQuestion() {
+    if (this.currentQuestionIndex < this.quiz.questions.length - 1) {
+      this.currentQuestionIndex++;
+      this.selectedAnswer = null;
+      this.answerChecked = false;
+    } else {
+      // Hết câu hỏi → có thể hiện kết quả
+      this.closeModal();
     }
+  }
+    // isBooleanReport = false;
+    // quiz: any;
+    // currentQuestionIndex = 0;
+    // isModalOpen = false;
+    // selectedAnswer: string | null = null;
+    // answerChecked = false;
+
+    // openQuizModal($event: any) {
+    //     this.quiz = $event;
+    //     this.currentQuestionIndex = 0;
+    //     this.isModalOpen = true;
+    //     this.selectedAnswer = null;
+    //     this.answerChecked = false;
+    // }
+    // selectAnswer(answer: any) {
+    //     this.selectedAnswer = answer.content;
+    //     this.answerChecked = true;
+    //     if (answer.isCorrect) {
+    //         this.playSound('correct');
+    //     } else {
+    //         this.playSound('wrong');
+    //     }
+    // }
+    // playSound(type: 'correct' | 'wrong') {
+    //     const audio = new Audio();
+    //     audio.src = `assets/sounds/${type}.mp3`;
+    //     audio.load();
+    //     audio.play();
+    // }
+
+    // nextQuestion() {
+    //     if (this.currentQuestionIndex < this.quiz.questions.length - 1) {
+    //         this.currentQuestionIndex++;
+    //         this.selectedAnswer = null;
+    //         this.answerChecked = false;
+    //     } else {
+    //         // Hết câu hỏi → có thể hiện kết quả
+    //         this.closeModal();
+    //     }
+    // }
 
     closeModal() {
         this.isModalOpen = false;
@@ -732,7 +791,7 @@ export class VideoLearning1Component implements OnInit {
                 this.reviewText = '';
             },
             error: (err) => {
-                this.toastService.addToast('error', err.error?.message);
+                this.toastService.addToast('error', 'Bạn đã đánh giá khóa học này');
                 console.error('Error submitting review:', err);
             }
         });

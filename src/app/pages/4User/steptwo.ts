@@ -15,9 +15,9 @@ import { Router } from '@angular/router';
 
         <!-- Main Content -->
         <div class="container">
-            <div class="question-box">Answer a few questions to improve your content recommendations</div>
+            <div class="question-box">Trả lời 1 số câu hỏi để chúng tôi dễ dàng đề xuất khóa học cho bạn</div>
 
-            <h2>What topic are you learning for?</h2>
+            <h2>Bạn đang muốn học chủ đề nào?</h2>
 
             <form>
                 <div class="grid">
@@ -28,8 +28,8 @@ import { Router } from '@angular/router';
 
         <!-- Footer -->
         <div class="footer">
-            <button type="submit" class="back-btn" (click)="prev.emit()">Back</button>
-            <button type="button" class="next-btn" (click)="onSubmit()">Submit</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-4 py-2 rounded" (click)="prev.emit()">Back</button>
+            <button type="button" class="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-4 py-2 rounded" (click)="onSubmit()">Submit</button>
         </div>
     `,
     styles: `
@@ -81,11 +81,11 @@ import { Router } from '@angular/router';
 
         label:hover {
             background-color: #eef2ff;
-            border-color: #a5b4fc;
+            // border-color: #a5b4fc;
         }
 
         input[type='checkbox'] {
-            accent-color: blue;
+            accent-color: #60A5FA;
             width: 18px;
             height: 18px;
         }

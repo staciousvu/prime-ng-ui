@@ -20,11 +20,11 @@ import { ToastService } from '../service/toast.service';
                 <!-- Nội dung chính -->
                 <div>
                     <nav class="text-lg text-[#5694E5] space-x-1 mb-4">
-                        <a href="#" class="hover:underline">{{ course.categories[0].categoryName }}</a>
-                        <span>></span>
-                        <a href="#" class="hover:underline">{{ course.categories[1].categoryName }}</a>
-                        <span>></span>
-                        <span class="hover:underline">{{ course.categories[2].categoryName }}</span>
+                        <a *ngIf="course.categories[0]" href="#" class="hover:underline">{{ course.categories[0].categoryName }}</a>
+                        <span *ngIf="course.categories[1]">></span>
+                        <a *ngIf="course.categories[1]" href="#" class="hover:underline">{{ course.categories[1].categoryName }}</a>
+                        <span *ngIf="course.categories[2]">></span>
+                        <span *ngIf="course.categories[2]" class="hover:underline">{{ course.categories[2].categoryName }}</span>
                     </nav>
 
                     <h1 class="text-3xl font-bold text-white mb-2">{{ course.title }}</h1>
@@ -79,8 +79,14 @@ import { ToastService } from '../service/toast.service';
                                 <span *ngIf="loading" class="spinner"></span>
                             </button>
 
-                            <button class="w-[48px] h-[48px] border border-gray-300 rounded-md flex items-center justify-center hover:border-purple-500 transition">
-                                <i class="fa-regular fa-heart text-xl text-purple-600"></i>
+                            <button (click)="toggleFavorite(course.id)" class="w-[48px] h-[48px] border border-gray-300 rounded-md flex items-center justify-center hover:border-purple-500 transition">
+                                <ng-container *ngIf="isInFavorite; else notInFavorite">
+                                    <i class="fa-solid fa-heart text-xl text-purple-600"></i>
+                                </ng-container>
+
+                                <ng-template #notInFavorite>
+                                    <i class="fa-regular fa-heart text-xl text-purple-600"></i>
+                                </ng-template>
                             </button>
                         </div>
 
@@ -119,14 +125,14 @@ import { ToastService } from '../service/toast.service';
             </div>
         </div>
         <div class="w-[80%] mx-auto px-8 md:px-12 lg:px-20 py-10">
-            <div class="whatwillyoulearn">
+            <div class="whatwillyoulearn" *ngIf="course.contents.length>0">
                 <h2 class="wwyl-title">Bạn sẽ được học những nội dung</h2>
                 <ul class="wwyl-list">
                     <li class="wwyl-item text-gray-800" *ngFor="let content of course.contents">{{ content.title }}</li>
                 </ul>
             </div>
-            <div class="course-content">
-                <h2 class="course-content-title">Course Content</h2>
+            <div class="course-content" *ngIf="courseSections.length>0">
+                <h2 class="course-content-title">Nội dung khóa học</h2>
                 <div class="course-timeline">
                     <span class="ct-totalsections">21 sections</span>
                     <span class="ct-totallectures">200 lectures</span>
@@ -733,6 +739,7 @@ export class CourseDetail2Component implements OnInit {
             this.isInCart = carts.some((c) => c.courseResponse.id === this.courseId);
             console.log('isInCart:', this.isInCart);
         });
+        this.checkFavorite(this.courseId);
     }
     isInCart: boolean = false;
     loading: boolean = false;
@@ -741,8 +748,10 @@ export class CourseDetail2Component implements OnInit {
             this.route.navigate(['/cart']);
         } else {
             this.loading = true;
+
             this.cartService.addToCart(this.courseId).subscribe(() => {
                 this.cartService.loadCart();
+                this.checkFavorite(this.courseId);
                 // giả lập hiệu ứng loading 1s rồi mới set lại
                 setTimeout(() => {
                     this.loading = false;
@@ -770,5 +779,40 @@ export class CourseDetail2Component implements OnInit {
     }
     santinizeBio() {
         return this.course.author.bio.replace(/&nbsp;/g, ' ');
+    }
+    moveToFavorite(courseId: any): void {
+        this.cartService.moveToFavorite(courseId).subscribe(() => {
+            this.cartService.loadCart();
+            this.checkFavorite(courseId);
+            this.toastService.addToast('success', 'Thêm vào yêu thích thành công');
+        });
+    }
+    isInFavorite: boolean = false;
+    checkFavorite(id: any) {
+        this.http.get<any>(`http://localhost:8080/favorite/check/${id}`).subscribe({
+            next: (response) => {
+                this.isInFavorite = response.data;
+                console.log('check favoriteeee:', this.isInFavorite);
+            },
+            error: (error) => {}
+        });
+    }
+    toggleFavorite(id: any) {
+        if (this.isInFavorite) {
+            this.http.delete<any>(`http://localhost:8080/favorite/${id}`).subscribe({
+            next: (response) => {
+                this.checkFavorite(id);
+                console.log('check favoriteeee:', this.isInFavorite);
+                this.toastService.addToast('success', 'Xóa khỏi yêu thích thành công');
+            },
+            error: (error) => {}
+        });
+        } else {
+            this.cartService.moveToFavorite(id).subscribe(() => {
+            this.cartService.loadCart();
+            this.checkFavorite(id);
+            this.toastService.addToast('success', 'Thêm vào yêu thích thành công');
+        });
+        }
     }
 }

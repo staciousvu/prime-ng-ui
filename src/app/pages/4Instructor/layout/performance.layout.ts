@@ -13,7 +13,7 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
                 <ul class="space-y-1">
                     <!--Overviews -->
                     <li>
-                        <div routerLink="/instructor/performances/overview" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" 
+                        <div routerLink="/instructor/performances/overview" routerLinkActive="border-l-4 border-blue-500 bg-blue-50 text-blue-700 font-semibold" 
                         class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">Overview</div>
                     </li>
 
@@ -21,16 +21,16 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
                     <li>
                         <div
                             routerLink="/instructor/performances/student"
-                            routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold"
+                            routerLinkActive="border-l-4 border-blue-500 bg-blue-50 text-blue-700 font-semibold"
                             class="flex items-center justify-between px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
                             <span>Students</span>
-                            <!-- <span class="bg-purple-500 text-white text-xs font-semibold rounded-full px-2 py-1">7</span> -->
+                            <!-- <span class="bg-blue-500 text-white text-xs font-semibold rounded-full px-2 py-1">7</span> -->
                         </div>
                     </li>
 
                     <!-- Reviews -->
                     <li>
-                        <div routerLink="/instructor/performances/review" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
+                        <div routerLink="/instructor/performances/review" routerLinkActive="border-l-4 border-blue-500 bg-blue-50 text-blue-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
                             Reviews
                         </div>
                     </li>

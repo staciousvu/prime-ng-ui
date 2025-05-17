@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 import { ToastService } from '../service/toast.service';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Editor } from 'primeng/editor';
 import { SelectModule } from 'primeng/select';
 import { ClassicEditor } from 'ckeditor5';
 import { CKEDITOR_CONFIG } from '../models/ckeditor-config';
@@ -15,10 +14,10 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     selector: 'app-edit-course-landing-page',
     standalone: true,
     encapsulation:ViewEncapsulation.None, 
-    imports: [RouterModule, FormsModule, CommonModule, Editor, SelectModule,CKEditorModule],
+    imports: [RouterModule, FormsModule, CommonModule, SelectModule,CKEditorModule],
     template: `
-        <section class="bg-gradient-to-r from-indigo-50 to-purple-50 w-full">
-  <div class="w-full mx-auto bg-white overflow-hidden">
+        <section class=" from-indigo-50 to-purple-50">
+  <div class="max-w-6xl mx-auto bg-white overflow-hidden">
     <!-- Header -->
     <!-- <div class="bg-gradient-to-r from-indigo-600 to-purple-600 px-8 py-6 text-white">
       <h1 class="text-2xl font-bold">Tạo khóa học mới</h1>
@@ -26,10 +25,10 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
     </div> -->
 
     <!-- Form Content -->
-    <div class="px-8 py-6 space-y-8 w-full">
-      <form class="space-y-8 w-full">
+    <div class="px-8 py-6 space-y-8">
+      <div class="space-y-8">
         <!-- Course title section -->
-        <div class="bg-white p-6 rounded-lg border border-gray-100 shadow-sm w-full">
+        <div class="bg-white p-6 rounded-lg border border-gray-100 shadow-sm">
           <h2 class="text-lg font-semibold text-gray-800 flex items-center mb-4">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-indigo-500 mr-2" viewBox="0 0 20 20" fill="currentColor">
               <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z" />
@@ -37,8 +36,8 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
             Thông tin cơ bản
           </h2>
           
-          <div class="space-y-6 w-full">
-            <div class="w-full">
+          <div class="space-y-6">
+            <div>
               <label for="course-title" class="block text-sm font-medium text-gray-700 mb-1">Tiêu đề khóa học</label>
               <div class="relative rounded-md shadow-sm">
                 <input 
@@ -76,9 +75,9 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
               <p class="mt-1 text-xs text-gray-500">Sử dụng 1-2 từ khóa và đề cập đến 3-4 lĩnh vực quan trọng của khóa học</p>
             </div>
 
-            <div class="w-full">
+            <div>
               <label for="course-description" class="block text-sm font-medium text-gray-700 mb-1">Mô tả khóa học</label>
-              <div class="w-full border border-gray-300 rounded-md focus-within:ring-1 focus-within:ring-indigo-500">
+              <div class="border border-gray-300 rounded-md overflow-hidden focus-within:ring-1 focus-within:ring-indigo-500">
                 <!-- <p-editor 
                   [(ngModel)]="course.description" 
                   name="description" 
@@ -95,7 +94,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
                     </div>
                   </ng-template>
                 </p-editor> -->
-                <ckeditor class="w-full" [editor]="Editor" [(ngModel)]="course.description" [config]="config"></ckeditor>
+                <ckeditor [editor]="Editor" [(ngModel)]="course.description" [config]="config"></ckeditor>
               </div>
               <p class="mt-1 text-xs text-gray-500">Mô tả phải có ít nhất 200 từ để giới thiệu đầy đủ về khóa học của bạn</p>
             </div>
@@ -154,7 +153,7 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
             
             <div>
               <label for="sub-category" class="block text-sm font-medium text-gray-700 mb-1">Danh mục con</label>
-              <select  
+              <select 
                 id="sub-category" 
                 [(ngModel)]="selectedSub" 
                 (ngModelChange)="onSubChange()" 
@@ -272,40 +271,18 @@ import { CKEditorModule } from '@ckeditor/ckeditor5-angular';
         
         <!-- Form actions -->
         <div class="flex justify-end pt-6 border-t border-gray-200">
-          <!-- <button 
-            type="button" 
-            class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
-            </svg>
-            Lưu bản nháp
-          </button> -->
           
-          <div class="flex space-x-3">
-            <!-- <button 
+            <button (click)="save()" 
               type="button" 
-              class="inline-flex items-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-              </svg>
-              Xem trước
-            </button> -->
-            
-            <button 
-              type="button" (click)="save()"
               class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-          </svg>
+              <svg xmlns="http://www.w3.org/2000/svg" class="-ml-1 mr-2 h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
               Lưu
             </button>
-          </div>
         </div>
-      </form>
+</div>
     </div>
   </div>
 </section>
@@ -428,20 +405,7 @@ export class EditCourseLandingPageComponent implements OnInit, OnDestroy {
                 console.error('Error fetching course details:', error);
             }
         );
-        // this.headerService.setControls([
-        //     {
-        //         type: 'button',
-        //         label: 'Save',
-        //         action: () => this.save(),
-        //         disabled: false
-        //     },
-        //     {
-        //         type: 'button',
-        //         label: 'Continue',
-        //         action: () => console.log('heelo'),
-        //         disabled: false
-        //     }
-        // ]);
+
     }
 
     ngOnDestroy(): void {
@@ -522,20 +486,31 @@ export class EditCourseLandingPageComponent implements OnInit, OnDestroy {
         }
     }
     save() {
-        console.log(this.course.description);
-        const data = {
-            title: this.course.title,
-            subtitle: this.course.subtitle,
-            price: this.course.price,
-            description: this.course.description,
-            language: this.course.language,
-            level: this.course.level,
-            categoryId: this.selectedTopic!.id
-        };
-        this.http.put<any>(`http://localhost:8080/course/${this.courseId}`, data).subscribe((res) => {
-            this.toastService.addToast('success', 'Update landing page successfully');
-        });
+    console.log(this.course.description);
+    
+    const categoryId = this.selectedTopic?.id || this.selectedSub?.id;
+
+    if (!categoryId) {
+        this.toastService.addToast('error', 'Vui lòng chọn danh mục khóa học');
+        return;
     }
+
+    const data = {
+        title: this.course.title,
+        subtitle: this.course.subtitle,
+        price: this.course.price,
+        description: this.course.description,
+        language: this.course.language,
+        level: this.course.level,
+        categoryId: categoryId
+    };
+    console.log('dataaaaaaaa:',data);
+
+    this.http.put<any>(`http://localhost:8080/course/${this.courseId}`, data).subscribe((res) => {
+        this.toastService.addToast('success', 'Cập nhật thông tin cơ bản thành công');
+    });
+}
+
     trackById(index: number, item: any): any {
         return item.id; // Giả sử mỗi item có trường id duy nhất
     }

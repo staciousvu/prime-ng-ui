@@ -12,7 +12,7 @@ import { HttpClient } from '@angular/common/http';
     encapsulation: ViewEncapsulation.None,
     imports: [AccordionModule, CommonModule, FormsModule],
     template: `
-        <div class="w-[50%] mx-auto mt-6">
+        <!-- <div class="w-[50%] mx-auto mt-6">
             <h2 class="text-2xl font-semibold mb-4">Danh sách bộ câu hỏi ôn tập</h2>
 
             <ng-container *ngIf="quizSets.length > 0; else noQuiz">
@@ -47,7 +47,47 @@ import { HttpClient } from '@angular/common/http';
             <ng-template #noQuiz>
                 <p class="text-gray-500 italic">Không có bộ câu hỏi nào.</p>
             </ng-template>
+        </div> -->
+        <div class="w-full max-w-3xl mx-auto mt-6">
+    <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">Danh sách bộ câu hỏi ôn tập</h2>
+
+    <ng-container *ngIf="quizSets.length > 0; else noQuiz">
+        <div *ngFor="let quiz of quizSets" class="border border-gray-200 rounded-xl shadow-md p-6 mb-6 bg-white">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="text-lg font-semibold text-gray-700">{{ quiz.title }}</h3>
+                <button
+                    (click)="toggleQuiz(quiz)"
+                    class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded-lg text-sm transition duration-200"
+                >
+                    {{ quiz.expanded ? 'Ẩn' : 'Xem' }}
+                </button>
+            </div>
+
+            <div *ngIf="quiz.expanded" class="space-y-5 border-t pt-4">
+                <div *ngFor="let question of quiz.questions" class="bg-gray-50 p-4 rounded-lg">
+                    <p class="font-medium text-gray-800 mb-2" [innerHTML]="question.content"></p>
+                    <ul class="space-y-2">
+                        <li
+                            *ngFor="let answer of question.answers"
+                            class="py-1 px-3 rounded transition duration-150"
+                            [ngClass]="{
+                                'text-green-600 font-semibold bg-green-50': answer.isCorrect,
+                                'text-gray-700 hover:bg-gray-100': !answer.isCorrect
+                            }"
+                        >
+                            <span [innerHTML]="answer.content"></span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+    </ng-container>
+
+    <ng-template #noQuiz>
+        <p class="text-gray-500 italic text-center mt-6">Hiện chưa có bộ câu hỏi nào để ôn tập.</p>
+    </ng-template>
+</div>
+
     `,
     styles: ``
 })

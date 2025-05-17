@@ -15,7 +15,7 @@ import { ToastService } from '../../service/toast.service';
     template: `
         <app-breadcrump [apr]="'List recommends'" [manager]="'Manage recommeds'"></app-breadcrump>
 
-        <div class="font-semibold text-xl mb-4">List recommends</div>
+        <div class="font-semibold text-xl mb-4">Đề xuất ở trang chủ</div>
         <div class="flex justify-between items-center mb-4">
             <span class="text-gray-700 text-sm ml-2">Có tổng cộng {{ totalTopic }} topic trong danh sách</span>
 
@@ -34,7 +34,7 @@ import { ToastService } from '../../service/toast.service';
                 <label *ngFor="let topic of item.leafCategories" class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 transition cursor-pointer">
                     <input type="checkbox" [checked]="hcIds.includes(topic.id)" (change)="onCheckboxChange($event, topic.id)" name="option2" value="2" class="form-checkbox h-5 w-5 text-blue-600 transition duration-150 ease-in-out" />
                     <span class="text-gray-700 text-base"
-                        >{{ topic.name }} <span class="text-blue-600 font-semibold">({{ topic.totalCourses }} khóa học)</span></span
+                        >{{ topic.name }} | {{topic.id}} <span class="text-blue-600 font-semibold">({{ topic.totalCourses }} khóa học)</span></span
                     >
                 </label>
             </div>

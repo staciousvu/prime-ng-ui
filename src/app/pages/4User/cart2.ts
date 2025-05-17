@@ -16,10 +16,10 @@ import { StarRatingComponent } from './star-rating';
     template: `
         <div class="app">
             <div class="grid wrapper">
-                <h1 class="myshoppingcart_title text-4xl">Shopping Cart</h1>
+                <h1 class="myshoppingcart_title text-4xl">Giỏ hàng của tôi</h1>
                 <div *ngIf="myCarts.length>0" class="myshoppingcart_content">
                     <div class="myshoppingcart_content-left">
-                        <p class="total_course text-lg font-semibold mb-4">{{ myCarts.length }} Courses in Cart</p>
+                        <p class="total_course text-lg font-semibold mb-4">{{ myCarts.length }} khóa học trong giỏ hàng</p>
                         <ul class="myshoppingcart_content__list">
                             <li class="myshoppingcart_content__item-course" *ngFor="let item of myCarts">
                                 <img [src]="item.courseResponse.thumbnail" alt="" class="myshoppingcart_content__item-course-img" />
@@ -38,10 +38,10 @@ import { StarRatingComponent } from './star-rating';
                                         <ng-container *ngIf="loadingRemoveIds.includes(item.courseResponse.id); else showText">
                                             <i class="fas fa-spinner fa-spin"></i>
                                         </ng-container>
-                                        <ng-template #showText> Remove </ng-template>
+                                        <ng-template #showText> Xóa khỏi giỏ hàng </ng-template>
                                     </p>
-                                    <p class="save padding-action">Save for Later</p>
-                                    <p (click)="moveToFavorite(item.courseResponse.id)" class="move_to_with_list padding-action">Move to Withlist</p>
+                                    <!-- <p class="save padding-action">Save for Later</p> -->
+                                    <p (click)="moveToFavorite(item.courseResponse.id)" class="move_to_with_list padding-action">Chuyển sang yêu thích</p>
                                 </div>
                                 <div class="myshoppingcart_content__item-course-price">
                                     <p class="discount-price">đ{{ item.courseResponse.discount_price | number: '1.0-1' }} <i class="fa-solid fa-tag" style="color: #6c28d2;"></i></p>
@@ -52,21 +52,21 @@ import { StarRatingComponent } from './star-rating';
                     </div>
                     <div *ngIf="myCarts.length>0" class="myshoppingcart_content-right">
                         <div class="p-6 w-full max-w-md">
-                            <p class="text-lg font-semibold text-gray-700 mb-2">Total:</p>
+                            <p class="text-lg font-semibold text-gray-700 mb-2">Tổng tiền :</p>
                             <p class="text-2xl font-bold text-dark-500 mb-2">đ{{ totalMoney | number: '1.0-1' }}</p>
-                            <p class="text-base line-through text-gray-600 mb-2">đ{{ totalOldMoney | number: '1.0-1' }}</p>
-                            <p class="text-lg text-[#6c28d2] font-medium mb-4">Sale off {{ saleOff.toFixed(1) }}%</p>
+                            <p *ngIf="totalMoney != totalOldMoney" class="text-base line-through text-gray-600 mb-2">đ{{ totalOldMoney | number: '1.0-1' }}</p>
+                            <p *ngIf="totalMoney != totalOldMoney" class="text-lg text-[#6c28d2] font-medium mb-4">Giảm {{ saleOff.toFixed(1) }}%</p>
 
                             <button
                                 (click)="onPayment()"
                                 class="w-full bg-[#6c28d2] text-white py-3 px-5 rounded-xl transition mb-4 flex items-center justify-center gap-2
                                         hover:opacity-80 active:opacity-70"
                             >
-                                Payment courses
+                                Thanh toán
                                 <i class="fa-solid fa-arrow-right"></i>
                             </button>
 
-                            <p class="text-xs text-gray-500 text-center mb-6">You won't be charged yet</p>
+                            <!-- <p class="text-xs text-gray-500 text-center mb-6">You won't be charged yet</p> -->
 
                             <div class="border-t pt-4">
                                 <p class="text-sm font-semibold text-gray-700 mb-2">Promotions</p>
@@ -84,7 +84,7 @@ import { StarRatingComponent } from './star-rating';
                         </div>
                     </div>
                 </div>
-                <p *ngIf="myCarts.length === 0" class="text-center mt-4 text-gray-600">No courses in cart.</p>
+                <p *ngIf="myCarts.length === 0" class="text-center mt-4 text-gray-600">Không có khóa học nào.</p>
             </div>
         </div>
     `,

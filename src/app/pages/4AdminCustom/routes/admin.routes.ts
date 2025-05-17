@@ -9,6 +9,8 @@ import { PostAddComponent } from '../post/post-add';
 import { PostEditComponent } from '../post/post-edit';
 import { AdminReviewComponent } from '../admin-review-course/admin-review';
 import { AdvertisementAdminComponent } from '../advertisement/advertisement-list';
+import { Report2Component } from '../report/report2';
+import { Report3Component } from '../report/report3';
 
 export const AdminRoutes: Routes = [
     {
@@ -45,7 +47,7 @@ export const AdminRoutes: Routes = [
             },
             { 
                 path: 'report/list', 
-                component :ReportComponent
+                component :Report3Component
             },
             { 
                 path: 'advertisements/list', 

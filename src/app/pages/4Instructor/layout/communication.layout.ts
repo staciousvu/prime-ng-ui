@@ -15,30 +15,30 @@ import { RouterLink, RouterModule, RouterOutlet } from '@angular/router';
                 <ul class="space-y-1">
                     <!-- Q&A -->
                     <li>
-                        <div routerLink="/instructor/communications/qna" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">Q&A</div>
+                        <div routerLink="/instructor/communications/qna" routerLinkActive="border-l-4 border-blue-500 bg-blue-50 text-blue-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">Q&A</div>
                     </li>
 
                     <!-- Messages -->
                     <li>
                         <div
                             routerLink="/instructor/communications/messages"
-                            routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold"
+                            routerLinkActive="border-l-4 border-blue-500 bg-blue-50 text-blue-700 font-semibold"
                             class="flex items-center justify-between px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
                             <span>Messages</span>
-                            <span class="bg-purple-500 text-white text-xs font-semibold rounded-full px-2 py-1">7</span>
+                            <span class="bg-blue-500 text-white text-xs font-semibold rounded-full px-2 py-1">7</span>
                         </div>
                     </li>
 
                     <!-- Assignments -->
                     <li>
-                        <div routerLink="/instructor/communications/assignments" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
+                        <div routerLink="/instructor/communications/assignments" routerLinkActive="border-l-4 border-blue-500 bg-blue-50 text-blue-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
                             Assignments
                         </div>
                     </li>
 
                     <!-- Announcements -->
                     <li>
-                        <div routerLink="/instructor/communications/announcements" routerLinkActive="border-l-4 border-purple-500 bg-purple-50 text-purple-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
+                        <div routerLink="/instructor/communications/announcements" routerLinkActive="border-l-4 border-blue-500 bg-blue-50 text-blue-700 font-semibold" class="px-6 py-4 hover:bg-gray-100 text-gray-800 transition cursor-pointer">
                             Notifications
                         </div>
                     </li>

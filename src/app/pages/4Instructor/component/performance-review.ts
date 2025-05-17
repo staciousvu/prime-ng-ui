@@ -13,9 +13,9 @@ import FileSaver from 'file-saver';
         <main class="w-full mx-auto px-6 py-8 text-[17px]">
             <header class="mb-4 flex flex-wrap items-center justify-between gap-4">
                 <div class="flex items-center gap-4">
-                    <h1 class="text-5xl font-extrabold text-gray-900 inline-block">Reviews</h1>
-                    <select (change)="onCourseChange($event)" aria-label="All courses dropdown" class="text-purple-700 font-semibold text-xl bg-white px-3 py-2">
-                        <option class="text-black font-extralight" selected value="0">All courses</option>
+                    <h1 class="text-5xl font-extrabold text-gray-900 inline-block">Đánh giá</h1>
+                    <select (change)="onCourseChange($event)" aria-label="All courses dropdown" class="text-blue-700 font-semibold text-xl bg-white px-3 py-2">
+                        <option class="text-black font-extralight" selected value="0">Tất cả khóa học</option>
                         <option *ngFor="let course of instructor_courses" [value]="course.id" class="text-gray-800 font-extralight">
                             {{ course.title }}
                         </option>
@@ -23,7 +23,7 @@ import FileSaver from 'file-saver';
                 </div>
 
                 <!-- Nút Export -->
-                <button (click)="exportToExcel()" class="text-purple-700 border border-purple-700 hover:bg-purple-100 active:bg-purple-200 font-semibold px-4 py-2 rounded-lg transition-all duration-150 shadow-sm hover:shadow-md active:scale-95">
+                <button (click)="exportToExcel()" class="text-blue-700 border border-blue-700 hover:bg-blue-100 active:bg-blue-200 font-semibold px-4 py-2 rounded-lg transition-all duration-150 shadow-sm hover:shadow-md active:scale-95">
                     Export to Excel
                 </button>
             </header>
@@ -36,13 +36,13 @@ import FileSaver from 'file-saver';
                         Our Reviews
                         <p class="mt-2 text-base font-normal text-gray-500 dark:text-gray-400">Trusted feedback from our learners worldwide 🌍</p>
                     </caption> -->
-                    <thead class="bg-purple-500 dark:bg-gray-800 text-white dark:text-gray-200 uppercase tracking-wider text-xs">
+                    <thead class="bg-blue-500 dark:bg-gray-800 text-white dark:text-gray-200 uppercase tracking-wider text-xs">
                         <tr>
                             <th class="px-6 py-4">Student</th>
                             <th class="px-6 py-4">Rating</th>
                             <th class="px-6 py-4">Comment</th>
                             <th class="px-6 py-4">Created At</th>
-                            <th class="px-6 py-4">Status</th>
+                            <!-- <th class="px-6 py-4">Status</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -71,7 +71,7 @@ import FileSaver from 'file-saver';
                                             />
                                         </svg>
                                     </ng-container>
-                                    <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">{{ review.rating }}/5</span>
+                                    <!-- <span class="ml-2 text-sm text-gray-500 dark:text-gray-400">{{ review.rating }}/5</span> -->
                                 </div>
                             </td>
 
@@ -86,7 +86,7 @@ import FileSaver from 'file-saver';
                             </td>
 
                             <!-- Status tag -->
-                            <td class="px-6 py-4">
+                            <!-- <td class="px-6 py-4">
                                 <span
                                     [ngClass]="{
                                         'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300': review.rating >= 4,
@@ -97,7 +97,7 @@ import FileSaver from 'file-saver';
                                 >
                                     {{ review.rating >= 4 ? 'Excellent' : review.rating == 3 ? 'Average' : 'Needs Work' }}
                                 </span>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>
@@ -107,7 +107,7 @@ import FileSaver from 'file-saver';
                     <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 0" class="mx-1 px-3 py-1 bg-gray-200 hover:bg-gray-300 rounded disabled:opacity-50">Previous</button>
 
                     <ng-container *ngFor="let page of [].constructor(totalPages); let i = index">
-                        <button (click)="goToPage(i)" [ngClass]="{ 'bg-purple-600 text-white': i === currentPage, 'bg-gray-200': i !== currentPage }" class="mx-1 px-3 py-1 rounded hover:bg-purple-300">
+                        <button (click)="goToPage(i)" [ngClass]="{ 'bg-blue-600 text-white': i === currentPage, 'bg-gray-200': i !== currentPage }" class="mx-1 px-3 py-1 rounded hover:bg-purple-300">
                             {{ i + 1 }}
                         </button>
                     </ng-container>

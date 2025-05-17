@@ -15,11 +15,11 @@ import { BaseChartDirective } from 'ng2-charts';
                 {{ errorMessage }}
             </div>
             <header class="mb-4">
-                <h1 class="text-5xl font-extrabold text-gray-900 inline-block">Overview</h1>
+                <h1 class="text-5xl font-extrabold text-gray-900 inline-block">Tổng quan</h1>
 
                 <!-- Sửa thành select thay vì button -->
-                <select [(ngModel)]="selectedCourseId" (ngModelChange)="getPerformanceData()" aria-label="All courses dropdown" class="ml-4 text-purple-700 font-semibold text-xl bg-white px-2 py-1 focus:outline-none">
-                    <option value="all">All courses</option>
+                <select [(ngModel)]="selectedCourseId" (ngModelChange)="getPerformanceData()" aria-label="All courses dropdown" class="ml-4 text-blue-700 font-semibold text-xl bg-white px-2 py-1 focus:outline-none">
+                    <option value="all">Tất cả khóa học</option>
                     <option *ngFor="let course of courses" [value]="course.id" class="text-gray-800 font-extralight">
                         {{ course.title }}
                     </option>
@@ -34,7 +34,7 @@ import { BaseChartDirective } from 'ng2-charts';
                     <div class="flex flex-col pr-10 min-w-[120px]">
                         <span class="mb-1">Total revenue</span>
                         <span class="text-3xl font-light text-gray-900">$0.00</span>
-                        <span class="mt-1 text-sm font-normal text-gray-700 border-b border-purple-700 w-max"> $0.00 this month </span>
+                        <span class="mt-1 text-sm font-normal text-gray-700 border-b border-blue-700 w-max"> $0.00 this month </span>
                     </div>
 
                     <!-- Total enrollments -->
@@ -68,16 +68,16 @@ import { BaseChartDirective } from 'ng2-charts';
                         <span>Date range:</span>
 
                         <!-- Sửa thành select -->
-                        <select [(ngModel)]="selectedRange" (ngModelChange)="getPerformanceData()" class="bg-white border border-purple-700 rounded-md px-3 py-1 text-purple-700 font-semibold focus:outline-none" aria-label="Select date range">
+                        <select [(ngModel)]="selectedRange" (ngModelChange)="getPerformanceData()" class="bg-white border border-blue-700 rounded-md px-3 py-1 text-blue-700 font-semibold focus:outline-none" aria-label="Select date range">
                             <option *ngFor="let option of dateRangeOptions" [ngValue]="option">{{ option.label }}</option>
                         </select>
 
-                        <button type="button" class="bg-purple-700 text-white font-bold px-4 py-2 rounded-md flex items-center focus:outline-none">
+                        <!-- <button type="button" class="bg-blue-700 text-white font-bold px-4 py-2 rounded-md flex items-center focus:outline-none">
                             Export
                             <svg class="ml-1 w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"></path>
                             </svg>
-                        </button>
+                        </button> -->
                     </div>
 
                     <!-- No data -->
@@ -176,7 +176,7 @@ export class PerformanceOverviewComponent implements OnInit {
                     label: 'Revenue',
                     tension: 0.4,
                     fill: true,
-                    borderColor: '#7E42D9',
+                    borderColor: '#60A5FA',
                     backgroundColor: 'transparent',
                     pointBackgroundColor: '#0d47a1'
                 }

@@ -12,7 +12,7 @@ import { CartService } from '../service/cart.service';
     template: `
         <div class="app">
             <div class="grid wrapper">
-                <h1 class="mylearning_title">My learning</h1>
+                <h1 class="mylearning_title">Khóa học của tôi</h1>
 
                 <ul class="mylearning_card__list">
                     <li class="mylearning_card__item" *ngFor="let course of courses" [routerLink]="['/course/video-learning', course.id]">
@@ -27,8 +27,9 @@ import { CartService } from '../service/cart.service';
                         <p class="course-author">{{ course.authorName }}</p>
 
                         <!-- Giả lập progress: nếu có dữ liệu real thì thay thế -->
-                        <progress [value]="course.progress || 2" max="100"></progress>
-                        <p class="percentcompleted">{{ course.progress || 2 }}% complete</p>
+                        <progress [value]="course.progress || 0" max="100"></progress>
+                        <p class="percentcompleted">{{ (course.progress || 0) | number:'1.0-0' }}% complete</p>
+
                     </li>
                 </ul>
                 <!-- Pagination -->
@@ -43,7 +44,7 @@ import { CartService } from '../service/cart.service';
                 </div>
 
                 <!-- Nếu không có khóa học -->
-                <p *ngIf="courses.length === 0" class="text-center mt-4 text-gray-600">No courses in my learning.</p>
+                <p *ngIf="courses.length === 0" class="text-center mt-4 text-gray-600">Không có khóa học nào.</p>
             </div>
         </div>
     `,
@@ -64,7 +65,7 @@ import { CartService } from '../service/cart.service';
         }
 
         .pagination button.active {
-            background-color: #8D55E2;
+            background-color: #60A5FA;
             color: white;
             font-weight: bold;
         }
@@ -192,7 +193,7 @@ import { CartService } from '../service/cart.service';
             overflow: hidden;
         }
         progress::-webkit-progress-value {
-            background-color: #7d2ae8;
+            background-color: #60A5FA;
             border-radius: 5px;
         }
 
@@ -202,7 +203,7 @@ import { CartService } from '../service/cart.service';
             border-radius: 5px;
         }
         progress::-moz-progress-bar {
-            background-color: #7d2ae8;
+            background-color: #60A5FA;
             border-radius: 5px;
         }
 

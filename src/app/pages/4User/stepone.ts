@@ -12,9 +12,9 @@ import { FormsModule } from '@angular/forms';
             <div class="progress-bar"></div>
         </div>
         <div class="container">
-            <div class="question-box">Answer a few questions to improve your content recommendations</div>
-
-            <h2>What field are you learning for?</h2>
+            <!-- <div class="question-box">Answer a few questions to improve your content recommendations</div> -->
+            <div class="question-box">Trả lời 1 số câu hỏi để chúng tôi dễ dàng đề xuất khóa học cho bạn</div>
+            <h2>Bạn quan tâm đến danh mục nào?</h2>
 
             <form>
                 <div class="grid">
@@ -30,7 +30,7 @@ import { FormsModule } from '@angular/forms';
             </form>
         </div>
         <div class="footer">
-            <button type="submit" class="next-btn" (click)="onNext()">Next</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white px-4 py-2 rounded" (click)="onNext()">Next</button>
         </div>
     `,
 
@@ -91,8 +91,8 @@ import { FormsModule } from '@angular/forms';
         }
 
         .radio-item:hover {
-            border-color: blue;
-            background-color: #f3e8fd;
+            // border-color: #60A5FA;
+            background-color: #60A5FA;
         }
 
         .radio-item input[type='radio'] {
@@ -110,8 +110,8 @@ import { FormsModule } from '@angular/forms';
         }
 
         .radio-item input[type='radio']:checked + .custom-radio {
-            border-color: blue;
-            background-color: blue;
+            border-color: #60A5FA;
+            background-color: #60A5FA;
         }
 
         .radio-item input[type='radio']:checked + .custom-radio::after {

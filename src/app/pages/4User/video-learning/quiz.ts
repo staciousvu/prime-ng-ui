@@ -23,7 +23,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
                     <p class="text-gray-600 mt-1">{{quiz.description}}</p>
                     <div class="flex gap-3 mt-4">
                         <button (click)="clickPlayQuiz(quiz)"  class="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700 transition"><i class="fa-solid fa-play"></i> Làm ngay</button>
-                        <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-200 transition"><i class="fa-solid fa-clock-rotate-left"></i> Xem lịch sử</button>
+                        <!-- <button class="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-200 transition"><i class="fa-solid fa-clock-rotate-left"></i> Xem lịch sử</button> -->
                     </div>
                 </div>
             </div>

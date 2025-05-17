@@ -111,7 +111,7 @@ import { ActivatedRoute } from '@angular/router';
         .review-footer div {
             display: flex;
             align-items: center;
-            color: #805ad5;
+            color: #60A5FA;
         }
 
         .review-footer div i {
@@ -119,7 +119,7 @@ import { ActivatedRoute } from '@angular/router';
         }
 
         .review-footer a {
-            color: #805ad5;
+            color: #60A5FA;
             text-decoration: none;
         }
 

@@ -104,8 +104,8 @@ export class UserLoginComponent {
           }
         },
         error: (err) => {
-            // this.errorMessage = err.error?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại.';
-            this.errorMessage = 'Đăng nhập thất bại. Vui lòng kiểm tra lại.';
+            this.errorMessage = err.error?.message || 'Đăng nhập thất bại. Vui lòng kiểm tra lại.';
+            // this.errorMessage = 'Đăng nhập thất bại. Vui lòng kiểm tra lại.';
             this.autoHideError();
         }
       });

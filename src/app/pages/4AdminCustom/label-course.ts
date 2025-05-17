@@ -41,30 +41,30 @@ import { BreadcrumpComponent } from './breadcrump';
     template: `
         <app-breadcrump [apr]="'Label course'" [manager]="'Manage course'"></app-breadcrump>
 
-        <div class="font-semibold text-xl mb-4">Label Course</div>
+        <div class="font-semibold text-xl mb-4">Gán nhãn cho khóa học</div>
         <div class="flex gap-4 mb-4">
             <!-- Label và Dropdown sắp xếp theo thời gian tạo -->
             <div class="flex flex-col">
                 <label for="sort-createdAt" class="mb-1">Thời gian tạo</label>
-                <p-select id="sort-createdAt" [options]="sortDirections" [(ngModel)]="selectedSortDirections.createdAt" (ngModelChange)="performSearch()" placeholder="Sort by Created At" class="w-56" />
+                <p-select id="sort-createdAt" [options]="sortDirections" [(ngModel)]="selectedSortDirections.createdAt" (ngModelChange)="performSearch()" placeholder="Thời gian tạotạo" class="w-56" />
             </div>
 
             <!-- Label và Dropdown sắp xếp theo số lượng đánh giá -->
             <div class="flex flex-col">
                 <label for="sort-countRating" class="mb-1">Số lượng đánh giá</label>
-                <p-select id="sort-countRating" [options]="sortDirections" [(ngModel)]="selectedSortDirections.countRating" (ngModelChange)="performSearch()" placeholder="Sort by Count Rating" class="w-56" />
+                <p-select id="sort-countRating" [options]="sortDirections" [(ngModel)]="selectedSortDirections.countRating" (ngModelChange)="performSearch()" placeholder="Lượt đánh giá" class="w-56" />
             </div>
 
             <!-- Label và Dropdown sắp xếp theo điểm trung bình -->
             <div class="flex flex-col">
                 <label for="sort-avgRating" class="mb-1">Điểm trung bình</label>
-                <p-select id="sort-avgRating" [options]="sortDirections" [(ngModel)]="selectedSortDirections.avgRating" (ngModelChange)="performSearch()" placeholder="Sort by Avg Rating" class="w-56" />
+                <p-select id="sort-avgRating" [options]="sortDirections" [(ngModel)]="selectedSortDirections.avgRating" (ngModelChange)="performSearch()" placeholder="Điểm trung bình" class="w-56" />
             </div>
 
             <!-- Label và Dropdown sắp xếp theo số người đăng ký -->
             <div class="flex flex-col">
                 <label for="sort-countEnrolled" class="mb-1">Số người đăng ký</label>
-                <p-select id="sort-countEnrolled" [options]="sortDirections" [(ngModel)]="selectedSortDirections.countEnrolled" (ngModelChange)="performSearch()" placeholder="Sort by Count Enrolled" class="w-56" />
+                <p-select id="sort-countEnrolled" [options]="sortDirections" [(ngModel)]="selectedSortDirections.countEnrolled" (ngModelChange)="performSearch()" placeholder="Lượt mua" class="w-56" />
             </div>
         </div>
 

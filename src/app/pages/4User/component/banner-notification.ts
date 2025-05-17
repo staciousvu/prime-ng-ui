@@ -9,7 +9,7 @@ import { Subscription } from 'rxjs';
     standalone: true,
     imports:[CommonModule],
     template: `
-        <div *ngIf="showBanner" class="banner-notification">
+        <div *ngIf="showBanner" class="banner-notification bg-blue-400">
             <div class="description">🎉 {{ description }}</div>
             <div class="countdown">{{ countdown }}</div>
             <span class="close-icon" (click)="hideBanner()">&times;</span>
@@ -18,7 +18,7 @@ import { Subscription } from 'rxjs';
     styles: `
         .banner-notification {
             width: 100%;
-            background: linear-gradient(to right, rgba(108, 40, 210, 0.908), rgba(99, 20, 217, 0.7));
+            // background: linear-gradient(to right, rgba(108, 40, 210, 0.908), rgba(99, 20, 217, 0.7));
             color: white;
             padding: 15px;
             z-index: 9999;

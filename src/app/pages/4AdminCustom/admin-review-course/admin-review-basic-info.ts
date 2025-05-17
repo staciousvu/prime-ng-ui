@@ -17,20 +17,19 @@ import { ToastService } from '../../service/toast.service';
             <div class="w-[75%] mx-auto relative z-10">
                 <!-- Nội dung chính -->
                 <div>
-                    <nav class="text-lg text-[#5694E5] mb-4 flex items-center space-x-1">
-                        <ng-container *ngFor="let category of course.categories; let last = last">
-                            <a href="#" class="hover:underline">{{ category.categoryName }}</a>
-                            <svg *ngIf="!last" class="w-4 h-4 mx-1 text-[#5694E5]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
-                            </svg>
-                        </ng-container>
+                    <nav class="text-lg text-[#5694E5] space-x-1 mb-4">
+                        <a *ngIf="course.categories[0]" href="#" class="hover:underline">{{ course.categories[0].categoryName }}</a>
+                        <span *ngIf="course.categories[1]">></span>
+                        <a *ngIf="course.categories[1]" href="#" class="hover:underline">{{ course.categories[1].categoryName }}</a>
+                        <span *ngIf="course.categories[2]">></span>
+                        <span *ngIf="course.categories[2]" class="hover:underline">{{ course.categories[2].categoryName }}</span>
                     </nav>
 
                     <h1 class="text-3xl font-bold text-white mb-2">{{ course.title }}</h1>
                     <p class="text-lg text-white opacity-90 mb-4">{{ course.subtitle }}</p>
 
                     <div class="flex items-center gap-3 mb-2">
-                        <span class="text-yellow-500 font-semibold">{{ course.avgRating | number:'1.1-1' }}</span>
+                        <span class="text-yellow-500 font-semibold">{{ course.avgRating | number: '1.1-1' }}</span>
 
                         <app-star-rating [rating]="roundedRating"></app-star-rating>
                         <span class="text-gray-500">({{ course.countRating }} ratings)</span>
@@ -56,7 +55,7 @@ import { ToastService } from '../../service/toast.service';
                     <!-- Info Section -->
                     <div class="w-full px-5 py-6 border rounded-md shadow-sm">
                         <!-- Price + Discount -->
-                         <div class="text-3xl font-bold text-gray-900 mb-1">đ{{ course.price | number: '1.0-1' }}</div>
+                        <div class="text-3xl font-bold text-gray-900 mb-1">đ{{ course.price | number: '1.0-1' }}</div>
                         <!-- Course Includes -->
                         <div>
                             <p class="font-semibold text-sm text-gray-900 mb-3">This course includes:</p>
@@ -92,13 +91,13 @@ import { ToastService } from '../../service/toast.service';
             </div>
         </div>
         <div class="w-[80%] mx-auto px-8 md:px-12 lg:px-20 py-10">
-            <div class="whatwillyoulearn">
+            <div *ngIf="course.contents.length>0" class="whatwillyoulearn">
                 <h2 class="wwyl-title">Bạn sẽ được học những nội dung</h2>
                 <ul class="wwyl-list">
                     <li class="wwyl-item text-gray-800" *ngFor="let content of course.contents">{{ content.title }}</li>
                 </ul>
             </div>
-            <div class="course-content">
+            <div *ngIf="courseSections.length>0" class="course-content">
                 <h2 class="course-content-title">Course Content</h2>
                 <div class="course-timeline">
                     <span class="ct-totalsections">21 sections</span>
@@ -686,7 +685,6 @@ export class AdminReviewBasicInfoComponent implements OnInit {
         private toastService: ToastService
     ) {}
     ngOnInit(): void {
-
         this.http.get<any>(`http://localhost:8080/course/course-detail/${this.courseId}`).subscribe((response) => {
             this.course = response.data;
             this.roundedRating = Math.round(this.course.avgRating);
@@ -722,8 +720,5 @@ export class AdminReviewBasicInfoComponent implements OnInit {
     santinizeBio() {
         return this.course.author.bio.replace(/&nbsp;/g, ' ');
     }
-    roundedRating=0;
-
-
-
+    roundedRating = 0;
 }

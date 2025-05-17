@@ -50,7 +50,8 @@ import { FormsModule } from '@angular/forms';
 
                                             <div class="lecture-right">
                                                 <i class="fa fa-play-circle"></i>
-                                                <span class="lecture-duration">{{ lecture.duration || '1' }}min</span>
+                                                <span class="lecture-duration">{{ lecture.duration | number:'1.0-1' }}s</span>
+
                                             </div>
                                         </li>
                                     </ul>

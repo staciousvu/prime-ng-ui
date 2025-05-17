@@ -17,10 +17,10 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 
   <!-- Header -->
   <header class="mb-4">
-    <h1 class="text-5xl font-extrabold text-gray-900 inline-block">Students</h1>
+    <h1 class="text-5xl font-extrabold text-gray-900 inline-block">Học sinh</h1>
     <select (change)="onCourseChange($event)" aria-label="All courses dropdown" 
-            class="ml-4 text-purple-700 font-semibold text-xl bg-white px-2 py-1 focus:outline-none">
-      <option value="all">All courses</option>
+            class="ml-4 text-blue-700 font-semibold text-xl bg-white px-2 py-1 focus:outline-none">
+      <option value="all">Tất cả khóa học</option>
       <option *ngFor="let course of courses" [value]="course.id" class="text-gray-800 font-extralight">
         {{ course.title }}
       </option>
@@ -73,7 +73,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
     <i class="fa-solid fa-question text-2xl"></i>
     </div>
     <div class="text-center">
-      <p class="text-sm text-[#4B4B4B]">Question asks</p>
+      <p class="text-sm text-[#4B4B4B]">Discussion</p>
       <p class="font-semibold text-lg text-[#1E1E1E]">{{ totalQuestions }} </p>
     </div>
   </div>
@@ -95,7 +95,7 @@ import { RouterModule, RouterOutlet } from '@angular/router';
   <!-- Students Table -->
   <div class="overflow-x-auto bg-white shadow-lg rounded-2xl">
   <table class="min-w-full divide-y divide-gray-200 text-sm">
-  <thead class="bg-purple-500 dark:bg-gray-800 text-white dark:text-gray-200 uppercase tracking-wider text-xs">
+  <thead class="bg-blue-500 dark:bg-gray-800 text-white dark:text-gray-200 uppercase tracking-wider text-xs">
     <tr>
     <th class="px-6 py-3 text-left">Student</th>
       <th class="px-6 py-3 text-left">Email</th>

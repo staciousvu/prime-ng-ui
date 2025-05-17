@@ -113,6 +113,7 @@ export class AppConfigurator {
     ngOnInit() {
         if (isPlatformBrowser(this.platformId)) {
             this.onPresetChange(this.layoutService.layoutConfig().preset);
+            this.updateColors(null, 'primary', { name: 'blue' });
         }
     }
 
@@ -415,7 +416,7 @@ export class AppConfigurator {
         } else if (type === 'surface') {
             this.layoutService.layoutConfig.update((state) => ({ ...state, surface: color.name }));
         }
-        this.applyTheme(type, color);
+        this.applyTheme(type, 'blue');
 
         event.stopPropagation();
     }

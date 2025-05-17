@@ -98,7 +98,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
                         </td>
 
                         <td class="p-3 space-x-2">
-                            <button class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">Xem</button>
+                            <button (click)="view(course.id)" class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">Xem</button>
                         </td>
                     </tr>
                 </tbody>

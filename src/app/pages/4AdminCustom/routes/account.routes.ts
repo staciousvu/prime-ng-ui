@@ -4,6 +4,7 @@ import { UpdateAccountAdminComponent } from "../user/update-account-admin";
 import { AddAdminComponent } from "../user/add-admin";
 import { InstructorAccountComponent } from "../user/instructor-account";
 import { ViewInstructorComponent } from "../user/view-instructor/view-instructor";
+import { ViewInstructorDetailComponent } from "../user/view-instructor/instructor-detai";
 
 
 export default [
@@ -11,6 +12,6 @@ export default [
     { path: 'update-admin/:id', data: { breadcrumb: 'Button' }, component: UpdateAccountAdminComponent },
     { path: 'add-admin', data: { breadcrumb: 'Button' }, component: AddAdminComponent },
     { path: 'list-instructor', data: { breadcrumb: 'Button' }, component: InstructorAccountComponent },
-    { path: 'view-instructor', data: { breadcrumb: 'Button' }, component: ViewInstructorComponent },
+    { path: 'view-instructor/:id', data: { breadcrumb: 'Button' }, component: ViewInstructorDetailComponent },
     { path: '**', redirectTo: '/notfound' }
 ] as Routes;
