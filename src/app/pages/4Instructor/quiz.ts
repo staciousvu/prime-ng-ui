@@ -46,7 +46,7 @@ import { ClassicEditor } from 'ckeditor5';
               </svg>
             </div>
             <div>
-              <h3 class="text-md font-medium text-gray-800">{{ quizI.title }}</h3>
+              <h3 class="text-lg font-medium text-gray-800">{{ quizI.title }}</h3>
               <p class="text-sm text-gray-500 mt-0.5">{{ quizI.description }}</p>
             </div>
           </div>

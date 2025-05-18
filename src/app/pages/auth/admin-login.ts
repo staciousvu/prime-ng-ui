@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
     standalone: true,
     imports: [CommonModule,ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
     template: `
-        <app-floating-configurator />
+        <!-- <app-floating-configurator />
         <div class="bg-surface-50 dark:bg-surface-950 flex items-center justify-center min-h-screen min-w-[100vw] overflow-hidden">
             <div class="flex flex-col items-center justify-center">
                 <div style="border-radius: 56px; padding: 0.3rem; background: linear-gradient(180deg, var(--primary-color) 10%, rgba(33, 150, 243, 0) 30%)">
@@ -65,7 +65,34 @@ import { CommonModule } from '@angular/common';
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
+        <div class="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex items-center justify-center">
+  <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md">
+    <h2 class="text-3xl font-bold text-center text-gray-800 mb-6">Đăng nhập Admin</h2>
+    <div class="space-y-5">
+      <div>
+        <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+        <input type="email" [(ngModel)]="email" id="email" name="email" required
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+      </div>
+
+      <div>
+        <label for="password" class="block text-sm font-medium text-gray-700">Mật khẩu</label>
+        <input [(ngModel)]="password" type="password" id="password" name="password" required
+          class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+      </div>
+
+      <button (click)="onSubmit()"
+        class="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-lg shadow-md transition duration-300">
+        Đăng nhập
+      </button>
+</div>
+
+    <p class="text-center text-sm text-gray-500 mt-6">
+      © 2025 Admin Panel. All rights reserved.
+    </p>
+  </div>
+</div> 
     `
 })
 export class AdminLoginComponent {

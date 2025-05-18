@@ -116,7 +116,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                                 </div>
 
                                 <div class="accordion-body" [class.open]="isSectionActive(i)">
-                                    <ul class="lecture-list">
+                                    <!-- <ul class="lecture-list">
                                         <li *ngFor="let lecture of section.lectures" class="lecture-item" [ngClass]="{ active: activeLecture === lecture.id }" (click)="onLectureClick(lecture)">
                                             <div class="lecture-left">
                                                 <input type="checkbox" [(ngModel)]="lecture.completed" (change)="onLectureStatusChange(lecture)" />
@@ -126,6 +126,31 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
                                             <div class="lecture-right">
                                                 <i class="fa fa-play-circle"></i>
                                                 <span class="lecture-duration">{{ lecture.duration || '1' }}s</span>
+                                            </div>
+                                        </li>
+                                    </ul> -->
+                                    <ul class="lecture-list">
+                                        <li *ngFor="let lecture of section.lectures" class="lecture-item" [ngClass]="{ active: activeLecture === lecture.id }" (click)="onLectureClick(lecture)">
+                                            <div class="lecture-left">
+                                                <input type="checkbox" [(ngModel)]="lecture.completed" (change)="onLectureStatusChange(lecture)" />
+                                                <div class="lecture-title">{{ lecture.title }}</div>
+                                            </div>
+
+                                            <div class="lecture-right flex justify-between items-center gap-2 w-full text-gray-500 text-sm">
+                                                <div class="flex items-center gap-1">
+                                                    <i class="fa fa-play-circle text-base"></i>
+                                                    <!-- <span class="lecture-duration">{{ lecture.duration || '1' }}s</span> -->
+                                                </div>
+
+                                                <button
+                                                    *ngIf="lecture.documentUrl"
+                                                    class="flex items-center gap-2 px-3 py-1 border border-blue-400 rounded-md text-blue-400 text-sm font-normal hover:bg-blue-50 transition"
+                                                    type="button"
+                                                    (click)="onResourceClick(lecture, $event)"
+                                                >
+                                                    <i class="far fa-folder-open text-blue-400 text-base"></i>
+                                                    <span>Tài liệu</span>
+                                                </button>
                                             </div>
                                         </li>
                                     </ul>
@@ -245,42 +270,25 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
                 <!-- Danh sách đáp án -->
                 <div class="space-y-3 mb-6">
-  <label
-    *ngFor="let answer of quiz.questions[currentQuestionIndex]?.answers"
-    class="flex items-center gap-3 px-4 py-3 border rounded-xl transition cursor-pointer"
-    [ngClass]="{
-      'border-green-500 bg-green-100': answerChecked && answer.isCorrect,
-      'border-red-500 bg-red-100': answerChecked && selectedAnswer === answer && !answer.isCorrect,
-      'border-gray-200 hover:bg-blue-50': !answerChecked
-    }"
-  >
-    <input
-      type="radio"
-      name="answer"
-      [value]="answer.content"
-      class="form-radio text-blue-600"
-      [disabled]="answerChecked"
-      (change)="selectAnswer(answer)"
-    />
-    <span class="text-gray-800" [innerHTML]="answer.content"></span>
-  </label>
-</div>
+                    <label
+                        *ngFor="let answer of quiz.questions[currentQuestionIndex]?.answers"
+                        class="flex items-center gap-3 px-4 py-3 border rounded-xl transition cursor-pointer"
+                        [ngClass]="{
+                            'border-green-500 bg-green-100': answerChecked && answer.isCorrect,
+                            'border-red-500 bg-red-100': answerChecked && selectedAnswer === answer && !answer.isCorrect,
+                            'border-gray-200 hover:bg-blue-50': !answerChecked
+                        }"
+                    >
+                        <input type="radio" name="answer" [value]="answer.content" class="form-radio text-blue-600" [disabled]="answerChecked" (change)="selectAnswer(answer)" />
+                        <span class="text-gray-800" [innerHTML]="answer.content"></span>
+                    </label>
+                </div>
 
-<!-- Nút -->
-<div class="flex justify-end gap-4">
-  <button
-    (click)="closeModal()"
-    class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300"
-  >
-    Huỷ làm bài
-  </button>
-  <button
-    (click)="nextQuestion()"
-    class="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700"
-  >
-    Câu hỏi tiếp theo
-  </button>
-</div>
+                <!-- Nút -->
+                <div class="flex justify-end gap-4">
+                    <button (click)="closeModal()" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-300">Huỷ làm bài</button>
+                    <button (click)="nextQuestion()" class="bg-blue-600 text-white px-4 py-2 rounded-xl hover:bg-blue-700">Câu hỏi tiếp theo</button>
+                </div>
             </div>
         </div>
     `,
@@ -526,7 +534,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
             cursor: pointer;
             background-color: transparent;
             color: #e2d9d9;
-            padding: 8px 15px;
+            padding: 5px 10px;
             border: none;
         }
         .btn-rating::after {
@@ -540,7 +548,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
             background-color: #ffffff91;
         }
         .btn-rating:hover {
-            background-color:rgba(52, 116, 200, 0.86);
+            background-color: rgba(57, 57, 57, 0.86);
             transition: all 0.3s ease-in-out;
         }
         .btn-rating:active {
@@ -582,47 +590,47 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 })
 export class VideoLearning1Component implements OnInit {
     isBooleanReport = false;
-  quiz: any;
-  currentQuestionIndex = 0;
-  isModalOpen = false;
-  selectedAnswer: any = null;
-  answerChecked = false;
+    quiz: any;
+    currentQuestionIndex = 0;
+    isModalOpen = false;
+    selectedAnswer: any = null;
+    answerChecked = false;
 
-  openQuizModal($event: any) {
-    this.quiz = $event;
-    this.currentQuestionIndex = 0;
-    this.isModalOpen = true;
-    this.selectedAnswer = null;
-    this.answerChecked = false;
-  }
-
-  selectAnswer(answer: any) {
-    this.selectedAnswer = answer;
-    this.answerChecked = true;
-    // if (answer.isCorrect) {
-    //   this.playSound('correct');
-    // } else {
-    //   this.playSound('wrong');
-    // }
-  }
-
-  playSound(type: 'correct' | 'wrong') {
-    const audio = new Audio();
-    audio.src = `assets/sounds/${type}.mp3`;
-    audio.load();
-    audio.play();
-  }
-
-  nextQuestion() {
-    if (this.currentQuestionIndex < this.quiz.questions.length - 1) {
-      this.currentQuestionIndex++;
-      this.selectedAnswer = null;
-      this.answerChecked = false;
-    } else {
-      // Hết câu hỏi → có thể hiện kết quả
-      this.closeModal();
+    openQuizModal($event: any) {
+        this.quiz = $event;
+        this.currentQuestionIndex = 0;
+        this.isModalOpen = true;
+        this.selectedAnswer = null;
+        this.answerChecked = false;
     }
-  }
+
+    selectAnswer(answer: any) {
+        this.selectedAnswer = answer;
+        this.answerChecked = true;
+        // if (answer.isCorrect) {
+        //   this.playSound('correct');
+        // } else {
+        //   this.playSound('wrong');
+        // }
+    }
+
+    playSound(type: 'correct' | 'wrong') {
+        const audio = new Audio();
+        audio.src = `assets/sounds/${type}.mp3`;
+        audio.load();
+        audio.play();
+    }
+
+    nextQuestion() {
+        if (this.currentQuestionIndex < this.quiz.questions.length - 1) {
+            this.currentQuestionIndex++;
+            this.selectedAnswer = null;
+            this.answerChecked = false;
+        } else {
+            // Hết câu hỏi → có thể hiện kết quả
+            this.closeModal();
+        }
+    }
     // isBooleanReport = false;
     // quiz: any;
     // currentQuestionIndex = 0;
@@ -709,7 +717,7 @@ export class VideoLearning1Component implements OnInit {
         private route: ActivatedRoute,
         private http: HttpClient,
         private toastService: ToastService,
-        private router:Router
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -862,11 +870,15 @@ export class VideoLearning1Component implements OnInit {
         this.reportImage = null;
         this.reportDialogVisible = false;
     }
-    authorId:any;
+    authorId: any;
     navigateMessage() {
         this.http.get<any>(`http://localhost:8080/conversations/get-or-create?instructorId=${this.authorId}`).subscribe((response) => {
             const conversationId = response.data.id;
             this.router.navigate(['/message'], { queryParams: { conversationId: conversationId } });
         });
+    }
+    onResourceClick(lecture: any, event: MouseEvent): void {
+        event.stopPropagation(); // Ngăn sự kiện click lan ra ngoài
+        window.open(lecture.documentUrl, '_blank'); // Mở tài liệu trong tab mới
     }
 }

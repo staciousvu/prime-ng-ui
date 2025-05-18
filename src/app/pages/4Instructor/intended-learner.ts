@@ -216,14 +216,15 @@ import { ToastService } from '../service/toast.service';
       display: flex;
       align-items: center;
       background-color: #f8fafc;
-      border: 1px solid #e2e8f0;
+      border: 1px solid rgb(150, 150, 150);
       border-radius: 8px;
       padding: 0.75rem 1rem;
       transition: all 0.2s ease;
     }
     
     .input-wrapper:focus-within {
-      border-color: #3b82f6;
+      border-color:rgb(16, 100, 234);
+      border-width:2px;
       box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
     }
     

@@ -8,12 +8,13 @@ import { CartService } from '../service/cart.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ToastService } from '../service/toast.service';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
     selector: 'app-course-detail2',
     standalone: true,
     encapsulation: ViewEncapsulation.None,
-    imports: [AccordionModule, CommonModule, StarRatingComponent, RouterLink, ToastModule],
+    imports: [AccordionModule, CommonModule, StarRatingComponent, RouterLink, ToastModule, DialogModule],
     template: `
         <div class="bg-[#1d1e27] p-8 md:p-12 lg:p-15 relative overflow-visible">
             <div class="w-[75%] mx-auto relative z-10">
@@ -61,12 +62,6 @@ import { ToastService } from '../service/toast.service';
                             <span class="line-through text-lg text-gray-500">đ{{ course.price | number: '1.0-1' }}</span>
                             <span class="text-red-600 text-base font-semibold">{{ calculateDiscount(course.price, course.discount_price) }}% off</span>
                         </div>
-
-                        <!-- Emergency notice -->
-                        <!-- <div *ngIf="course.discount_price !== course.price" class="flex items-center text-lg text-red-600 mb-4">
-                            <i class="fa-solid fa-bell mr-2"></i>
-                            <span><strong>10 hours</strong> left at this price</span>
-                        </div> -->
 
                         <!-- Add to cart and heart -->
                         <div class="flex gap-3 mb-6">
@@ -125,18 +120,17 @@ import { ToastService } from '../service/toast.service';
             </div>
         </div>
         <div class="w-[80%] mx-auto px-8 md:px-12 lg:px-20 py-10">
-            <div class="whatwillyoulearn" *ngIf="course.contents.length>0">
+            <div class="whatwillyoulearn" *ngIf="course.contents.length > 0">
                 <h2 class="wwyl-title">Bạn sẽ được học những nội dung</h2>
                 <ul class="wwyl-list">
                     <li class="wwyl-item text-gray-800" *ngFor="let content of course.contents">{{ content.title }}</li>
                 </ul>
             </div>
-            <div class="course-content" *ngIf="courseSections.length>0">
+            <div class="course-content" *ngIf="courseSections.length > 0">
                 <h2 class="course-content-title">Nội dung khóa học</h2>
                 <div class="course-timeline">
-                    <span class="ct-totalsections">21 sections</span>
+                    <span class="ct-totalsections">{{courseSections.length}} sections</span>
                     <span class="ct-totallectures">200 lectures</span>
-                    <span class="ct-totallength">32h 12m total length</span>
                 </div>
                 <div class="card" style="padding:0;width:100%;">
                     <p-accordion [value]="0" [multiple]="true">
@@ -146,10 +140,15 @@ import { ToastService } from '../service/toast.service';
                                 <p-accordion-content>
                                     <ul>
                                         @for (lecture of section.lectures; track lecture.id) {
-                                            <li>
-                                                {{ lecture.title }} ({{ lecture.duration }} mins)
-                                                <span *ngIf="lecture.type === 'video'">🎥</span>
-                                                <span *ngIf="lecture.type === 'quiz'">📝</span>
+                                            <li class="flex items-center justify-between px-4 py-2">
+                                                <span class="text-gray-500 flex items-center gap-2">
+                                                    <i class="fa-solid fa-video text-xs text-gray-400"></i>
+                                                    {{ lecture.title }}
+                                                </span>
+
+                                                @if (lecture.previewable) {
+                                                    <a href="javascript:void(0)" (click)="openVideoModal(lecture)" class="text-blue-600 underline hover:text-blue-800 transition"> Xem trước </a>
+                                                }
                                             </li>
                                         }
                                     </ul>
@@ -198,7 +197,27 @@ import { ToastService } from '../service/toast.service';
                 </div>
             </div>
         </div>
-        <p-toast></p-toast>
+        <!-- Modal hiển thị video -->
+        <p-dialog
+  [header]="selectedLecture?.title"
+  [(visible)]="displayVideoModal"
+  [modal]="true"
+  [style]="{ width: '70vw' }"
+  [closable]="true"
+  (onHide)="selectedLecture = null"
+  [contentStyle]="{ 'background-color': '#1f2937', color: '#f3f4f6' }">
+  <ng-container *ngIf="selectedLecture">
+    <video
+      *ngIf="selectedLecture.contentUrl"
+      controls
+      class="rounded w-full h-[400px]"
+    >
+      <source [src]="selectedLecture.contentUrl" type="video/mp4" />
+      Trình duyệt của bạn không hỗ trợ thẻ video.
+    </video>
+  </ng-container>
+</p-dialog>
+
     `,
     styles: `
         .spinner {
@@ -705,8 +724,7 @@ import { ToastService } from '../service/toast.service';
             color: #1f2937;
             margin-bottom: 24px;
         }
-    `,
-    providers: [MessageService]
+    `
 })
 export class CourseDetail2Component implements OnInit {
     courseId: any;
@@ -718,7 +736,6 @@ export class CourseDetail2Component implements OnInit {
         private http: HttpClient,
         private cartService: CartService,
         private route: Router,
-        private messageService: MessageService,
         private toastService: ToastService
     ) {}
     ngOnInit(): void {
@@ -800,19 +817,26 @@ export class CourseDetail2Component implements OnInit {
     toggleFavorite(id: any) {
         if (this.isInFavorite) {
             this.http.delete<any>(`http://localhost:8080/favorite/${id}`).subscribe({
-            next: (response) => {
-                this.checkFavorite(id);
-                console.log('check favoriteeee:', this.isInFavorite);
-                this.toastService.addToast('success', 'Xóa khỏi yêu thích thành công');
-            },
-            error: (error) => {}
-        });
+                next: (response) => {
+                    this.checkFavorite(id);
+                    console.log('check favoriteeee:', this.isInFavorite);
+                    this.toastService.addToast('success', 'Xóa khỏi yêu thích thành công');
+                },
+                error: (error) => {}
+            });
         } else {
             this.cartService.moveToFavorite(id).subscribe(() => {
-            this.cartService.loadCart();
-            this.checkFavorite(id);
-            this.toastService.addToast('success', 'Thêm vào yêu thích thành công');
-        });
+                this.cartService.loadCart();
+                this.checkFavorite(id);
+                this.toastService.addToast('success', 'Thêm vào yêu thích thành công');
+            });
         }
+    }
+    selectedLecture: any = null;
+    displayVideoModal: boolean = false;
+
+    openVideoModal(lecture: any) {
+        this.selectedLecture = lecture;
+        this.displayVideoModal = true;
     }
 }

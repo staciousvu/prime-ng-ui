@@ -54,8 +54,9 @@ import { VoucherService } from '../../service/voucher.service';
                         <td>
                             <p-tag [value]="voucher.discountType" [severity]="getSeverityDiscountType(voucher.discountType)" />
                         </td>
-                        <td>{{ voucher.startDate }}</td>
-                        <td>{{ voucher.endDate }}</td>
+                        <td>{{ voucher.startDate | date: 'dd/MM/yyyy' }}</td>
+<td>{{ voucher.endDate | date: 'dd/MM/yyyy' }}</td>
+
                         <td>
                             <p-tag [value]="isExpired(voucher.endDate)" [severity]="getSeverityExpired(voucher.endDate)"></p-tag>
                         </td>
@@ -70,7 +71,7 @@ import { VoucherService } from '../../service/voucher.service';
             </p-table>
         </div>
         <div class="card">
-          <p class="text-lg font-semibold text-gray-800 mb-4">Voucher chưa kích hoạt</p>
+            <p class="text-lg font-semibold text-gray-800 mb-4">Voucher chưa kích hoạt</p>
             <!-- test -->
             <!-- <div class="w-full mx-auto bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900 p-4 rounded-lg shadow-md">
                 <div class="flex items-center gap-2">
@@ -102,8 +103,9 @@ import { VoucherService } from '../../service/voucher.service';
                         <td>
                             <p-tag [value]="voucher.discountType" [severity]="getSeverityDiscountType(voucher.discountType)" />
                         </td>
-                        <td>{{ voucher.startDate }}</td>
-                        <td>{{ voucher.endDate }}</td>
+                        <td>{{ voucher.startDate | date: 'dd/MM/yyyy' }}</td>
+                        <td>{{ voucher.endDate | date: 'dd/MM/yyyy' }}</td>
+
                         <td>
                             <p-tag [value]="isExpired(voucher.endDate)" [severity]="getSeverityExpired(voucher.endDate)"></p-tag>
                         </td>
@@ -118,7 +120,7 @@ import { VoucherService } from '../../service/voucher.service';
             </p-table>
         </div>
         <div class="card">
-          <p class="text-lg font-semibold text-gray-800 mb-4">Voucher đã hết hạn</p>
+            <p class="text-lg font-semibold text-gray-800 mb-4">Voucher đã hết hạn</p>
             <!-- test -->
             <!-- <div class="w-full mx-auto bg-red-100 border-l-4 border-red-500 text-red-900 p-4 rounded-lg shadow-md">
                 <div class="flex items-center gap-2">
@@ -152,8 +154,9 @@ import { VoucherService } from '../../service/voucher.service';
                         <td>
                             <p-tag [value]="voucher.discountType" [severity]="getSeverityDiscountType(voucher.discountType)" />
                         </td>
-                        <td>{{ voucher.startDate }}</td>
-                        <td>{{ voucher.endDate }}</td>
+                        <td>{{ voucher.startDate | date: 'dd/MM/yyyy' }}</td>
+<td>{{ voucher.endDate | date: 'dd/MM/yyyy' }}</td>
+
                         <td>
                             <p-tag [value]="isExpired(voucher.endDate)" [severity]="getSeverityExpired(voucher.endDate)"></p-tag>
                         </td>

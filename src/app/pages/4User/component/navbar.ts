@@ -62,7 +62,7 @@ import { NotificationService } from '../../service/notification.service';
                                                 <div class="mylearning_dropdown-item-name">
                                                     <span class="course-name">{{ item.title }}</span>
                                                 </div>
-                                                <div class="progress"></div>
+                                                <!-- <div class="progress"></div> -->
                                             </div>
                                         </a>
                                     </li>

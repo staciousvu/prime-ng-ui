@@ -25,7 +25,7 @@ import { Router } from '@angular/router';
         <!-- Component chính -->
         <div class="container">
             <div class="page-header">
-                <h1 class="page-title">Quản lý báo cáo</h1>
+                <h1 class="page-title text-lg">Quản lý báo cáo</h1>
                 <div class="search-container">
                     <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path
@@ -69,7 +69,7 @@ import { Router } from '@angular/router';
                                     'status-rejected': report.status === 'REJECTED'
                                 }"
                             >
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px">
+                                <!-- <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 6px">
                                     <path
                                         d="M12 8V12L15 15M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
                                         stroke="currentColor"
@@ -77,7 +77,7 @@ import { Router } from '@angular/router';
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                     />
-                                </svg>
+                                </svg> -->
                                 {{ getStatusText(report.status) }}
                             </div>
 
@@ -300,7 +300,7 @@ import { Router } from '@angular/router';
         }
 
         .page-title {
-            font-size: 1.75rem;
+            // font-size: 1.75rem;
             font-weight: 700;
             color: #1a202c;
         }
@@ -426,17 +426,17 @@ import { Router } from '@angular/router';
         }
 
         .status-pending {
+            background-color: #f6e05e;
+            color: black;
+        }
+
+        .status-approved {
             background-color: #3182ce;
             color: white;
         }
 
-        .status-approved {
-            background-color: #48bb78;
-            color: white;
-        }
-
         .status-rejected {
-            background-color: #e53e3e;
+            background-color: #f56565;
             color: white;
         }
 

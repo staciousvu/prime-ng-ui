@@ -28,7 +28,7 @@ import { ToastService } from '../../service/toast.service';
       type="file"
       accept="image/*"
       (change)="fileChangeEvent($event)"
-      class="w-full border border-gray-300 rounded-md px-4 py-3 text-base text-gray-700 file:mr-4 file:py-3 file:px-5 file:rounded-md file:border-0 file:text-base file:bg-purple-50 file:text-purple-700 hover:file:bg-purple-100"
+      class="w-full border border-gray-300 rounded-md px-4 py-3 text-base text-gray-700 file:mr-4 file:py-3 file:px-5 file:rounded-md file:border-0 file:text-base file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
     />
 
     <image-cropper
@@ -45,7 +45,7 @@ import { ToastService } from '../../service/toast.service';
 ></image-cropper>
 
 
-    <button type="submit" [disabled]="!croppedImage" class="bg-purple-700 text-white font-semibold rounded-md px-6 py-3 disabled:bg-purple-300 disabled:cursor-not-allowed transition-colors w-full sm:w-1/2 text-center">Save</button>
+    <button type="submit" [disabled]="!croppedImage" class="bg-blue-700 w-full text-white font-semibold rounded-md px-6 py-3 disabled:bg-blue-300 disabled:cursor-not-allowed transition-colors w-full sm:w-1/2 text-center">Save</button>
   </form>
 </div>
 
